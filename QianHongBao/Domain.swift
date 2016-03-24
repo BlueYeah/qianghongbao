@@ -248,6 +248,36 @@ class MyHttp{
         let task = session.dataTaskWithRequest(req, completionHandler: completionHandler)
         task.resume()
     }
+    
+    class func doUpload(url:String,filename:String,fileData:NSData,completionHandler:(NSData?,NSURLResponse?, NSError?) -> Void){
+        
+        let request=NSMutableURLRequest(URL:NSURL(string:url)!)
+        
+        request.HTTPMethod="POST"//设置请求方式
+        
+        let boundary:String="-------------------21212222222222222222222"
+        
+        let contentType:String="multipart/form-data;boundary="+boundary
+        
+        request.addValue(contentType, forHTTPHeaderField:"Content-Type")
+        
+        let body=NSMutableData()
+        
+        body.appendData(NSString(format:"\r\n--\(boundary)\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        body.appendData(NSString(format:"Content-Disposition:form-data;name=\"\(filename)\";filename=\"dd.jpg\"\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        body.appendData(NSString(format:"Content-Type:application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        body.appendData(fileData)
+        
+        body.appendData(NSString(format:"\r\n--\(boundary)").dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        request.HTTPBody=body
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request, completionHandler: completionHandler)
+        task.resume()
+    }
 }
 struct MyUserDefaultKey{
     static let KEY_HEADIMG = "ud_headimg"
