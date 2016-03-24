@@ -28,12 +28,10 @@ class ModPWDViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "两次输入密码不一致")
             return
         }
-        let req = NSMutableURLRequest(URL: NSURL(string: URL_UserModPwd)!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "uid=\(Common.getUid())&oldPassword=\(old)&password=\(pwd)".dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue()) { (rep, data, err) in
-            
-            dispatch_sync(dispatch_get_main_queue(), { 
+
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid(),"oldPassword":old,"password":pwd]
+        MyHttp.doPost(URL_UserModPwd, data: data) { (data, rep, error) in
+            dispatch_sync(dispatch_get_main_queue(), {
                 do{
                     var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                     let status = (jobj["status"] as! NSNumber).integerValue

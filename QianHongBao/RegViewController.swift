@@ -18,10 +18,10 @@ class RegViewController: UIViewController {
     @IBOutlet weak var tPwd2: UITextField!
     
     @IBAction func btnConfirm(sender: AnyObject) {
-        let pwd = tPwd.text
-        let pwd2 = tPwd2.text
-        let name = etName.text
-        let tel = tPhone.text
+        let pwd = tPwd.text!
+        let pwd2 = tPwd2.text!
+        let name = etName.text!
+        let tel = tPhone.text!
         
         
         
@@ -34,16 +34,12 @@ class RegViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "两次输入密码不一致")
             
         }
-        
-        let req = NSMutableURLRequest(URL: NSURL(string: URL_UserRegister)!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "nackname=\(name)&username=\(tel)&password=\(pwd)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue.mainQueue()) { (rep, data, error) -> Void in
-            
-            
-            do{
-                print(NSString(data: data!, encoding: NSUTF8StringEncoding))
-                var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+        let data:Dictionary<String,AnyObject> = ["nackname":name,"username":tel,"password":pwd]
+        MyHttp.doPost(URL_UserRegister, data: data) { (data, rep, error) in
+            dispatch_async(dispatch_get_main_queue(), { 
+                
+                
+                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
                     MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
@@ -55,12 +51,10 @@ class RegViewController: UIViewController {
                 NSUserDefaults.standardUserDefaults().setInteger((user["uid"] as! NSNumber).integerValue, forKey: UD_UID)
                 
                 
-            }catch{
-                print("reg json error")
-            }
-            
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
-            self.presentViewController(vc, animated: true, completion: nil)
+                
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
+                self.presentViewController(vc, animated: true, completion: nil)
+            })
         }
     }
     

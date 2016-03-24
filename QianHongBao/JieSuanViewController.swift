@@ -46,24 +46,15 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         let order = NSString(data: jsondata, encoding: NSUTF8StringEncoding)!
 
         let sUrl = URL_AddOrder
-        let url = NSURL(string: sUrl)
-        let req = NSMutableURLRequest(URL: url!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "order=\(order)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        
-        
+        let data:Dictionary<String,AnyObject> = ["order":order]
         MyDialog.showLoadingAlert(self)
-        
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue.mainQueue(), completionHandler: { (rep, data, error) -> Void in
-            
-            
-            do{
-            
-                var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+        MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
+            dispatch_async(dispatch_get_main_queue(), { 
+                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
-
-                     MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+                    
+                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
                     return
                 }
                 //success
@@ -72,14 +63,9 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
                 vc.order = order
                 self.dismissViewControllerAnimated(true, completion: nil)
                 self.presentViewController(vc, animated: true, completion: nil)
-                
-            }catch{
-                
-            }
-            
-            
-           // self.dismissViewControllerAnimated(false, completion: nil)
-        })
+            })
+        }
+
         
     }
     override func viewDidLoad() {

@@ -26,21 +26,10 @@ class LoginViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "输入不能为空")
             return
         }
-        let body = "username=\(tPhone.text!)&password=\(tPassword.text!)"
-        let req = NSMutableURLRequest(URL: NSURL(string: URL_UserLogin)!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        canLogin = false
-        
-
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue.mainQueue()) { (rep, data, error) -> Void in
-            self.canLogin = true
-            
-           
-            
-            do{
-                
-                var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+        let data:Dictionary<String,AnyObject> = ["username":tPhone.text!,"password":tPassword.text!]
+        MyHttp.doPost(URL_UserLogin, data: data) { (data, rep, error) in
+            dispatch_async(dispatch_get_main_queue(), { 
+                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
@@ -56,7 +45,7 @@ class LoginViewController: UIViewController {
                 
                 let uid = Int(user["uid"]!)!
                 
-               
+                
                 Common.setHeadImg(user["photo"]! as String)
                 
                 Common.setNickName(user["nackname"]! as String)
@@ -65,13 +54,11 @@ class LoginViewController: UIViewController {
                 
                 NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
                 
-            }catch{
                 
-            }
-           
-            
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
-            self.presentViewController(vc, animated: true, completion: nil)
+                
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
+                self.presentViewController(vc, animated: true, completion: nil)
+            })
             
         }
         

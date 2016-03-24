@@ -51,44 +51,37 @@ class FourViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        let req = NSMutableURLRequest(URL: NSURL(string: URL_UserInfo)!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "uid=\(Common.getUid())".dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue()) { (rep, data, err) in
-            
+        
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid()]
+        MyHttp.doPost(URL_UserInfo, data: data) { (data, rep, error) in
             dispatch_sync(dispatch_get_main_queue(), {
-                do{
-                    var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
-                    
-                    let status = (jobj["status"] as! NSNumber).integerValue
-                    if(status==0){
-                        MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
-                        return
-                    }
-                    //success
-                    
-                    var user = jobj["data"] as! Dictionary<String,String>
-                    
-                    
-                    let uid = Int(user["uid"]!)!
-                    
-                    
-                    Common.setHeadImg(user["photo"]! as String)
-                    
-                    Common.setNickName(user["nackname"]! as String)
-                    
-                    Common.setMoney(Double(user["integral"]!)!)
-                    
-                    
-                    self.lName.text = Common.getNickName()
-                    self.lMoney.text = "\(Common.getMoney())"
-                    self.iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
-                    NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
-                    
-                }catch{
-                    UIAlertView(title: "error", message:"Unknow Error", delegate: nil, cancelButtonTitle: "ok").show()
+                
+                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+                
+                let status = (jobj["status"] as! NSNumber).integerValue
+                if(status==0){
+                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
                     return
                 }
+                //success
+                
+                var user = jobj["data"] as! Dictionary<String,String>
+                
+                
+                let uid = Int(user["uid"]!)!
+                
+                
+                Common.setHeadImg(user["photo"]! as String)
+                
+                Common.setNickName(user["nackname"]! as String)
+                
+                Common.setMoney(Double(user["integral"]!)!)
+                
+                
+                self.lName.text = Common.getNickName()
+                self.lMoney.text = "\(Common.getMoney())"
+                self.iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+                NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
             })
         }
     }

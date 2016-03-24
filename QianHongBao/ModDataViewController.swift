@@ -51,45 +51,9 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
     func uploadImg(img:UIImage){
         let data = UIImagePNGRepresentation(img)
         let url = URL_UserHeadImage + "/uid/\(Common.getUid())"
-
-        
-        let request=NSMutableURLRequest(URL:NSURL(string:url)!)
-        
-        
-        
-        request.HTTPMethod="POST"//设置请求方式
-        
-        let boundary:String="-------------------21212222222222222222222"
-        
-        let contentType:String="multipart/form-data;boundary="+boundary
-        
-        request.addValue(contentType, forHTTPHeaderField:"Content-Type")
-        
-        let body=NSMutableData()
-        
-        body.appendData(NSString(format:"\r\n--\(boundary)\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
-        
-        body.appendData(NSString(format:"Content-Disposition:form-data;name=\"userfile\";filename=\"dd.jpg\"\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
-        
-        body.appendData(NSString(format:"Content-Type:application/octet-stream\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
-        
-        body.appendData(data!)
-        
-        body.appendData(NSString(format:"\r\n--\(boundary)").dataUsingEncoding(NSUTF8StringEncoding)!)
-        
-        request.HTTPBody=body
-        
-        let que=NSOperationQueue()
-        
-        NSURLConnection.sendAsynchronousRequest(request, queue: que, completionHandler: {
+        MyHttp.doUpload(url, filename: "photo2", fileData: data!){ (data, rep, error) in
             
-            (response, data, error) ->Void in
-            
-            let tr=NSString(data:data!,encoding:NSUTF8StringEncoding)
-            print(tr)
-            
-        })       
-        
+        }
     
     }
     @IBAction func btnConfirm(sender: AnyObject) {
@@ -98,11 +62,10 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
             MyDialog.showErrorAlert(self, msg: "数据不能为空")
             return
         }
-        let req = NSMutableURLRequest(URL: NSURL(string: URL_UserModPwd)!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "uid=\(Common.getUid())&nackname=\(nackname)".dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue()) { (rep, data, err) in
-            
+
+        
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid(),"nackname":nackname]
+        MyHttp.doPost(URL_UserModPwd, data: data) { (data, rep, error) in
             dispatch_sync(dispatch_get_main_queue(), {
                 do{
                     var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
@@ -119,6 +82,7 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
                     return
                 }
             })
+            
         }
     }
     override func viewDidLoad() {

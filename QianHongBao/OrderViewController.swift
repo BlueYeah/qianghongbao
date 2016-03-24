@@ -39,43 +39,43 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     func addOrders(){
         let sUrl = getCurPageOrderUrl
-        let url = NSURL(string: sUrl)
-        let req = NSMutableURLRequest(URL: url!)
-        req.HTTPMethod = "POST"
-        req.HTTPBody = "uid=\(Common.getUid())".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
 
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue.mainQueue(), completionHandler: { (rep, data, error) -> Void in
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid()]
+        MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             
-            let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
+                
+                let res_jsonobj: AnyObject = self.json2obj(res as! String)
+                
+                let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
+                
+                
+                let jOrders = res_jsonobj.objectForKey("orders") as! NSArray
+                
+                
+                let page = Page(obj: page_jsonobj)
+                
+                
+                
+                for jOrder in jOrders{
+                    let order = Order(obj: jOrder)
+                    self.Orders.append(order)
+                }
+                
+                self.tvOrders.reloadData()
+                
+                if(page.hasNext){
+                    self.getCurPageOrderUrl = URL_Order + "/page/\(page.cur+1)"
+                    self.mMJRefreshFooter.endRefreshing()
+                }else{
+                    self.mMJRefreshFooter.endRefreshingWithNoMoreData()
+                }
+            })
             
-            
-            let res_jsonobj: AnyObject = self.json2obj(res as! String)
-            
-            let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
-            
-
-            let jOrders = res_jsonobj.objectForKey("orders") as! NSArray
-            
-        
-            let page = Page(obj: page_jsonobj)
-            
-            
-            
-            for jOrder in jOrders{
-                let order = Order(obj: jOrder)
-                self.Orders.append(order)
-            }
-            
-            self.tvOrders.reloadData()
-            
-            if(page.hasNext){
-                self.getCurPageOrderUrl = URL_Order + "/page/\(page.cur+1)"
-                self.mMJRefreshFooter.endRefreshing()
-            }else{
-                self.mMJRefreshFooter.endRefreshingWithNoMoreData()
-            }
-            
-        })
+        }
     }
     func json2obj(json:String)->AnyObject{
         let obj: AnyObject? = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!, options: NSJSONReadingOptions())

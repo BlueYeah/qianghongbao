@@ -47,7 +47,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     func pullRefresh(){
         self.mMJRefreshHeader.endRefreshing()
-        print("refresh...")
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

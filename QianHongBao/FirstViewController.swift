@@ -74,30 +74,27 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     func adaptProduct(){
         let sUrl = getCurPageProductUrl
-        let url = NSURL(string: sUrl)
-        let req = NSMutableURLRequest(URL: url!)
         MyHttp.doPost(sUrl, data: nil) { (data, req, error) in
+            dispatch_async(dispatch_get_main_queue(), {
+                let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let res_jsonobj: AnyObject = self.json2obj(res! as String)
+                let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
+                let products: AnyObject = res_jsonobj.objectForKey("products")!
                 
+                self.pros += Product.initWithJsonObjs(products)
+                
+                let page = Page(obj: page_jsonobj)
+                
+                self.tvProducts.reloadData()
+                if(page.hasNext){
+                    self.getCurPageProductUrl = URL_Product + "/page/\(page.cur+1)"
+                    self.mMJRefresh.endRefreshing()
+                }else{
+                    self.mMJRefresh.endRefreshingWithNoMoreData()
+                }
+            })
         }
-        NSURLConnection.sendAsynchronousRequest(req, queue: NSOperationQueue.mainQueue(), completionHandler: { (rep, data, error) -> Void in
-            let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            let res_jsonobj: AnyObject = self.json2obj(res! as String)
-            let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
-            let products: AnyObject = res_jsonobj.objectForKey("products")!
-           
-            self.pros += Product.initWithJsonObjs(products)
-            
-            let page = Page(obj: page_jsonobj)
-            
-            self.tvProducts.reloadData()
-            if(page.hasNext){
-                self.getCurPageProductUrl = URL_Product + "/page/\(page.cur+1)"
-                self.mMJRefresh.endRefreshing()
-            }else{
-                self.mMJRefresh.endRefreshingWithNoMoreData()
-            }
-            
-        })
+
     }
 
     func json2obj(json:String)->AnyObject{
