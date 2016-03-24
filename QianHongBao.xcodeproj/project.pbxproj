@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2E008AAA1C4AC94300188334 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E008AA91C4AC94300188334 /* ChatTableViewCell.swift */; };
-		2E008AAF1C4B803400188334 /* PopSJHBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E008AAE1C4B803400188334 /* PopSJHBView.swift */; };
 		2E0D134E1C897E9C00B44D62 /* CDSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0D134D1C897E9C00B44D62 /* CDSViewController.swift */; };
 		2E71ACAB1C42BD3600412CAF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E71ACAA1C42BD3600412CAF /* ChatViewController.swift */; };
 		2E7537FC1C8E95DF0082FF0A /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7537FB1C8E95DF0082FF0A /* Domain.swift */; };
@@ -83,7 +82,6 @@
 
 /* Begin PBXFileReference section */
 		2E008AA91C4AC94300188334 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
-		2E008AAE1C4B803400188334 /* PopSJHBView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopSJHBView.swift; sourceTree = "<group>"; };
 		2E0D134D1C897E9C00B44D62 /* CDSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSViewController.swift; sourceTree = "<group>"; };
 		2E71ACAA1C42BD3600412CAF /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		2E7537FB1C8E95DF0082FF0A /* Domain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Domain.swift; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 			children = (
 				2E94B8621C47CCF5003845B6 /* JLSliderView.swift */,
 				2E008AA91C4AC94300188334 /* ChatTableViewCell.swift */,
-				2E008AAE1C4B803400188334 /* PopSJHBView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -609,7 +606,6 @@
 				2EE25BB91C442190002D99C3 /* SDWebImagePrefetcher.m in Sources */,
 				2EE25BBE1C442190002D99C3 /* UIImageView+WebCache.m in Sources */,
 				2EE25BB31C442190002D99C3 /* SDImageCache.m in Sources */,
-				2E008AAF1C4B803400188334 /* PopSJHBView.swift in Sources */,
 				2EEBD37F1C87B9B000A6914F /* RegViewController.swift in Sources */,
 				2EE25BB11C442190002D99C3 /* README.md in Sources */,
 				2EE25B5E1C440346002D99C3 /* MJRefreshBackGifFooter.m in Sources */,
