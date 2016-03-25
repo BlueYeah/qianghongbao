@@ -26,6 +26,25 @@ class LoginViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "输入不能为空")
             return
         }
+//--------
+
+        var hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.labelText = "请稍等，数据加载中,预计10秒中"
+        
+        hud.showAnimated(true, whileExecutingBlock: {
+            //异步任务，在后台运行的任务
+            sleep(4)
+        }) {
+            //执行完成后的操作，移除
+            hud.removeFromSuperview()
+//            hud = nil
+        }
+        
+        
+        
+//--------
+
+        
         let data:Dictionary<String,AnyObject> = ["username":tPhone.text!,"password":tPassword.text!]
         MyHttp.doPost(URL_UserLogin, data: data) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), { 
@@ -63,6 +82,8 @@ class LoginViewController: UIViewController {
         }
         
     }
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

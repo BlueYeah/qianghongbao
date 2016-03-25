@@ -68,6 +68,7 @@
 		2EECDECB1C8685BC003D4B6A /* AddrMGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EECDECA1C8685BC003D4B6A /* AddrMGViewController.swift */; };
 		2EEE2B6C1C8AD655004D0238 /* JieSuanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEE2B6B1C8AD655004D0238 /* JieSuanViewController.swift */; };
 		2EF513701C81744F002EA6BC /* SJHBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF5136F1C81744F002EA6BC /* SJHBViewController.swift */; };
+		324ECD171CA55F1700E0A766 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 324ECD161CA55F1700E0A766 /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +182,8 @@
 		2EECDECA1C8685BC003D4B6A /* AddrMGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddrMGViewController.swift; sourceTree = "<group>"; };
 		2EEE2B6B1C8AD655004D0238 /* JieSuanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JieSuanViewController.swift; sourceTree = "<group>"; };
 		2EF5136F1C81744F002EA6BC /* SJHBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SJHBViewController.swift; sourceTree = "<group>"; };
+		324ECD151CA55F1700E0A766 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		324ECD161CA55F1700E0A766 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +225,7 @@
 		2EE25B281C440302002D99C3 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				324ECD141CA55F1700E0A766 /* MBProgressHUD */,
 				2EE25B7F1C442190002D99C3 /* SDWebImage */,
 				2EE25B291C440346002D99C3 /* MJRefresh */,
 			);
@@ -451,6 +455,15 @@
 			name = Test;
 			sourceTree = "<group>";
 		};
+		324ECD141CA55F1700E0A766 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				324ECD151CA55F1700E0A766 /* MBProgressHUD.h */,
+				324ECD161CA55F1700E0A766 /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -610,6 +623,7 @@
 				2EE25BB11C442190002D99C3 /* README.md in Sources */,
 				2EE25B5E1C440346002D99C3 /* MJRefreshBackGifFooter.m in Sources */,
 				2E7537FC1C8E95DF0082FF0A /* Domain.swift in Sources */,
+				324ECD171CA55F1700E0A766 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
