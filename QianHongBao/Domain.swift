@@ -8,7 +8,7 @@
 
 import UIKit
 
-let SERVER_HTTP = "http://192.168.111.106:8033/QHB2/"
+let SERVER_HTTP = "http://192.168.111.116:8001/index.php/"
 
 let URL_Product = SERVER_HTTP + "Product/getJson"
 let URL_Slider = SERVER_HTTP + "Slider/getJson"

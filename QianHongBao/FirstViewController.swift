@@ -60,6 +60,7 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         MyHttp.doPost(sUrl, data: nil) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
                 self.sliders = Slider.initWithJsonObjectArray(res_jsonobj.objectForKey("slider")!)
                 
