@@ -23,7 +23,7 @@
 
 import UIKit
 
-let SERVER_HTTP = "http://192.168.100.108:8001/index.php/"
+let SERVER_HTTP = "http://192.168.111.107/QHB/index.php/"
 
 let URL_Product = SERVER_HTTP + "Product/getJson"
 let URL_Slider = SERVER_HTTP + "Slider/getJson"
@@ -260,7 +260,9 @@ class MyHttp{
             req.HTTPBody = param.dataUsingEncoding(NSUTF8StringEncoding)
         }
         let session = NSURLSession.sharedSession()
+        req.timeoutInterval = 10
         let task = session.dataTaskWithRequest(req, completionHandler: completionHandler)
+        
         task.resume()
     }
     
@@ -269,6 +271,8 @@ class MyHttp{
         let request=NSMutableURLRequest(URL:NSURL(string:url)!)
         
         request.HTTPMethod="POST"//设置请求方式
+        
+        request.timeoutInterval = 5
         
         let boundary:String="-------------------21212222222222222222222"
         

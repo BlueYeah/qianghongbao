@@ -34,11 +34,33 @@ class RegViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "两次输入密码不一致")
             
         }
+        
+// 添加正在申请注册HUD
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.label.text = "正在申请注册...."
+        
         let data:Dictionary<String,AnyObject> = ["nackname":name,"username":tel,"password":pwd]
         MyHttp.doPost(URL_UserRegister, data: data) { (data, rep, error) in
-            dispatch_async(dispatch_get_main_queue(), { 
+            if (error != nil)
+            {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hideAnimated(true)
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "网络异常"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    
+                    print("cuowu",error)
+                    
+                    
+                })
                 
+                return
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), {
                 
+                // 隐藏HUD
+                hud.hideAnimated(true)
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){

@@ -26,19 +26,11 @@ class LoginViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "输入不能为空")
             return
         }
-//--------
+//--------添加HUD
 
-        var hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        hud.labelText = "请稍等，数据加载中,预计10秒中"
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.label.text = "正在登陆...."
         
-        hud.showAnimated(true, whileExecutingBlock: {
-            //异步任务，在后台运行的任务
-            sleep(4)
-        }) {
-            //执行完成后的操作，移除
-            hud.removeFromSuperview()
-//            hud = nil
-        }
         
         
         
@@ -46,32 +38,52 @@ class LoginViewController: UIViewController {
 
         
         let data:Dictionary<String,AnyObject> = ["username":tPhone.text!,"password":tPassword.text!]
-        MyHttp.doPost(URL_UserLogin, data: data) { (data, rep, error) in
-            dispatch_async(dispatch_get_main_queue(), { 
-                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+        MyHttp.doPost(URL_UserLogin, data: data) { (data, rep, error)  in
+            
+            if (error != nil)
+            {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hideAnimated(true)
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "网络异常"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    print("cuowu",error)
+                    
+                   
+                })
+            
+                 return
+
+            }
+            dispatch_async(dispatch_get_main_queue(),{
+                // 隐藏HUD
+                hud.hideAnimated(true)
                 
-                let status = (jobj["status"] as! NSNumber).integerValue
-                if(status==0){
-                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
-                    return
-                }
-                //success
+                    var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? Dictionary<String,AnyObject>
+                    let status = (jobj!["status"] as! NSNumber).integerValue
+                    if(status==0){
+                        MyDialog.showErrorAlert(self, msg: jobj!["info"] as! String)
+                        return
+                    }
+                    //success
+                    
+                    var data = jobj!["data"] as! Dictionary<String,AnyObject>
+                    
+                    var user = data["user"] as! Dictionary<String,String>
+                    
+                    
+                    let uid = Int(user["uid"]!)!
+                    
+                    
+                    Common.setHeadImg(user["photo"]! as String)
+                    
+                    Common.setNickName(user["nackname"]! as String)
+                    
+                    Common.setMoney(Double(user["integral"]!)!)
+                    
+                    NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
+              
                 
-                var data = jobj["data"] as! Dictionary<String,AnyObject>
-                
-                var user = data["user"] as! Dictionary<String,String>
-                
-                
-                let uid = Int(user["uid"]!)!
-                
-                
-                Common.setHeadImg(user["photo"]! as String)
-                
-                Common.setNickName(user["nackname"]! as String)
-                
-                Common.setMoney(Double(user["integral"]!)!)
-                
-                NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
                 
                 
                 

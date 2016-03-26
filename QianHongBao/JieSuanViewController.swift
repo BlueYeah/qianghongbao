@@ -47,9 +47,33 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
 
         let sUrl = URL_AddOrder
         let data:Dictionary<String,AnyObject> = ["order":order]
-        MyDialog.showLoadingAlert(self)
+      //添加HUD
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.label.text = "正在提交订单...."
+
+        
+        //MyDialog.showLoadingAlert(self)
         MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
+            if (error != nil)
+            {
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud.hideAnimated(true)
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "提交失败"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    print("cuowu",error)
+                    
+                    
+                })
+                
+                return
+                
+            }
+            
             dispatch_async(dispatch_get_main_queue(), { 
+                // 隐藏HUD
+                hud.hideAnimated(true)
+                
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
@@ -58,14 +82,18 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
                     return
                 }
                 //success
+
+
                 let order = Order(obj: jobj["data"]!)
                 let vc = self.storyboard?.instantiateViewControllerWithIdentifier("orderDetailVC") as! OrderDetailViewController
                 vc.order = order
-                self.dismissViewControllerAnimated(true, completion: nil)
                 self.presentViewController(vc, animated: true, completion: nil)
+
+
+                
             })
         }
-
+        
         
     }
     override func viewDidLoad() {
@@ -137,6 +165,14 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         }else{
             sName = "请选择收货地址"
         }
+        
+        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JieSuanViewController.close), name: "CLOSE_B", object: nil)
+        
+    }
+    
+    func close () {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
     func actionChangeAddress(sender:AnyObject){

@@ -38,6 +38,7 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
         self.btnHeadImg.setImage(midImage, forState: UIControlState.Normal)
         
         uploadImg(midImage)
+
         
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -51,7 +52,36 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
     func uploadImg(img:UIImage){
         let data = UIImagePNGRepresentation(img)
         let url = URL_UserHeadImage + "/uid/\(Common.getUid())"
+        // 添加正在上传HUD
+        let hud2 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud2.label.text = "正在上传...."
         MyHttp.doUpload(url, filename: "photo2", fileData: data!){ (data, rep, error) in
+
+            if (error != nil)
+            {
+            
+                dispatch_async(dispatch_get_main_queue(), {
+                    hud2.hideAnimated(true)
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "上传失败"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    print("cuowu",error)
+                    
+                    
+                })
+                
+                return
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { 
+                // 隐藏HUD
+                hud2.hideAnimated(true)
+                
+                // 上传成功
+                let hud2 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                hud2.label.text = "上传成功"
+                hud2.hideAnimated(true, afterDelay: 0.5)
+            })
             
         }
     

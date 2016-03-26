@@ -19,11 +19,31 @@ class OrderDetailViewController: UIViewController,UITableViewDataSource,UITableV
     var order:Order!
     
     @IBAction func btnBack(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+
+        // 直接设置rootview 因为不是navigation。
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("First") as! FirstViewController
+
+        UIApplication.sharedApplication().keyWindow?.rootViewController = vc
+        
+       // 发送通知提醒B界面销毁
+        dismissViewControllerAnimated(true) {
+
+            NSNotificationCenter.defaultCenter().postNotificationName("CLOSE_B", object: nil, userInfo: nil)
+            
+            
+
+            
+        }
+
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.label.text = "正在获取订单..."
+        hud.hideAnimated(true, afterDelay: 1)
+        
         // Do any additional setup after loading the view.
         
         let fv = UIView()
@@ -35,6 +55,7 @@ class OrderDetailViewController: UIViewController,UITableViewDataSource,UITableV
         addFooterViewLabel(fv)
         
         mTableView.tableFooterView = fv
+        
         
         
     }
