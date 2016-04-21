@@ -75,12 +75,6 @@
                                                         <constraint firstAttribute="height" constant="60" id="Qws-Sn-8D2"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="很好吃很好吃的美味鸡" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZr-5e-XgH">
-                                                    <rect key="frame" x="80" y="15" width="230" height="20"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99.9" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="er3-RR-p3Q">
                                                     <rect key="frame" x="241" y="42" width="52" height="27"/>
                                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
@@ -142,6 +136,12 @@
                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="7" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o2G-49-xih">
                                                     <rect key="frame" x="174" y="36" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="很好吃很好吃的美味鸡" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZr-5e-XgH">
+                                                    <rect key="frame" x="80" y="14" width="230" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -494,6 +494,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="939-t4-h7X" firstAttribute="leading" secondItem="zdk-fK-8S3" secondAttribute="leading" id="1Js-qu-A27"/>
                             <constraint firstAttribute="trailing" secondItem="gL8-wI-r88" secondAttribute="trailing" id="Icz-Hz-BNt"/>
@@ -506,6 +507,9 @@
                             <constraint firstItem="gL8-wI-r88" firstAttribute="top" secondItem="RYb-1A-LBV" secondAttribute="bottom" id="w5K-k5-Uum"/>
                             <constraint firstItem="gL8-wI-r88" firstAttribute="leading" secondItem="zdk-fK-8S3" secondAttribute="leading" id="yy0-fW-XJE"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="DXS-tI-LIs" appends="YES" id="lvE-6f-H14"/>
+                        </connections>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
@@ -515,6 +519,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="33q-IN-o5Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="DXS-tI-LIs">
+                    <connections>
+                        <action selector="tapAction:" destination="6lD-iR-Fcd" id="cDj-79-gUM"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1564" y="-320"/>
         </scene>
@@ -1533,6 +1542,7 @@
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="NWH-TK-49V" secondAttribute="centerX" constant="-5" id="0dZ-kW-NHG"/>
                             <constraint firstItem="1I8-h7-yd3" firstAttribute="top" secondItem="Tme-sh-JBR" secondAttribute="bottom" constant="12" id="4GD-gd-aKt"/>
@@ -1549,6 +1559,9 @@
                             <constraint firstItem="CFs-gf-MjC" firstAttribute="leading" secondItem="WbQ-L7-91j" secondAttribute="leading" constant="30" id="vCs-vo-eSS"/>
                             <constraint firstItem="1I8-h7-yd3" firstAttribute="leading" secondItem="WbQ-L7-91j" secondAttribute="leading" constant="30" id="xqB-N7-0Hv"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ZNz-AX-xJ9" appends="YES" id="gg8-pj-YiA"/>
+                        </connections>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
@@ -1557,6 +1570,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wxT-Ar-OcR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ZNz-AX-xJ9">
+                    <connections>
+                        <action selector="tapAction:" destination="MYO-dw-bud" id="c9J-10-EaX"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="734" y="1023"/>
         </scene>
