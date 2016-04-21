@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import CryptoSwift
+import AFNetworking
 class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     @IBOutlet weak var textFieldSend: UITextField!
@@ -43,6 +44,66 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
 //        mTableView.addSubview(mMJRefreshHeader)
         // Do any additional setup after loading the view.
+        
+        
+        // 接收聊天消息通知
+        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.ReceiveMessage(_:)), name: "NewMessage", object: nil)
+        
+        
+        
+        
+        
+        
+        
+        
+        // 信鸽
+
+        
+        let acount = "SX"
+        let type = "single_account"
+        //设置message
+        let dict:NSDictionary = ["alert":"gogogo"]
+        
+        let message = MyXG.message(dict)
+        
+        
+        let param = MyXG.sendMessage(acount, type: type, message: message)
+   
+        let mgr = AFHTTPSessionManager()
+        
+        let url = "\(XGurl)\(type)"
+        
+        print("-----------------url\(url)")
+        
+        mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
+            print("服务端API接入成功")
+            
+            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
+            
+        }) { (task, error) in
+            print(error)
+        }
+
+        
+        
+        
+        
+    }
+    
+    func ReceiveMessage(notification: NSNotification) {
+
+        let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
+        if let apsDict = apsDictionary
+        {
+            //apsDict["alert"]
+            let msg = apsDict["alert"]
+            
+            chatData.append(MessageItem(uid:1,type:ChatType.Text,name:"System",headImg:"qrcode",content:msg! as! String))
+            
+            mTableView.reloadData()
+        }
+
     }
     
     func pullRefresh(){
@@ -70,6 +131,36 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         //scroll to bottom
         let indexPath = NSIndexPath(forRow: chatData.count-1, inSection: 0)
         mTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        
+        
+        // 信鸽
+        
+        
+        let acount = "SX"
+        let type = "single_account"
+        //设置message
+        let dict:NSDictionary = ["alert":"gogogo"]
+        
+        let message = MyXG.message(dict)
+        
+        
+        let param = MyXG.sendMessage(acount, type: type, message: message)
+        
+        let mgr = AFHTTPSessionManager()
+        
+        let url = "\(XGurl)\(type)"
+        
+        print("-----------------url\(url)")
+        
+        mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
+            print("服务端API接入成功")
+            
+            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
+            
+        }) { (task, error) in
+            print(error)
+        }
+
         
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -117,6 +208,12 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return cell!
     }
 
+    
+    @IBAction func tapAction(sender: AnyObject) {
+        
+        view.endEditing(true)
+    }
+    
     /*
     // MARK: - Navigation
 

@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import CryptoSwift
+import AFNetworking
 class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
 
     let TAG_PRO_IMG=1
@@ -17,6 +18,11 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     let TAG_PRO_ADD=5
     let TAG_PRO_DEC=6
     let TAG_PRO_ID = 7
+    
+    var token:NSString!
+    var uid:Int!
+    
+
     
     @IBOutlet weak var tvProducts: UITableView!
     var viewAppearCounter = 0
@@ -35,9 +41,17 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         mMJRefresh = MJRefreshAutoNormalFooter(refreshingTarget: self, refreshingAction: #selector(FirstViewController.endRefreshing))
         tvProducts.addSubview(mMJRefresh)
         mMJRefresh.beginRefreshing()
-//        endRefreshing()
+        //endRefreshing()
+
+        self.uid = Common.getUid()
+        self.token = Common.getToken()
+        //print("================\(self.token)-----\(self.uid)")
+        
+        
+        
     }
     func endRefreshing(){
+        // 这里注释了
         adaptProduct()
     }
 
@@ -49,6 +63,7 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     override func viewWillAppear(animated: Bool) {
         
         if(viewAppearCounter == 0){
+            // 这里注释了
             adaptSlider()
         }
         NSUserDefaults.standardUserDefaults().removeObjectForKey(UD_GWCS)
@@ -57,12 +72,20 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     func adaptSlider(){
         let sUrl = URL_Slider
-        MyHttp.doPost(sUrl, data: nil) { (data, rep, error) in
+        let data = ["uid":self.uid,"token":self.token]
+        MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
-                self.sliders = Slider.initWithJsonObjectArray(res_jsonobj.objectForKey("slider")!)
+                
+                
+                // data后还是json字符串 要再一次解析对data 进行解析
+                let data = res_jsonobj["data"]
+                let slider:AnyObject = self.json2obj(data as! String)
+                
+
+                self.sliders = Slider.initWithJsonObjectArray(slider)
                 
                 
                 var images:[String] = []
@@ -75,12 +98,21 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     func adaptProduct(){
         let sUrl = getCurPageProductUrl
-        MyHttp.doPost(sUrl, data: nil) { (data, req, error) in
+        // 自己添加data
+        let data = ["uid":self.uid,"token":self.token]
+        MyHttp.doPost(sUrl, data: data) { (data, req, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
-                let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
-                let products: AnyObject = res_jsonobj.objectForKey("products")!
+
+                
+                let data_json = res_jsonobj["data"]
+                
+                let data:AnyObject = self.json2obj(data_json as! String)
+                
+
+                let page_jsonobj: AnyObject = data.objectForKey("page")!
+                let products: AnyObject = data.objectForKey("products")!
                 
                 self.pros += Product.initWithJsonObjs(products)
                 

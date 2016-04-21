@@ -9,12 +9,12 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: XinGeAppDelegate {
 
     var window: UIWindow?
 
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    override func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         let uid = Common.getUid()
         
@@ -27,7 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //self.presentViewController(vc, animated: true, completion: nil)
         }
         
-        return true
+        // return true
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
     func applicationWillResignActive(application: UIApplication) {

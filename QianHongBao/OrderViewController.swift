@@ -40,7 +40,7 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func addOrders(){
         let sUrl = getCurPageOrderUrl
 
-        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid()]
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid(),"token":Common.getToken()]
         MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             
             dispatch_async(dispatch_get_main_queue(), {
@@ -50,10 +50,20 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 
                 let res_jsonobj: AnyObject = self.json2obj(res as! String)
                 
-                let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
+                
+                print("----------------------\(res_jsonobj)")
+                
+                let data_json = res_jsonobj["data"]
+                
+                let data:AnyObject = self.json2obj(data_json as! String)
+                
+                //if data == nil return
+                let page_jsonobj: AnyObject = data.objectForKey("page")!
+                
+                //let page_jsonobj: AnyObject = res_jsonobj.objectForKey("page")!
                 
                 
-                let jOrders = res_jsonobj.objectForKey("orders") as! NSArray
+                let jOrders = data.objectForKey("orders") as! NSArray
                 
                 
                 let page = Page(obj: page_jsonobj)

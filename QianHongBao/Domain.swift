@@ -22,8 +22,8 @@
 ////////////////////////////////////////////////////////////////////
 
 import UIKit
-
-let SERVER_HTTP = "http://192.168.111.107/QHB/index.php/"
+import CryptoSwift
+let SERVER_HTTP = "http://192.168.111.106/QHB/"
 
 let URL_Product = SERVER_HTTP + "Product/getJson"
 let URL_Slider = SERVER_HTTP + "Slider/getJson"
@@ -42,6 +42,19 @@ let IMG_LOADING = "qrcode"
 let UD_ADDRESS = "addr"
 let UD_GWCS = "ud_gwcs"
 let UD_UID = "ud_uid"
+let UD_TOKEN = "ud_token"
+
+
+// MYXG
+
+let XGurl = "http://openapi.xg.qq.com/v2/push/"
+
+let baseSign = "POSTopenapi.xg.qq.com/v2/push/"
+
+let secretKey = "18b40b132096fc86f0e1fc46c237aa30"
+
+let access_id:NSString = "2200194772"
+let timeString:NSString = MyXG.setUnix()
 
 class Product{
     var id:Int
@@ -80,23 +93,23 @@ class Product{
 
 }
 class Page{
-    var all:Int
+//    var all:Int
     var cur:Int
-    var each:Int
+//    var each:Int
     var nums:Int
-    var last:String
+//    var last:String
     var next:String
-    var head:String
-    var foot:String
+//    var head:String
+//    var foot:String
     var hasNext:Bool
     init(obj:AnyObject){
         let dict = obj as! NSDictionary
-        self.last = dict["last"] as! String
+        //self.last = dict["last"] as! String
         self.next = dict["next"] as! String
-        self.foot = dict["foot"] as! String
-        self.head = dict["head"] as! String
-        self.all =  dict["all"]!.integerValue
-        self.each =  dict["each"]!.integerValue
+//        self.foot = dict["foot"] as! String
+//        self.head = dict["head"] as! String
+//        self.all =  dict["all"]!.integerValue
+//        self.each =  dict["each"]!.integerValue
         self.cur =  dict["cur"]!.integerValue
         self.nums =  dict["nums"]!.integerValue
         if(cur == nums){
@@ -185,6 +198,8 @@ class Order{
 }
 class Common{
 
+    
+    
     class func getUid()->Int{
         return NSUserDefaults.standardUserDefaults().integerForKey(UD_UID)
     }
@@ -198,6 +213,15 @@ class Common{
         return NSUserDefaults.standardUserDefaults().doubleForKey(MyUserDefaultKey.KEY_MONDY)
     }
     
+    class func getToken()->String{
+        return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_TOKEN) as! String
+    }
+    
+    class func setToken(str:String){
+        let mUserDefault =  NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: MyUserDefaultKey.KEY_TOKEN)
+        
+    }
     
     class func setHeadImg(str:String){
         let mUserDefault =  NSUserDefaults.standardUserDefaults()
@@ -298,10 +322,91 @@ class MyHttp{
         task.resume()
     }
 }
+
+class MyXG {
+    
+    // 发送消息
+    class func setUnix () -> NSString {
+        let date = NSDate()
+        let timeInterval  = date.timeIntervalSince1970
+        
+        let a = NSInteger (timeInterval)
+        
+        let timeString:NSString = "\(a)"
+        
+        return timeString
+   
+        
+    }
+    // 发送消息
+    class func message (dict:NSDictionary)-> NSString {
+        let dict2 = ["aps":dict]
+
+    
+        let data = try! NSJSONSerialization.dataWithJSONObject(dict2, options: .PrettyPrinted)
+
+        
+        let message:NSString = NSString (data: data ,encoding: NSUTF8StringEncoding)!
+        
+        return message
+ 
+    }
+    // 字典拼接升序
+    class func sortDictionary (dict:NSDictionary)-> NSString {
+        
+        let DictAll = NSMutableDictionary()
+        
+        let keys = dict.allKeys as NSArray
+        
+        let sortedArray:NSArray = keys.sortedArrayUsingComparator { (obj1, obj2) -> NSComparisonResult in
+            return obj1.compare(obj2 as! String, options: NSStringCompareOptions.NumericSearch)
+        }
+        
+        let appString = NSMutableString()
+        
+        for categoryId in sortedArray {
+            // 表面是字典按升序排，但字典实际上是没顺序
+            DictAll.setValue(dict.objectForKey(categoryId), forKey: categoryId as! String)
+            
+            let value = dict.objectForKey(categoryId) as! String
+            
+            appString.appendString("\(categoryId)=\(value)")
+    
+        }
+        
+        return appString
+    }
+    
+    class func sendMessage (account: NSString ,type: NSString ,message:NSString) -> NSDictionary {
+    
+        let param = NSMutableDictionary()
+        
+        param.setValue(account, forKey: "account")
+        param.setValue(access_id, forKey: "access_id")
+        param.setValue(timeString, forKey: "timestamp")
+        param.setValue("0", forKey: "message_type")
+        param.setValue("1", forKey: "environment")
+        param.setValue(message, forKey: "message")
+        
+        let appParam = MyXG.sortDictionary(param)
+        
+        let appString = "\(baseSign)\(type)\(appParam)\(secretKey)"
+        
+        let sign2MD5 = appString.md5()
+        
+        param.setValue(sign2MD5, forKey: "sign")
+        
+        return param
+        
+    }
+    
+    
+}
 struct MyUserDefaultKey{
     static let KEY_HEADIMG = "ud_headimg"
     static let KEY_NICKNAME = "ud_nickname"
     static let KEY_MONDY = "ud_money"
+    static let KEY_TOKEN = "ud_token"
 }
 
 

@@ -9,3 +9,6 @@
 #import "UIImageView+WebCache.h"
 #import "UIButton+WebCache.h"
 #import "MBProgressHUD.h"
+#import"XGSetting.h"
+#import"XGPush.h"
+#import"NSString+MD5.h"

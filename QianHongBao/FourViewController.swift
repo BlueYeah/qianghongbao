@@ -52,11 +52,13 @@ class FourViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         
-        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid()]
+        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid(),"token":Common.getToken()]
         MyHttp.doPost(URL_UserInfo, data: data) { (data, rep, error) in
             dispatch_sync(dispatch_get_main_queue(), {
                 
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
+                
+                //print("----------------\(jobj)")
                 
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
@@ -64,8 +66,12 @@ class FourViewController: UIViewController {
                     return
                 }
                 //success
+                let data:AnyObject = self.json2obj(jobj["data"] as! String)
                 
-                var user = jobj["data"] as! Dictionary<String,String>
+                
+                
+                var user = data as! Dictionary<String,String>
+                
                 
                 
                 let uid = Int(user["uid"]!)!
@@ -120,6 +126,12 @@ class FourViewController: UIViewController {
         let vc = storyboard!.instantiateViewControllerWithIdentifier("dataVC") as UIViewController
         presentViewController(vc, animated: true, completion: nil)
     }
+    
+    func json2obj(json:String)->AnyObject{
+        let obj: AnyObject? = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!, options: NSJSONReadingOptions())
+        return obj!
+    }
+
     /*
     // MARK: - Navigation
 
