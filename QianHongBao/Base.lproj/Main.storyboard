@@ -670,6 +670,8 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="bonusImage" destination="LhR-ri-NTB" id="OzG-12-jKP"/>
+                        <outlet property="bonusNickname" destination="pIZ-GP-inD" id="QDH-l2-29V"/>
                         <outlet property="mUITableView" destination="wJC-n8-sJu" id="uJC-ew-zxr"/>
                     </connections>
                 </viewController>

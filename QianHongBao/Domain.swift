@@ -47,6 +47,11 @@ let UD_GWCS = "ud_gwcs"
 let UD_UID = "ud_uid"
 let UD_TOKEN = "ud_token"
 
+//BonusDetail
+let BD_NICKNAME = "bd_nickname"
+let BD_IMAGE = "bd_image"
+
+
 
 // MYXG
 
@@ -57,7 +62,8 @@ let baseSign = "POSTopenapi.xg.qq.com/v2/push/"
 let secretKey = "0e8d5682dc81ab5a2dbd2b211895a389"
 
 let access_id:NSString = "2200195440"
-let timeString:NSString = MyXG.setUnix()
+
+
 
 class Product{
     var id:Int
@@ -95,6 +101,7 @@ class Product{
     }
 
 }
+
 class Page{
 //    var all:Int
     var cur:Int
@@ -199,6 +206,8 @@ class Order{
         return res
     }
 }
+
+
 class Common{
 
     
@@ -219,11 +228,32 @@ class Common{
     class func getToken()->String{
         return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_TOKEN) as! String
     }
-    class func getBonusId()->String{
-        return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_BONUS_TOTAL) as! String
+    class func getBonusId()->Int{
+        return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_BONUS_TOTAL) as! Int
     }
     
-    class func setBonusId(str:String){
+    class func getBonusImage()->String{
+        return NSUserDefaults.standardUserDefaults().objectForKey(BD_IMAGE) as! String
+    }
+    
+    class func getBonusNickName()->String{
+        return NSUserDefaults.standardUserDefaults().objectForKey(BD_NICKNAME) as! String
+    }
+    
+    
+    class func setBonusImage(str:String){
+        let mUserDefault =  NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: BD_IMAGE)
+        
+    }
+    
+    class func setBonusNickName(str:String){
+        let mUserDefault =  NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: BD_NICKNAME)
+        
+    }
+
+    class func setBonusId(str:Int){
         let mUserDefault =  NSUserDefaults.standardUserDefaults()
         mUserDefault.setObject(str, forKey: MyUserDefaultKey.KEY_BONUS_TOTAL)
         
@@ -398,6 +428,7 @@ class MyXG {
     
         let param = NSMutableDictionary()
  
+        let timeString:NSString = MyXG.setUnix()
         param.setValue(access_id, forKey: "access_id")
         param.setValue(timeString, forKey: "timestamp")
         param.setValue("0", forKey: "message_type")

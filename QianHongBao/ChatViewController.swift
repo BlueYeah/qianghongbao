@@ -27,8 +27,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         self.chatData = [
 
             MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck"),
-            MessageItem(uid: 1,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "1000"),
-            MessageItem(uid: 1,type: ChatType.CDS,name:"System",headImg: "qrcode",content: "300")
+
+            
         ]
     
 //        self.mMJRefreshHeader = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction: "pullRefresh")
@@ -39,6 +39,10 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
 //        mTableView.addSubview(mMJRefreshHeader)
         // Do any additional setup after loading the view.
+        
+        //scroll to bottom
+        let indexPath = NSIndexPath(forRow: chatData.count-1, inSection: 0)
+        mTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         
         
         // 接收聊天消息通知
@@ -55,14 +59,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if let apsDict = apsDictionary!["alert"]
         {
             
-            print("=========aps=\(apsDictionary)")
-             print("===========chat_alert\(apsDict)")
-            //var alert = apsDict
-            // alert若是json字符串 再解析一遍
- 
-            //let alert = Common.json2obj(apsDict as! String) as! NSDictionary
-            
-//            let json = apsDict as? String
+
             let alert:NSDictionary
             
             
@@ -77,7 +74,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
               alert = apsDict as! NSDictionary
             }
-            let uid = alert["uid"] as! Int
+            let uid = Int( alert["uid"] as! Int)
             let myuid = Common.getUid()
             
             
@@ -91,7 +88,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
             let nickName = alert["nackname"] as! String
             
-            let type = alert["type"] as! Int
+            let type =  Int( alert["type"] as! Int)
             
             let photo = alert["photo"] as! String
             
@@ -101,17 +98,19 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
            if (id != nil)
             
             {
-                 let bonus_id = String(alert["id"] as! NSNumber)
+                 let bonus_id = Int(alert["id"] as! NSNumber)
                 // 存放红包id
-                Common.setBonusId(bonus_id as String )
+                Common.setBonusId(bonus_id as Int )
+                Common.setBonusImage(photo)
+                Common.setBonusNickName(nickName)
             }
            
             
             if type == 1 {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo as String,content:msg! as! String))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String))
             }else if type == 2
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.SJHB,name:nickName as String,headImg:photo as String,content:msg! as! String))
+                chatData.append(MessageItem(uid:1,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String))
             }
             
             

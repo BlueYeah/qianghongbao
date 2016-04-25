@@ -149,7 +149,10 @@ class ChatTableViewCell: UITableViewCell {
             isSelf=true
         }
         //head Image
-        headImage.image = UIImage(named: mi.headImg)
+        headImage.sd_setImageWithURL(NSURL(string: mi.headImg), placeholderImage: UIImage(named: IMG_LOADING))
+        //headImage.image = UIImage(named: mi.headImg)
+        
+        
         headImage.frame.size = CGSize(width: 40 , height: 40)
         var imageOX = CGFloat(10)
         if(isSelf){

@@ -23,6 +23,8 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         dismissViewControllerAnimated(true, completion: nil)
     }
+    @IBOutlet weak var bonusNickname: UILabel!
+    @IBOutlet weak var bonusImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -124,6 +126,12 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
         time.text = tdata["time"]
         
         money.text = tdata["money"]
+        
+        // 设置发红包用户头像
+        bonusImage.sd_setImageWithURL(NSURL(string: Common.getBonusImage()), placeholderImage: UIImage(named: IMG_LOADING))
+        let nickName = Common.getBonusNickName()
+        
+        bonusNickname.text = "\(nickName)的红包"
         
         return cell
     }
