@@ -59,9 +59,9 @@ class LoginViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue(),{
                 // 隐藏HUD
                 hud.hideAnimated(true)
-                    let tmp = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
+//                    let tmp = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
                 
-                    print("====\(tmp)")
+                
                     var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? Dictionary<String,AnyObject>
                     let status = (jobj!["status"] as! NSNumber).integerValue
                     if(status==0){
@@ -70,30 +70,24 @@ class LoginViewController: UIViewController {
                     }
                     //success
                 
-                    print("-------\(jobj)")
-                
 
-                    
                 
-                    print("======\(jobj!["data"])")
-                
-                    var data = jobj!["data"] as? Dictionary<String,AnyObject>
-                
-                if data == nil
-                {
+                    let data1 = jobj!["data"] as? Dictionary<String,AnyObject>
+                print("=====data1\(data1)")
+              
                 // 假如data是string 再一次json解析成字典
                
-                    let tmp_str = jobj!["data"] as! String
+                    //let tmp_str = jobj!["data"] as! String
 
-                    let data1 = try! NSJSONSerialization.JSONObjectWithData(tmp_str.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments) as? Dictionary<String,AnyObject>
+//                    let data1 = try! NSJSONSerialization.JSONObjectWithData(tmp_str.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments) as? Dictionary<String,AnyObject>
 
-                    print("+++++\(data1)")
+
                     
                     
                     //print("---------------------token\(data!["token"])")
                     
                     let uid = Int(data1!["uid"]! as! String)!
-                    let token = Int(data1!["token"]! as! String)
+                    //let token = Int(data1!["token"]! as! String)
                     
                     Common.setHeadImg(data1!["photo"]! as! String)
                     
@@ -104,7 +98,9 @@ class LoginViewController: UIViewController {
                     NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
                     
                     Common.setToken(data1!["token"] as! String)
-                }
+                
+                print("=====login uid\(uid)  token\(data1!["token"])")
+                
                    // var user = data!["user"] as? Dictionary<String,String>
                 
                 

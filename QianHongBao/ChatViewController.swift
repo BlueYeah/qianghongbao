@@ -25,12 +25,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         super.viewDidLoad()
         //init data
         self.chatData = [
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "Fuck your!"),
-            MessageItem(uid: 0,type: ChatType.Text,name:"System",headImg: "qrcode",content: "F"),
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "说中文？"),
-            MessageItem(uid: 0,type: ChatType.Text,name:"System",headImg: "qrcode",content: "Hello I'm your father!jdkjdslfkfsdfsdfsdfsdfsdfsdfdsdfsdfsjdkjdslfkfsdfsdfsdfsdfsdfsdfdsdfsdfsjdkjdslfkfsdfsdfsdfsdfsdfsdfdsdfsdfsjdkjdslfkfsdfsdfsdfsdfsdfsdfdsdfsdfs"),
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "说中文？"),
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "heheheheheheeh"),
+
             MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck"),
             MessageItem(uid: 1,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "1000"),
             MessageItem(uid: 1,type: ChatType.CDS,name:"System",headImg: "qrcode",content: "300")
@@ -51,30 +46,102 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.ReceiveMessage(_:)), name: "NewMessage", object: nil)
         
         
+    }
+    
+    func ReceiveMessage(notification: NSNotification) {
+
+        let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
         
-        
-        
-        
-        
-        
-        // 信鸽
+        if let apsDict = apsDictionary!["alert"]
+        {
+            
+            print("=========aps=\(apsDictionary)")
+             print("===========chat_alert\(apsDict)")
+            //var alert = apsDict
+            // alert若是json字符串 再解析一遍
+ 
+            //let alert = Common.json2obj(apsDict as! String) as! NSDictionary
+            
+//            let json = apsDict as? String
+            let alert:NSDictionary
+            
+            
+            
+            let json = apsDict as? String
+            
+            if  json != nil {
+                alert = Common.json2obj(apsDict as! String) as! NSDictionary
+            }
+            else {
+            
+            
+              alert = apsDict as! NSDictionary
+            }
+            let uid = alert["uid"] as! Int
+            let myuid = Common.getUid()
+            
+            
+            if uid == myuid {
+                return
+            }
+            
+            //apsDict["alert"]
+            let msg = alert["content"]
+            
+
+            let nickName = alert["nackname"] as! String
+            
+            let type = alert["type"] as! Int
+            
+            let photo = alert["photo"] as! String
+            
+            
+               // 如果有红包
+            let id = alert["id"] as? Int
+           if (id != nil)
+            
+            {
+                 let bonus_id = String(alert["id"] as! NSNumber)
+                // 存放红包id
+                Common.setBonusId(bonus_id as String )
+            }
+           
+            
+            if type == 1 {
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo as String,content:msg! as! String))
+            }else if type == 2
+            {
+                chatData.append(MessageItem(uid:1,type:ChatType.SJHB,name:nickName as String,headImg:photo as String,content:msg! as! String))
+            }
+            
+            
+            
+            mTableView.reloadData()
+        }
+
+    }
+    
+    func SendMessage(message: NSString ,rid: NSString) {
 
         
-        let acount = "SX"
-        let type = "single_account"
+        let type = "all_device"
+        let uid = Common.getUid()
+        let photo = Common.getHeadImg()
+        let nickName = Common.getNickName()
+        
+        let appDict:NSDictionary = ["uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1]
+        
         //设置message
-        let dict:NSDictionary = ["alert":"gogogo"]
+        let dict:NSDictionary = ["alert":appDict]
         
         let message = MyXG.message(dict)
         
         
-        let param = MyXG.sendMessage(acount, type: type, message: message)
-   
+        let param = MyXG.sendMessage(type, message:message)
+        
         let mgr = AFHTTPSessionManager()
         
         let url = "\(XGurl)\(type)"
-        
-        print("-----------------url\(url)")
         
         mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
@@ -86,24 +153,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
 
         
-        
-        
-        
-    }
-    
-    func ReceiveMessage(notification: NSNotification) {
-
-        let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
-        if let apsDict = apsDictionary
-        {
-            //apsDict["alert"]
-            let msg = apsDict["alert"]
-            
-            chatData.append(MessageItem(uid:1,type:ChatType.Text,name:"System",headImg:"qrcode",content:msg! as! String))
-            
-            mTableView.reloadData()
-        }
-
     }
     
     func pullRefresh(){
@@ -123,7 +172,12 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         if(msg==""){
             return
         }
-        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:"System",headImg:"qrcode",content:msg!))
+        
+        let photo = Common.getHeadImg()
+        let nickName = Common.getNickName()
+        
+        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:nickName,headImg:photo,content:msg!))
+
         textFieldSend.text = ""
         
         mTableView.reloadData()
@@ -134,32 +188,9 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         
         // 信鸽
+        SendMessage(msg!, rid: "1")
         
-        
-        let acount = "SX"
-        let type = "single_account"
-        //设置message
-        let dict:NSDictionary = ["alert":"gogogo"]
-        
-        let message = MyXG.message(dict)
-        
-        
-        let param = MyXG.sendMessage(acount, type: type, message: message)
-        
-        let mgr = AFHTTPSessionManager()
-        
-        let url = "\(XGurl)\(type)"
-        
-        print("-----------------url\(url)")
-        
-        mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
-            print("服务端API接入成功")
-            
-            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
-            
-        }) { (task, error) in
-            print(error)
-        }
+
 
         
     }

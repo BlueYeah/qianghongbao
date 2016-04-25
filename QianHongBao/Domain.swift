@@ -35,6 +35,9 @@ let URL_UserModPwd = SERVER_HTTP + "User/update"
 let URL_Order = SERVER_HTTP + "Order/getJson"
 let URL_UserInfo = SERVER_HTTP + "User/getInfo"
 let URL_UserHeadImage = SERVER_HTTP + "User/updatePhoto"
+let URL_getRandomBonus = SERVER_HTTP + "HB/getRandomBonus"
+
+
 
 let IMG_LOADING = "qrcode"
 
@@ -51,9 +54,9 @@ let XGurl = "http://openapi.xg.qq.com/v2/push/"
 
 let baseSign = "POSTopenapi.xg.qq.com/v2/push/"
 
-let secretKey = "18b40b132096fc86f0e1fc46c237aa30"
+let secretKey = "0e8d5682dc81ab5a2dbd2b211895a389"
 
-let access_id:NSString = "2200194772"
+let access_id:NSString = "2200195440"
 let timeString:NSString = MyXG.setUnix()
 
 class Product{
@@ -216,6 +219,15 @@ class Common{
     class func getToken()->String{
         return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_TOKEN) as! String
     }
+    class func getBonusId()->String{
+        return NSUserDefaults.standardUserDefaults().objectForKey(MyUserDefaultKey.KEY_BONUS_TOTAL) as! String
+    }
+    
+    class func setBonusId(str:String){
+        let mUserDefault =  NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: MyUserDefaultKey.KEY_BONUS_TOTAL)
+        
+    }
     
     class func setToken(str:String){
         let mUserDefault =  NSUserDefaults.standardUserDefaults()
@@ -240,6 +252,11 @@ class Common{
     class func showAlert(vc:UIViewController,title:String,msg:String){
         let alert = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
         vc.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    class func json2obj(json:String)->AnyObject{
+        let obj: AnyObject? = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!, options: NSJSONReadingOptions())
+        return obj!
     }
 }
 class MyDialog{
@@ -377,11 +394,10 @@ class MyXG {
         return appString
     }
     
-    class func sendMessage (account: NSString ,type: NSString ,message:NSString) -> NSDictionary {
+    class func sendMessage (type: NSString ,message:NSString) -> NSDictionary {
     
         let param = NSMutableDictionary()
-        
-        param.setValue(account, forKey: "account")
+ 
         param.setValue(access_id, forKey: "access_id")
         param.setValue(timeString, forKey: "timestamp")
         param.setValue("0", forKey: "message_type")
@@ -391,6 +407,8 @@ class MyXG {
         let appParam = MyXG.sortDictionary(param)
         
         let appString = "\(baseSign)\(type)\(appParam)\(secretKey)"
+        
+        print("=======\(appString)")
         
         let sign2MD5 = appString.md5()
         
@@ -407,6 +425,7 @@ struct MyUserDefaultKey{
     static let KEY_NICKNAME = "ud_nickname"
     static let KEY_MONDY = "ud_money"
     static let KEY_TOKEN = "ud_token"
+    static let KEY_BONUS_TOTAL = "ud_bonus_total"
 }
 
 

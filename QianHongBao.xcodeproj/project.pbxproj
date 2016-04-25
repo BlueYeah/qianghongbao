@@ -411,12 +411,6 @@
 		2EE2DDEC1C429F4C00C75519 = {
 			isa = PBXGroup;
 			children = (
-				32166B6E1CC2170B00EBD1EE /* libsqlite3.0.tbd */,
-				32166B6C1CC216FE00EBD1EE /* CFNetwork.framework */,
-				32166B6A1CC216F500EBD1EE /* libz.tbd */,
-				32166B681CC216E700EBD1EE /* SystemConfiguration.framework */,
-				32166B661CC216DF00EBD1EE /* CoreTelephony.framework */,
-				32166B641CC216D600EBD1EE /* CoreGraphics.framework */,
 				2EE2DDF71C429F4C00C75519 /* QianHongBao */,
 				2EE2DE0F1C429F4C00C75519 /* QianHongBaoTests */,
 				2EE2DDF61C429F4C00C75519 /* Products */,
@@ -533,6 +527,12 @@
 		9BB646E0A79B30EECE3D5E63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32166B6E1CC2170B00EBD1EE /* libsqlite3.0.tbd */,
+				32166B6C1CC216FE00EBD1EE /* CFNetwork.framework */,
+				32166B6A1CC216F500EBD1EE /* libz.tbd */,
+				32166B681CC216E700EBD1EE /* SystemConfiguration.framework */,
+				32166B661CC216DF00EBD1EE /* CoreTelephony.framework */,
+				32166B641CC216D600EBD1EE /* CoreGraphics.framework */,
 				7D44DD68F7375AAE334333F8 /* Pods.framework */,
 			);
 			name = Frameworks;

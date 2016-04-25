@@ -52,7 +52,12 @@ class FourViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         
-        let data:Dictionary<String,AnyObject> = ["uid":Common.getUid(),"token":Common.getToken()]
+        let uid = Common.getUid()
+        let token = Common.getToken()
+        
+        
+        let data:Dictionary<String,AnyObject> = ["uid":uid,"token":token]
+        print("========uid\(uid)  token\(token)")
         MyHttp.doPost(URL_UserInfo, data: data) { (data, rep, error) in
             dispatch_sync(dispatch_get_main_queue(), {
                 
@@ -66,9 +71,11 @@ class FourViewController: UIViewController {
                     return
                 }
                 //success
-                let data:AnyObject = self.json2obj(jobj["data"] as! String)
                 
                 
+                let data:AnyObject = jobj["data"] as! NSDictionary
+                
+                print("====data\(data)")
                 
                 var user = data as! Dictionary<String,String>
                 

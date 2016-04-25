@@ -11,7 +11,7 @@ import UIKit
 
 let IPHONE_8:Int32 = 80000
 
-//ACCESS ID 2200192825  ACCESS KEY IWT1TIW8325P SECRET KEY c73c564d2d50be511d0ca3f7985beec9
+//ACCESS ID 2200195440  ACCESS KEY I8X681TTZ4IA SECRET KEY c73c564d2d50be511d0ca3f7985beec9
 
 /// ACCESS ID
 let kXinGeAppId: UInt32 = 2200195440
@@ -208,7 +208,7 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
         let apsDictionary = userInfo["aps"] as? NSDictionary
         if let apsDict = apsDictionary
         {
-            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"] as? String, delegate: self, cancelButtonTitle: "确定")
+            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"]!["content"] as? String, delegate: self, cancelButtonTitle: "确定")
             alertView.show()
             
             // 发送消息通知

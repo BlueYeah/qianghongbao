@@ -81,11 +81,12 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                 
                 
                 // data后还是json字符串 要再一次解析对data 进行解析
-                let data = res_jsonobj["data"]
-                let slider:AnyObject = self.json2obj(data as! String)
+//                let data = res_jsonobj["data"]
+//                print("============data\(data)")
+//                let slider:AnyObject = self.json2obj(data as! String)
                 
 
-                self.sliders = Slider.initWithJsonObjectArray(slider)
+                self.sliders = Slider.initWithJsonObjectArray(res_jsonobj.objectForKey("data")!)
                 
                 
                 var images:[String] = []
@@ -100,6 +101,7 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         let sUrl = getCurPageProductUrl
         // 自己添加data
         let data = ["uid":self.uid,"token":self.token]
+        print("======uid\(self.uid)")
         MyHttp.doPost(sUrl, data: data) { (data, req, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
@@ -108,7 +110,8 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                 
                 let data_json = res_jsonobj["data"]
                 
-                let data:AnyObject = self.json2obj(data_json as! String)
+                
+                let data:AnyObject = (data_json as! NSDictionary)
                 
 
                 let page_jsonobj: AnyObject = data.objectForKey("page")!

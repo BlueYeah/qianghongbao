@@ -139,5 +139,11 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func tapAction(sender: AnyObject) {
+        
+        view.endEditing(true)
+    }
+    
 
 }

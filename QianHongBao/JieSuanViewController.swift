@@ -234,4 +234,7 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
     }
     */
 
+    @IBAction func tapAction(sender: AnyObject) {
+        view.endEditing(true)
+    }
 }

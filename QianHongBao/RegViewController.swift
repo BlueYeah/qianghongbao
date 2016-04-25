@@ -107,4 +107,7 @@ class RegViewController: UIViewController {
     }
     */
 
+    @IBAction func tapAction(sender: AnyObject) {
+        view.endEditing(true)
+    }
 }
