@@ -36,6 +36,7 @@ let URL_Order = SERVER_HTTP + "Order/getJson"
 let URL_UserInfo = SERVER_HTTP + "User/getInfo"
 let URL_UserHeadImage = SERVER_HTTP + "User/updatePhoto"
 let URL_getRandomBonus = SERVER_HTTP + "HB/getRandomBonus"
+let URL_getRoom = SERVER_HTTP + "Room/sendRoomPHP"
 
 
 
@@ -100,6 +101,87 @@ class Product{
         return res
     }
 
+}
+
+class User{
+    
+    var image:String
+    var money:String
+    var time:String
+    var name:String
+    
+    
+    init(name:String,image:String,money:String,time:String){
+        self.name = name
+        self.image = image
+        self.time = time
+        self.money = money
+    }
+    
+    init(obj:AnyObject){
+        let dict = obj as! NSDictionary
+        
+        self.image = dict["user"]!["photo"] as! String
+        
+        self.time = dict["time"] as! String
+        
+        self.name = dict["user"]!["nackname"] as! String
+        
+        self.money = String( dict["bonus"] as! NSNumber)
+        
+        
+    }
+    class func initWithUser(obj:AnyObject)->[User]{
+        var res:[User] = []
+        if let arr = obj as? NSArray{
+            for item in arr{
+                res.append(User(obj: item))
+            }
+        }
+        return res
+    }
+    
+}
+
+class Room{
+    
+    var image:String
+    var name:String
+//    var time:String
+    var label:String?
+    var rid:Int
+    
+    
+    
+    init(name:String,image:String,rid:Int){
+        self.name = name
+        self.image = image
+        self.rid = rid
+
+    }
+    
+    init(obj:AnyObject){
+        let dict = obj as! NSDictionary
+        
+        self.image = dict["roomPhoto"] as! String
+        
+//        self.time = dict["time"] as! String
+        
+        self.name = dict["roomName"] as! String
+        self.rid = Int (dict["rid"] as! String)!
+        
+        
+    }
+    class func initWithRoom(obj:AnyObject)->[Room]{
+        var res:[Room] = []
+        if let arr = obj as? NSArray{
+            for item in arr{
+                res.append(Room(obj: item))
+            }
+        }
+        return res
+    }
+    
 }
 
 class Page{
@@ -439,7 +521,7 @@ class MyXG {
         
         let appString = "\(baseSign)\(type)\(appParam)\(secretKey)"
         
-        print("=======\(appString)")
+        //print("=======\(appString)")
         
         let sign2MD5 = appString.md5()
         

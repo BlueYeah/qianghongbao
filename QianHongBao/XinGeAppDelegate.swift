@@ -208,8 +208,8 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
         let apsDictionary = userInfo["aps"] as? NSDictionary
         if let apsDict = apsDictionary
         {
-            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"]!["content"] as? String, delegate: self, cancelButtonTitle: "确定")
-            alertView.show()
+//            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"]!["content"] as? String, delegate: self, cancelButtonTitle: "确定")
+//            alertView.show()
             
             // 发送消息通知
             NSNotificationCenter.defaultCenter().postNotificationName("NewMessage", object: nil, userInfo: userInfo )

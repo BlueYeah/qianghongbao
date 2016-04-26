@@ -16,7 +16,10 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
     let TAG_TIME = 3
     let TAG_MONEY = 4
 
-    var data:[Dictionary<String,String>] = []
+    //var data:[Dictionary<String,String>] = []
+    
+
+    var user:[User] = []
     
     @IBOutlet weak var mUITableView: UITableView!
     @IBAction func btnBack(sender: AnyObject) {
@@ -29,7 +32,7 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 //        var tdata = NSMutableDictionary()
-        var tdata:Dictionary<String,String> = ["":""]
+       // var tdata:Dictionary<String,String> = ["":""]
         
         
 //        for _ in 0...10{
@@ -46,46 +49,29 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let bonus_id = Common.getBonusId()
         
         let param:NSDictionary = ["uid":uid, "token":token,"id":bonus_id ]
-        
-        print("===========id\(bonus_id) uid\(uid) toke\(token)")
-        
-        
-        
+
         mgr.POST(URL_getRandomBonus, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             print("=============data\(responseObj!["data"])")
             //let data = Common.json2obj(responseObj["data"])
             
-            let randombonus = responseObj!["data"]!!["randombonus"]as! NSArray
-            let randombonu = randombonus[0] as! NSDictionary
-            let money = String(randombonu["bonus"] as! NSNumber)
-            print("=============USER=\(randombonu["user"])")
-            let user = randombonu["user"]as! NSDictionary
-            let time = randombonu["time"]as! String
-            let image = user["photo"]as! String
-            let name = user["nackname"]as! String
+            if (responseObj!["data"]!!["randombonus"] == nil)
+            {
+                return
+            }
             
-            tdata["image"] = image
-            tdata["name"] = name
-            tdata["time"] = time
-            tdata["money"] = money
-            self.data.append(tdata)
-            print("=====\(tdata)")
+            let randombonus = responseObj!["data"]!!["randombonus"]as! NSArray
+            
+              self.user += User.initWithUser(randombonus)
+
         
             self.mUITableView.reloadData()
-            
-            
-            
-            
-            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
-            }) { (task, error) in
+ 
+                       }) { (task, error) in
                 print(error)
                 
         }
-        
-        
-        
-        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,7 +85,7 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return user.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -116,16 +102,16 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
         let money = cell.viewWithTag(TAG_MONEY) as! UILabel
         
-        var tdata:Dictionary<String,String> = data[indexPath.row]
+        let tdata = user[indexPath.row]
         
         // 设置抢红包用户头像
-        img.sd_setImageWithURL(NSURL(string: tdata["image"]!), placeholderImage: UIImage(named: IMG_LOADING))
+        img.sd_setImageWithURL(NSURL(string: tdata.image), placeholderImage: UIImage(named: IMG_LOADING))
         
-        name.text = tdata["name"]
+        name.text = tdata.name
         
-        time.text = tdata["time"]
+        time.text = tdata.time
         
-        money.text = tdata["money"]
+        money.text = tdata.money
         
         // 设置发红包用户头像
         bonusImage.sd_setImageWithURL(NSURL(string: Common.getBonusImage()), placeholderImage: UIImage(named: IMG_LOADING))

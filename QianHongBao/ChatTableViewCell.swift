@@ -15,6 +15,8 @@ class ChatTableViewCell: UITableViewCell {
     var contentLabel:UILabel!
     var bgImageBtn:UIButton!
     var lName:UILabel!
+    var messageItem:MessageItem!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -173,7 +175,11 @@ class ChatTableViewCell: UITableViewCell {
         lName.frame.origin = CGPointMake(lnx, 10)
         
         //image
+        
+     
         var btnActionName:Selector = #selector(ChatTableViewCell.btnShowHB(_:))
+
+            
         if(mi.type==ChatType.CDS){
             btnActionName = #selector(ChatTableViewCell.btnShowCDS(_:))
         }
@@ -195,6 +201,11 @@ class ChatTableViewCell: UITableViewCell {
     
     func btnShowHB(sender:AnyObject){
         
+        Common.setBonusId(messageItem.bonusId!)
+        Common.setBonusImage(messageItem.headImg)
+        Common.setBonusNickName(messageItem.name)
+        
+        print("==============点击了SJHB 存放红包信息")
         
         var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
         while(vc?.presentedViewController != nil){
@@ -204,8 +215,26 @@ class ChatTableViewCell: UITableViewCell {
         let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("SJHBViewController") as UIViewController
         vc?.presentViewController(controller, animated: true, completion: nil)
         
+
+        
         
     }
+    
+//    func btnShowHB(sender:AnyObject){
+//        
+//        
+//        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+//        while(vc?.presentedViewController != nil){
+//            vc = vc?.presentedViewController
+//        }
+//        
+//        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("SJHBViewController") as UIViewController
+//        vc?.presentViewController(controller, animated: true, completion: nil)
+//        
+//
+//        
+//        
+//    }
     func btnShowCDS(sender:AnyObject){
         
         

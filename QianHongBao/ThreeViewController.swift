@@ -9,11 +9,20 @@
 import UIKit
 
 class ThreeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    
+    
+
+
+    
     let FriendsListCell="friendslistcell"
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        
 
+        
+        
         // Do any additional setup after loading the view.
     }
 
@@ -33,7 +42,7 @@ class ThreeViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         
         let cell = tableView.dequeueReusableCellWithIdentifier(FriendsListCell, forIndexPath: indexPath) as UITableViewCell
         
-        
+
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

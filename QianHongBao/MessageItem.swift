@@ -31,14 +31,17 @@ class MessageItem{
     var type:ChatType
     var content:String
     var name:String
+    var bonusId: Int?
     
-    init(uid:Int,type:ChatType,name:String,headImg:String,content:String){
+    
+    init(uid:Int,type:ChatType,name:String,headImg:String,content:String,bonusId:Int?){
         self.uid = uid
         self.type = type
         self.headImg = headImg
         self.name = name
         self.content = content
         self.time = NSDate()
+        self.bonusId = bonusId
     }
 }
 

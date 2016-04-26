@@ -26,7 +26,9 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         //init data
         self.chatData = [
 
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck"),
+            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: nil),
+            MessageItem(uid: 1,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 7780),
+           MessageItem(uid: 1,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 5600)
 
             
         ]
@@ -74,13 +76,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
               alert = apsDict as! NSDictionary
             }
-            let uid = Int( alert["uid"] as! Int)
-            let myuid = Common.getUid()
-            
-            
-            if uid == myuid {
-                return
-            }
+   
             
             //apsDict["alert"]
             let msg = alert["content"]
@@ -92,29 +88,34 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
             let photo = alert["photo"] as! String
             
+            let uid = Int( alert["uid"] as! Int)
+            let myuid = Common.getUid()
             
-               // 如果有红包
-            let id = alert["id"] as? Int
-           if (id != nil)
-            
-            {
-                 let bonus_id = Int(alert["id"] as! NSNumber)
-                // 存放红包id
-                Common.setBonusId(bonus_id as Int )
-                Common.setBonusImage(photo)
-                Common.setBonusNickName(nickName)
+            // 判断是否是我自己的消息
+            if uid == myuid && type == 1{
+             return
+  
             }
-           
-            
+
             if type == 1 {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil ))
+              
             }else if type == 2
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String))
+
+                let bonus_id = Int(alert["id"] as! NSNumber)
+                
+                var Userid:Int = 1
+                
+                if uid == myuid {
+                    Userid = 0
+                }
+                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id))
+
+
+                
             }
-            
-            
-            
+
             mTableView.reloadData()
         }
 
@@ -145,7 +146,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             
-            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
+//            print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
             
         }) { (task, error) in
             print(error)
@@ -175,7 +176,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let photo = Common.getHeadImg()
         let nickName = Common.getNickName()
         
-        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:nickName,headImg:photo,content:msg!))
+        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:nickName,headImg:photo,content:msg!,bonusId: nil))
 
         textFieldSend.text = ""
         
@@ -235,6 +236,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
         }
         cell!.adaptData(item)
+        cell?.messageItem = item
         return cell!
     }
 
