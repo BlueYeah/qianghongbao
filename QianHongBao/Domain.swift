@@ -37,6 +37,7 @@ let URL_UserInfo = SERVER_HTTP + "User/getInfo"
 let URL_UserHeadImage = SERVER_HTTP + "User/updatePhoto"
 let URL_getRandomBonus = SERVER_HTTP + "HB/getRandomBonus"
 let URL_getRoom = SERVER_HTTP + "Room/sendRoomPHP"
+let URL_getUserNotice = SERVER_HTTP + "User/notice"
 
 
 
@@ -52,7 +53,8 @@ let UD_TOKEN = "ud_token"
 let BD_NICKNAME = "bd_nickname"
 let BD_IMAGE = "bd_image"
 
-
+//RoomDetail
+let R_ID = "rid"
 
 // MYXG
 
@@ -320,6 +322,16 @@ class Common{
     
     class func getBonusNickName()->String{
         return NSUserDefaults.standardUserDefaults().objectForKey(BD_NICKNAME) as! String
+    }
+    
+    class func getNowRid()->Int{
+        return NSUserDefaults.standardUserDefaults().objectForKey(R_ID) as! Int
+    }
+    
+    class func setNowRid(str:Int) {
+        let mUserDefault = NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: R_ID)
+        
     }
     
     

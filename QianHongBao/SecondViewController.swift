@@ -35,12 +35,11 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
-            //print("=============data\(responseObj!["data"])")
+            
+            //print("=============data\(responseObj!["info"])")
             
             let datastring = responseObj!["data"] as!String
             let data = Common.json2obj(datastring) as! NSArray
-            
-            print("================data改\(data)")
 
             self.room = Room.initWithRoom(data)
             
@@ -94,6 +93,13 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let controller = storyboard!.instantiateViewControllerWithIdentifier("chatViewController") as UIViewController
         presentViewController(controller, animated: true, completion: nil)
+        
+        // 在进去房间的同时即时保存当前房间rid
+        let rid = room[indexPath.row].rid
+        print("======进入当前房间 rid=\(rid)")
+        Common.setNowRid(rid)
+
+        
     }
     
     /*

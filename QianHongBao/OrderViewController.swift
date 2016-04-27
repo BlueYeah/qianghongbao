@@ -53,9 +53,9 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 
                 print("----------------------\(res_jsonobj)")
                 
-                let data_json = res_jsonobj["data"]
+                let data = res_jsonobj["data"] as! NSDictionary
                 
-                let data:AnyObject = self.json2obj(data_json as! String)
+                //let data:AnyObject = self.json2obj(data_json as! String)
                 
                 //if data == nil return
                 let page_jsonobj: AnyObject = data.objectForKey("page")!

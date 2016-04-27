@@ -89,7 +89,17 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             let photo = alert["photo"] as! String
             
             let uid = Int( alert["uid"] as! Int)
+            
+            let rid = alert["rid"] as! Int
+            
+            
             let myuid = Common.getUid()
+            let nowRid = Common.getNowRid()
+            
+            //判断是否是这房间的消息
+            if nowRid != rid {
+                return
+            }
             
             // 判断是否是我自己的消息
             if uid == myuid && type == 1{
@@ -103,6 +113,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }else if type == 2
             {
 
+                // 判断红包是我发的
                 let bonus_id = Int(alert["id"] as! NSNumber)
                 
                 var Userid:Int = 1
@@ -121,7 +132,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
     }
     
-    func SendMessage(message: NSString ,rid: NSString) {
+    func SendMessage(message: NSString ,rid: Int) {
 
         
         let type = "all_device"
@@ -188,7 +199,9 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         
         // 信鸽
-        SendMessage(msg!, rid: "1")
+        let rid = Common.getNowRid()
+        
+        SendMessage(msg!, rid: rid)
         
 
 
