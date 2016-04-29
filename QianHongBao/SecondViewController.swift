@@ -37,13 +37,25 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             print("服务端API接入成功")
             
             //print("=============data\(responseObj!["info"])")
-            
+         let temp = responseObj!["data"] as? String
+          
+            if let sss = temp
+        {
             let datastring = responseObj!["data"] as!String
             let data = Common.json2obj(datastring) as! NSArray
-
+            
             self.room = Room.initWithRoom(data)
             
             self.tvHall.reloadData()
+            
+            }else {
+            
+                return
+            }
+            
+            
+            
+
             
             
         }) { (task, error) in

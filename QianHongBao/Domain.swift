@@ -38,7 +38,10 @@ let URL_UserHeadImage = SERVER_HTTP + "User/updatePhoto"
 let URL_getRandomBonus = SERVER_HTTP + "HB/getRandomBonus"
 let URL_getRoom = SERVER_HTTP + "Room/sendRoomPHP"
 let URL_getUserNotice = SERVER_HTTP + "User/notice"
-
+let URL_getpersonNum = SERVER_HTTP + "DS/getpersonNum"
+let URL_guessDS = SERVER_HTTP + "DS/cds"
+let URL_getDSResult = SERVER_HTTP + "DS/getResult"
+let URL_getMyGuess = SERVER_HTTP + "DS/getMyGuess"
 
 
 let IMG_LOADING = "qrcode"
@@ -55,6 +58,14 @@ let BD_IMAGE = "bd_image"
 
 //RoomDetail
 let R_ID = "rid"
+
+//DSBonus
+let DS_ID = "ds_id"
+let DS_TOTAL = "ds_total"
+let DS_DATE = "ds_date"
+let DS_TIME = "ds_time"
+
+
 
 // MYXG
 
@@ -141,6 +152,22 @@ class User{
             }
         }
         return res
+    }
+    
+}
+
+class DSBonus {
+    var id:Int
+    var bonus_total:Float
+    var date:String
+    var dsTime:Float
+
+    init(id:Int,bonus_total:Float,date:String,dsTime:Float)
+    {
+        self.id = id
+        self.bonus_total = bonus_total
+        self.date = date
+        self.dsTime = dsTime
     }
     
 }
@@ -328,6 +355,43 @@ class Common{
         return NSUserDefaults.standardUserDefaults().objectForKey(R_ID) as! Int
     }
     
+    class func getDSBonusId()->Int{
+        return NSUserDefaults.standardUserDefaults().objectForKey(DS_ID) as! Int
+    }
+    class func getDSBonusTotal()->Float{
+        return NSUserDefaults.standardUserDefaults().objectForKey(DS_TOTAL) as! Float
+    }
+    class func getDSBonusDate()->String{
+        return NSUserDefaults.standardUserDefaults().objectForKey(DS_DATE) as! String
+    }
+    
+    class func getDSBonusTime()->Float{
+        return NSUserDefaults.standardUserDefaults().objectForKey(DS_TIME) as! Float
+    }
+    
+    
+    class func setDSBonusTime(str:Float) {
+        let mUserDefault = NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: DS_TIME)
+        
+    }
+    
+    class func setDSBonusId(str:Int) {
+        let mUserDefault = NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: DS_ID)
+        
+    }
+    class func setDSBonusTotal(str:Float) {
+        let mUserDefault = NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: DS_TOTAL)
+        
+    }
+    class func setDSBonusDate(str:String) {
+        let mUserDefault = NSUserDefaults.standardUserDefaults()
+        mUserDefault.setObject(str, forKey: DS_DATE)
+        
+    }
+    
     class func setNowRid(str:Int) {
         let mUserDefault = NSUserDefaults.standardUserDefaults()
         mUserDefault.setObject(str, forKey: R_ID)
@@ -340,6 +404,8 @@ class Common{
         mUserDefault.setObject(str, forKey: BD_IMAGE)
         
     }
+    
+    
     
     class func setBonusNickName(str:String){
         let mUserDefault =  NSUserDefaults.standardUserDefaults()

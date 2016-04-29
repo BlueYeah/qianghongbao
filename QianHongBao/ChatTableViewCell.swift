@@ -44,6 +44,7 @@ class ChatTableViewCell: UITableViewCell {
             
             //bgImageView
             bgImage = UIImageView()
+            //bgImage.backgroundColor = UIColor.clearColor()
             self.addSubview(bgImage)
             
             //label
@@ -220,24 +221,13 @@ class ChatTableViewCell: UITableViewCell {
         
     }
     
-//    func btnShowHB(sender:AnyObject){
-//        
-//        
-//        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
-//        while(vc?.presentedViewController != nil){
-//            vc = vc?.presentedViewController
-//        }
-//        
-//        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("SJHBViewController") as UIViewController
-//        vc?.presentViewController(controller, animated: true, completion: nil)
-//        
-//
-//        
-//        
-//    }
+
     func btnShowCDS(sender:AnyObject){
         
-        
+        Common.setDSBonusId((messageItem.dsBonus?.id)!)
+        Common.setDSBonusTotal((messageItem.dsBonus?.bonus_total)!)
+        Common.setDSBonusDate((messageItem.dsBonus?.date)!)
+        Common.setDSBonusTime((messageItem.dsBonus?.dsTime)!)
         var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
         while(vc?.presentedViewController != nil){
             vc = vc?.presentedViewController
@@ -246,6 +236,7 @@ class ChatTableViewCell: UITableViewCell {
         let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("CDSVC") as UIViewController
         vc?.presentViewController(controller, animated: true, completion: nil)
 
+        
     }
     
 }
