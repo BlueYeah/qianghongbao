@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import AFNetworking
 class ChatTableViewCell: UITableViewCell {
     
     var headImage:UIImageView!
@@ -195,7 +195,7 @@ class ChatTableViewCell: UITableViewCell {
         let bgHeigh = CGFloat(91)
         var bgx = CGFloat(60)
         if(isSelf){
-            bgx -= bgWidth
+            bgx = self.frame.width-bgWidth-bgx
         }
         bgImageBtn.frame = CGRectMake(bgx, 25, bgWidth, bgHeigh)
     }
@@ -208,16 +208,84 @@ class ChatTableViewCell: UITableViewCell {
         
         print("==============点击了SJHB 存放红包信息")
         
-        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
-        while(vc?.presentedViewController != nil){
-            vc = vc?.presentedViewController
-        }
+        let mgr = AFHTTPSessionManager()
+        let token = Common.getToken()
+        let uid = Common.getUid()
+        let bonus_id = Common.getBonusId()
         
-        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("SJHBViewController") as UIViewController
-        vc?.presentViewController(controller, animated: true, completion: nil)
+        let param:NSDictionary = ["uid":uid, "token":token,"id":bonus_id ]
+        
+        // 点击后先判断红包是否有效
+        mgr.POST(URL_getRandomBonus, parameters: param, progress: nil, success: { (task, responseObj) in
+            print("服务端API接入成功")
+            print("=============data\(responseObj!["data"])==============SJ红包的response\(responseObj)========SJ红包的info\(responseObj!["info"] as! String)")
+            
+            if (responseObj!["data"]as? String == "")
+            {
+                print("=======红包失效============")
+
+                var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                while(vc?.presentedViewController != nil){
+                    vc = vc?.presentedViewController
+                }
+                
+                print("当前的VC=========的view\(vc)")
+                let hud1 = MBProgressHUD.showHUDAddedTo(vc!.view, animated: true)
+                hud1.label.text = "网络异常"
+                hud1.hideAnimated(true, afterDelay: 1)
+                return
+            }
+            
+            var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+            while(vc?.presentedViewController != nil){
+                vc = vc?.presentedViewController
+            }
+            
+            let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("SJHBViewController") as UIViewController
+            vc?.presentViewController(controller, animated: true, completion: nil)
+            
+            
+        }) { (task, error) in
+            print(error)
+            print("服务端API接入失败")
+            return
+            
+        }
+
+        
         
 
         
+
+        
+        
+    }
+    
+    func getCurrentVc() -> UIViewController {
+        var result = UIViewController()
+        
+        var window:UIWindow = UIApplication.sharedApplication().keyWindow!
+        if window.windowLevel != UIWindowLevelNormal {
+            let windows = UIApplication.sharedApplication().windows
+            
+            for tmpWin:UIWindow in windows {
+                if tmpWin.windowLevel == UIWindowLevelNormal {
+                    window = tmpWin
+                    break
+                }
+            }
+        
+            
+        }
+        
+        let frontView = window.subviews[0]
+        let  nextResponder:AnyObject = frontView.nextResponder()!
+        if nextResponder.isKindOfClass(UIViewController) {
+            result = nextResponder as! UIViewController
+        }else { result = window.rootViewController!}
+        
+        
+        return result
         
     }
     

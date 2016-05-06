@@ -27,6 +27,9 @@ class AppDelegate: XinGeAppDelegate {
             //self.presentViewController(vc, animated: true, completion: nil)
         }
         
+        // 打开数据库
+        SQLiteManager.sharedSQLiteManager.openDB("status.db")
+        
         // return true
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }

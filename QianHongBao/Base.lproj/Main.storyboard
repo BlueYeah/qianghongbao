@@ -512,6 +512,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="Vcname" destination="2uF-OW-atH" id="EvI-OR-IMW"/>
                         <outlet property="chatTableView" destination="gL8-wI-r88" id="QUr-YF-7ro"/>
                         <outlet property="mTableView" destination="gL8-wI-r88" id="yHP-Yy-LM9"/>
                         <outlet property="textFieldSend" destination="Ry5-LF-Ppg" id="HZF-ce-lYJ"/>

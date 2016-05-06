@@ -74,8 +74,11 @@ let XGurl = "http://openapi.xg.qq.com/v2/push/"
 let baseSign = "POSTopenapi.xg.qq.com/v2/push/"
 
 let secretKey = "0e8d5682dc81ab5a2dbd2b211895a389"
+let adSecreKey = "92319602671d73ebab46ff60537e3754"
+
 
 let access_id:NSString = "2200195440"
+let adAccess_id:NSString = "2100189658"
 
 
 
@@ -545,7 +548,7 @@ class MyXG {
    
         
     }
-    // 发送消息
+    // 发送ios消息
     class func message (dict:NSDictionary)-> NSString {
         let dict2 = ["aps":dict]
 
@@ -558,6 +561,20 @@ class MyXG {
         return message
  
     }
+    // 发送Android消息
+    class func Admessage (dict:NSDictionary)-> NSString {
+        let dict2 = ["title":"1","content":dict]
+        
+        // json
+        let data = try! NSJSONSerialization.dataWithJSONObject(dict2, options: .PrettyPrinted)
+        
+        // json字符串
+        let message:NSString = NSString (data: data ,encoding: NSUTF8StringEncoding)!
+        
+        return message
+        
+    }
+    
     // 字典拼接升序
     class func sortDictionary (dict:NSDictionary)-> NSString {
         
@@ -584,20 +601,23 @@ class MyXG {
         return appString
     }
     
-    class func sendMessage (type: NSString ,message:NSString) -> NSDictionary {
+    class func sendMessage (accessId:String, type: NSString ,message:NSString,enviroment:String,messageType:String) -> NSDictionary {
     
         let param = NSMutableDictionary()
  
         let timeString:NSString = MyXG.setUnix()
-        param.setValue(access_id, forKey: "access_id")
+        param.setValue(accessId, forKey: "access_id")
         param.setValue(timeString, forKey: "timestamp")
-        param.setValue("0", forKey: "message_type")
-        param.setValue("1", forKey: "environment")
+        param.setValue(messageType, forKey: "message_type")
+        param.setValue(enviroment, forKey: "environment")
         param.setValue(message, forKey: "message")
         
         let appParam = MyXG.sortDictionary(param)
         
-        let appString = "\(baseSign)\(type)\(appParam)\(secretKey)"
+        var appString = "\(baseSign)\(type)\(appParam)\(secretKey)"
+        if enviroment == "0" {
+            appString = "\(baseSign)\(type)\(appParam)\(adSecreKey)"
+        }
         
         //print("=======\(appString)")
         
@@ -610,6 +630,156 @@ class MyXG {
     }
     
     
+}
+
+class MySQL {
+    /// 将微博数据保存到数据库
+   class func saveMessage(dict:[String: AnyObject]) {
+        
+        // 1.定义SQL语句
+        let sql = "INSERT OR REPLACE INTO message (id, rid,uid,content,nackname,date,status,type,bonus_total,dsTime,photo) VALUES ( ?, ?,?,?,?,?,?,?,?,?,?);"
+        
+
+            // 3.1 cid
+            let id = dict["id"] as! Int
+            let rid = dict["rid"] as! Int
+            let uid = dict["uid"] as! Int
+            let content = dict["content"] as! String
+            let nackname = dict["nackname"] as! String
+    let date:String
+    
+            if let _ = dict["date"] as? String  {
+                date = dict["date"] as! String
+            }else {
+                date = "0"
+                
+            }
+    let status:Int
+    
+    if let _ = dict["status"] as? Int  {
+        status = dict["status"] as! Int
+    }else {
+         status = 0
+        
+    }
+    let dsTime:Int
+    
+    if let _ = dict["dsTime"] as? Int  {
+         dsTime = dict["dsTime"] as! Int
+    }else {
+         dsTime = 0
+        
+    }
+    let bonus_total:Float
+    if let _ = dict["bonus_total"] as? Float  {
+         bonus_total = dict["bonus_total"] as! Float
+    }else {
+         bonus_total = 0
+        
+    }
+    
+
+            let type = dict["type"] as! Int
+            let photo = dict["photo"] as! String
+  
+            
+            // 4. 执行 sql
+            SQLiteManager.sharedSQLiteManager.queue!.inTransaction({ (db, rollback) -> Void in
+                if !db.executeUpdate(sql, id, rid, uid, content,nackname,date,status,type,bonus_total,dsTime,photo) {
+                    rollback.memory = true
+                }
+            })
+    
+    }
+    
+    /// 加载缓存数据
+    class  func loadMessage(since_id: Int, max_id: Int,rid:Int ,finished:(array:Array<MessageItem>)->())
+    {
+        // 1.定义SQL语句
+        var sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(rid)"
+        
+//        if since_id > 0 {           // 下拉刷新
+//            sql += "AND mid > \(since_id) \n"
+//        } else if max_id > 0 {      // 上拉刷新
+//            sql += "AND mid <= \(max_id) \n"
+//        }
+//        sql += "ORDER BY mid DESC LIMIT 3;"
+        
+        // 测试 sql
+        print(sql)
+        
+        // 3. 执行 SQL
+        SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) -> Void in
+            let rs = db.executeQuery(sql)!
+
+            // 字典是一条完整的微博数据的字典
+            var array:Array<MessageItem> = []
+            
+            while rs.next() {
+
+                
+                
+                let uid = Int( rs.intForColumn("uid"))
+                let type = rs.intForColumn("type")
+                let name = rs.stringForColumn("nackname")
+                let headImg = rs.stringForColumn("photo")
+                let content = rs.stringForColumn("content")
+                let id = rs.intForColumn("id")
+                let bonus_total = Float( rs.intForColumn("bonus_total"))
+                let date = rs.stringForColumn("date")
+                let dstime = Float( rs.intForColumn("dsTime"))
+                
+                let myuid = Common.getUid()
+                // 判断是否自己的消息
+                var Userid:Int = 1
+                
+                if uid == myuid {
+                    Userid = 0
+                }
+                
+                if type == 1 {
+
+                    
+                    array.append(MessageItem(uid:Userid ,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil ))
+                    
+                }else if type == 2
+                {
+                    
+
+                    array.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:name ,headImg:headImg ,content:content,bonusId:Int (id),dsBonus: nil))
+                    
+                }else if type == 3
+                    
+                {
+                    print("=======猜单双")
+
+                    
+                    
+                    let dsBonus = DSBonus.init(id:Int(id), bonus_total: bonus_total, date: date, dsTime: dstime)
+                    
+                    array.append(MessageItem(uid:Userid,type:ChatType.CDS,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: dsBonus))
+                }else if type == 4
+                    
+                {
+                    print("=======猜随机")
+                    
+                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil))
+                }else if type == 5
+                    
+                {
+                    print("=======猜单双")
+                    
+                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil))
+                }
+
+
+                           }
+            
+            // 完成回调
+            finished(array: array)
+        })
+    }
+
 }
 struct MyUserDefaultKey{
     static let KEY_HEADIMG = "ud_headimg"

@@ -25,8 +25,6 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         super.viewDidLoad()
         
         
-        print("threeViewcontroller================")
-        
         let mgr = AFHTTPSessionManager()
         let token = Common.getToken()
         let uid = Common.getUid()
@@ -36,9 +34,23 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             
-            //print("=============data\(responseObj!["info"])")
+         
+             // 实现token过期
+            if responseObj!["status"] as! Int == 0
+            {
+                MyDialog.showErrorAlert(self, msg: responseObj!["info"] as! String)
+                let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                self.presentViewController(controller, animated: true, completion: nil)
+                
+            }
+
+            
+        
+            
+            
          let temp = responseObj!["data"] as? String
-          
+        
+       
             if let sss = temp
         {
             let datastring = responseObj!["data"] as!String
@@ -103,13 +115,16 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let controller = storyboard!.instantiateViewControllerWithIdentifier("chatViewController") as UIViewController
-        presentViewController(controller, animated: true, completion: nil)
         
         // 在进去房间的同时即时保存当前房间rid
         let rid = room[indexPath.row].rid
         print("======进入当前房间 rid=\(rid)")
         Common.setNowRid(rid)
+        
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("chatViewController") as UIViewController
+        presentViewController(controller, animated: true, completion: nil)
+        
+
 
         
     }

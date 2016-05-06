@@ -66,10 +66,19 @@ class FourViewController: UIViewController {
                 //print("----------------\(jobj)")
                 
                 let status = (jobj["status"] as! NSNumber).integerValue
-                if(status==0){
+//                if(status==0){
+//                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+//                    return
+//                }
+                // 实现token过期
+                if (status==0)
+                {
                     MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
-                    return
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    
                 }
+                
                 //success
                 
                 
@@ -77,19 +86,20 @@ class FourViewController: UIViewController {
                 
                 print("====data\(data)")
                 
-                var user = data as! Dictionary<String,String>
+                var user = data as! Dictionary<String,AnyObject>
                 
                 
                 
-                let uid = Int(user["uid"]!)!
+                let uid = Int(user["uid"]! as! String)!
                 
                 
-                Common.setHeadImg(user["photo"]! as String)
+                Common.setHeadImg(user["photo"]! as! String)
                 
-                Common.setNickName(user["nackname"]! as String)
+                Common.setNickName(user["nackname"]! as! String)
                 
-                Common.setMoney(Double(user["integral"]!)!)
+                Common.setMoney(Double(user["integral"]! as! String)!)
                 
+                Common.setToken(user["token"] as! String)
                 
                 self.lName.text = Common.getNickName()
                 self.lMoney.text = "\(Common.getMoney())"

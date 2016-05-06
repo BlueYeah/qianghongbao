@@ -8,3 +8,4 @@ pod 'CryptoSwift'
 
 pod 'AFNetworking'
 
+pod 'FMDB'

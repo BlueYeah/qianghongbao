@@ -79,6 +79,11 @@
 		32166B6F1CC2170B00EBD1EE /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 32166B6E1CC2170B00EBD1EE /* libsqlite3.0.tbd */; };
 		32166B731CC24D3E00EBD1EE /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 32166B721CC24D3E00EBD1EE /* NSString+MD5.m */; };
 		324ECD171CA55F1700E0A766 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 324ECD161CA55F1700E0A766 /* MBProgressHUD.m */; };
+		324FB99F1CD9969C00B355DF /* tables.sql in Resources */ = {isa = PBXBuildFile; fileRef = 324FB99C1CD9969C00B355DF /* tables.sql */; };
+		324FB9A01CD9969C00B355DF /* String+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324FB99D1CD9969C00B355DF /* String+Category.swift */; };
+		324FB9A11CD9969C00B355DF /* SQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324FB99E1CD9969C00B355DF /* SQLiteManager.swift */; };
+		324FB9A51CD996EB00B355DF /* FMDatabaseAdditionsVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324FB9A31CD996EB00B355DF /* FMDatabaseAdditionsVariadic.swift */; };
+		324FB9A61CD996EB00B355DF /* FMDatabaseVariadic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324FB9A41CD996EB00B355DF /* FMDatabaseVariadic.swift */; };
 		A799D0D597EFA5E109A8B523 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D44DD68F7375AAE334333F8 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -208,6 +213,11 @@
 		32166B721CC24D3E00EBD1EE /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		324ECD151CA55F1700E0A766 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		324ECD161CA55F1700E0A766 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		324FB99C1CD9969C00B355DF /* tables.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tables.sql; sourceTree = "<group>"; };
+		324FB99D1CD9969C00B355DF /* String+Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Category.swift"; sourceTree = "<group>"; };
+		324FB99E1CD9969C00B355DF /* SQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteManager.swift; sourceTree = "<group>"; };
+		324FB9A31CD996EB00B355DF /* FMDatabaseAdditionsVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseAdditionsVariadic.swift; sourceTree = "<group>"; };
+		324FB9A41CD996EB00B355DF /* FMDatabaseVariadic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDatabaseVariadic.swift; sourceTree = "<group>"; };
 		617C50727885780E8421E1E2 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7D44DD68F7375AAE334333F8 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5B4858FD9CF26F92C2FCEEA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -456,6 +466,7 @@
 				2EE2DE001C429F4C00C75519 /* Main.storyboard */,
 				2EE2DE031C429F4C00C75519 /* Images.xcassets */,
 				2EE2DE051C429F4C00C75519 /* LaunchScreen.xib */,
+				324FB99B1CD9962000B355DF /* Tool */,
 				2EE25B281C440302002D99C3 /* Libs */,
 				2EE2DDF81C429F4C00C75519 /* Supporting Files */,
 				2EE25B6C1C4406D9002D99C3 /* Bridge.h */,
@@ -522,6 +533,26 @@
 				324ECD161CA55F1700E0A766 /* MBProgressHUD.m */,
 			);
 			path = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		324FB99B1CD9962000B355DF /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				324FB9A21CD996EB00B355DF /* Swift extensions */,
+				324FB99C1CD9969C00B355DF /* tables.sql */,
+				324FB99D1CD9969C00B355DF /* String+Category.swift */,
+				324FB99E1CD9969C00B355DF /* SQLiteManager.swift */,
+			);
+			name = Tool;
+			sourceTree = "<group>";
+		};
+		324FB9A21CD996EB00B355DF /* Swift extensions */ = {
+			isa = PBXGroup;
+			children = (
+				324FB9A31CD996EB00B355DF /* FMDatabaseAdditionsVariadic.swift */,
+				324FB9A41CD996EB00B355DF /* FMDatabaseVariadic.swift */,
+			);
+			path = "Swift extensions";
 			sourceTree = "<group>";
 		};
 		9BB646E0A79B30EECE3D5E63 /* Frameworks */ = {
@@ -633,6 +664,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				324FB99F1CD9969C00B355DF /* tables.sql in Resources */,
 				32166B5F1CC215C400EBD1EE /* ReleaseNotes.txt in Resources */,
 				2EE25BB01C442190002D99C3 /* LICENSE in Resources */,
 				2EE2DE021C429F4C00C75519 /* Main.storyboard in Resources */,
@@ -730,7 +762,9 @@
 				2EE25B5C1C440346002D99C3 /* MJRefreshAutoNormalFooter.m in Sources */,
 				2EE25B601C440346002D99C3 /* MJRefreshBackStateFooter.m in Sources */,
 				2ECE2E761C42C8DB0080B642 /* MessageItem.swift in Sources */,
+				324FB9A51CD996EB00B355DF /* FMDatabaseAdditionsVariadic.swift in Sources */,
 				2EE2DE1F1C42A85300C75519 /* FourViewController.swift in Sources */,
+				324FB9A11CD9969C00B355DF /* SQLiteManager.swift in Sources */,
 				2EE25B611C440346002D99C3 /* MJRefreshGifHeader.m in Sources */,
 				2EE2DDFD1C429F4C00C75519 /* FirstViewController.swift in Sources */,
 				2EE25B681C440346002D99C3 /* UIView+MJExtension.m in Sources */,
@@ -738,6 +772,7 @@
 				2EE5F9731C8531E900FFD149 /* OrderViewController.swift in Sources */,
 				2EE25B5A1C440346002D99C3 /* MJRefreshHeader.m in Sources */,
 				2EE25BBF1C442190002D99C3 /* UIView+WebCacheOperation.m in Sources */,
+				324FB9A01CD9969C00B355DF /* String+Category.swift in Sources */,
 				2EEE2B6C1C8AD655004D0238 /* JieSuanViewController.swift in Sources */,
 				2EEBD3851C87C72200A6914F /* ModDataViewController.swift in Sources */,
 				2EE25BB81C442190002D99C3 /* SDWebImageManager.m in Sources */,
@@ -761,6 +796,7 @@
 				2EE25BB11C442190002D99C3 /* README.md in Sources */,
 				2EE25B5E1C440346002D99C3 /* MJRefreshBackGifFooter.m in Sources */,
 				2E7537FC1C8E95DF0082FF0A /* Domain.swift in Sources */,
+				324FB9A61CD996EB00B355DF /* FMDatabaseVariadic.swift in Sources */,
 				324ECD171CA55F1700E0A766 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

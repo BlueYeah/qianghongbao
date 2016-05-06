@@ -206,6 +206,7 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
         
 //        UIAlertView(title: "3-", message: "didReceive", delegate: self, cancelButtonTitle: "OK").show()
         let apsDictionary = userInfo["aps"] as? NSDictionary
+        print("收到的消息==========aps===\(userInfo["aps"])")
         if let apsDict = apsDictionary
         {
 //            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"]!["content"] as? String, delegate: self, cancelButtonTitle: "确定")
@@ -213,6 +214,18 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
             
             // 发送消息通知
             NSNotificationCenter.defaultCenter().postNotificationName("NewMessage", object: nil, userInfo: userInfo )
+     
+            let temp = apsDict["alert"] as? NSDictionary
+            if let ss = temp {
+                MySQL.saveMessage(apsDict["alert"]as! NSDictionary as! [String : AnyObject])
+            }else {
+                let data = apsDict["alert"] as! String
+                let dict = Common.json2obj(data) as! NSDictionary
+                MySQL.saveMessage(dict as! [String : AnyObject])
+            }
+            
+            
+            
         }
         
         // 清空通知栏通知

@@ -52,7 +52,7 @@ class SJHBViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
         mgr.POST(URL_getRandomBonus, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
-            print("=============data\(responseObj!["data"])")
+            print("=============data\(responseObj!["data"])==============SJ红包的response\(responseObj)========SJ红包的info\(responseObj!["info"] as! String)")
             //let data = Common.json2obj(responseObj["data"])
             
             if (responseObj!["data"]!!["randombonus"] == nil)

@@ -15,13 +15,18 @@ PODS:
   - AFNetworking/UIKit (3.0.4):
     - AFNetworking/NSURLSession
   - CryptoSwift (0.3)
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
 
 DEPENDENCIES:
   - AFNetworking
   - CryptoSwift
+  - FMDB
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   CryptoSwift: 19d29910d88440fcb132761d9ab57e175f1b0d0e
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
 
 COCOAPODS: 0.39.0

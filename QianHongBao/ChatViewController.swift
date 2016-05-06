@@ -14,24 +14,38 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     @IBOutlet weak var textFieldSend: UITextField!
     
     @IBOutlet weak var chatTableView: UITableView!
+    @IBOutlet weak var Vcname: UILabel!
     //chat data
     var chatData:Array<MessageItem>!
     
     var mMJRefreshHeader:MJRefreshNormalHeader!
+    let mgr = AFHTTPSessionManager()
+    let nowRid = Common.getNowRid()
     
-
     @IBOutlet weak var mTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
+        
         //init data
         self.chatData = [
 
-            MessageItem(uid: 1,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: nil,dsBonus: nil),
-            MessageItem(uid: 1,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 7780,dsBonus: nil),
+            MessageItem(uid: 22,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: nil,dsBonus: nil),
+            MessageItem(uid: 0,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 7780,dsBonus: nil),
             MessageItem(uid: 1,type: ChatType.CDS,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 5600,dsBonus: nil)
 
             
         ]
+
+        
+        changeVcName(nowRid)
+
+
+        MySQL.loadMessage(0, max_id: 0, rid: nowRid) { (array) in
+            self.chatData = array
+        }
+        
     
 //        self.mMJRefreshHeader = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction: "pullRefresh")
         
@@ -43,8 +57,12 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         // Do any additional setup after loading the view.
         
         //scroll to bottom
-        let indexPath = NSIndexPath(forRow: chatData.count-1, inSection: 0)
-        mTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        if chatData.count > 5 {
+            
+            let indexPath = NSIndexPath(forRow: chatData.count-1, inSection: 0)
+            mTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        }
+       
         
         
         // 接收聊天消息通知
@@ -52,6 +70,24 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.ReceiveMessage(_:)), name: "NewMessage", object: nil)
         
         
+    }
+    
+    func changeVcName(rid:Int) {
+        if rid == 1 {
+            Vcname.text = "100元红包群"
+        } else if rid == 2
+        {
+            Vcname.text = "100单双"
+        }else if rid == 3
+        {
+            Vcname.text = "80红包群"
+        }else if rid == 4
+        {
+            Vcname.text = "200红包群"
+        }else if rid == 5
+        {
+            Vcname.text = "50单双"
+        }
     }
     
     func ReceiveMessage(notification: NSNotification) {
@@ -134,13 +170,27 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 
                 let bonus_total = Float(alert["bonus_total"] as! NSNumber)
                 let date = alert["date"] as! String
-                let dsTime = Float (alert["dsTime"] as! String)
+                let dsTime =  alert["dsTime"] as! float_t
                 
                 
-                let dsBonus = DSBonus.init(id: bonus_id, bonus_total: bonus_total, date: date,dsTime: dsTime!)
+                let dsBonus = DSBonus.init(id: bonus_id, bonus_total: bonus_total, date: date,dsTime: dsTime)
                 
+                var Userid:Int = 1
+                
+                if uid == myuid {
+                    Userid = 0
+                }
                 
                 chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: dsBonus))
+            }else if type == 4
+            {
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil))
+                
+            }
+            else if type == 5
+            {
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil))
+                
             }
 
             mTableView.reloadData()
@@ -156,7 +206,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let photo = Common.getHeadImg()
         let nickName = Common.getNickName()
         
-        let appDict:NSDictionary = ["uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1]
+        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
         
         //设置message
         let dict:NSDictionary = ["alert":appDict]
@@ -164,7 +214,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let message = MyXG.message(dict)
         
         
-        let param = MyXG.sendMessage(type, message:message)
+        let param = MyXG.sendMessage(access_id as String, type: type, message: message, enviroment: "1", messageType: "0")
         
         let mgr = AFHTTPSessionManager()
         
@@ -178,7 +228,45 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }) { (task, error) in
             print(error)
         }
+        
+        
 
+        
+
+        
+    }
+    
+    func SendAdMessage(message: NSString ,rid: Int) {
+        
+        
+        let type = "all_device"
+        let uid = Common.getUid()
+        let photo = Common.getHeadImg()
+        let nickName = Common.getNickName()
+        
+        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
+        
+        //设置message
+        
+        let message = MyXG.Admessage(appDict)
+        
+        let param = MyXG.sendMessage(adAccess_id as String, type: type, message: message, enviroment: "0", messageType: "2")
+        
+        
+        
+        
+        let url = "\(XGurl)\(type)"
+        
+        print("ad的字典=============\(param)")
+        mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
+            print("服务端API接入成功")
+            
+                    print("-----------------response的message\(responseObj!["err_msg"]) 和ALL\(responseObj) ")
+            
+        }) { (task, error) in
+            print(error)
+        }
+        
         
     }
     
@@ -197,6 +285,14 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     @IBAction func btnSend(sender: AnyObject) {
         let msg = textFieldSend.text
         if(msg==""){
+            
+            // 测试随机红包
+            let url1 = "http://192.168.111.106/QHB/Room/testsendhb/rid/1/uid/6"
+            mgr.POST(url1, parameters: nil, success: { (task, respon) in
+                print("红包要发送啦======")
+            }) { (task, error) in
+                print("红包发送失败")
+            }
             return
         }
         
@@ -218,8 +314,11 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let rid = Common.getNowRid()
         
         SendMessage(msg!, rid: rid)
-        
+        SendAdMessage(msg!, rid: rid)
 
+
+        
+ 
 
         
     }

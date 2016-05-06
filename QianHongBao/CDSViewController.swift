@@ -49,7 +49,7 @@ class CDSViewController: UIViewController {
         self.RESULT_TYPE = CDS_CHOICE.Chose
         changeResultType()
        // 提交单双结果
-        guessDS()
+        guessDS(1)
         // 获取我的竞猜
         getMyGuess()
         
@@ -60,7 +60,7 @@ class CDSViewController: UIViewController {
         self.RESULT_TYPE = CDS_CHOICE.Chose
         changeResultType()
         // 提交单双结果
-        guessDS()
+        guessDS(2)
         // 获取我的竞猜
         getMyGuess()
     }
@@ -70,8 +70,13 @@ class CDSViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
+        
+        
         // 设置页面状态
         changeResultType()
+        
+        guessResult()
         // Do any additional setup after loading the view.
         // 设置倒数时间
         setTime()
@@ -86,8 +91,31 @@ class CDSViewController: UIViewController {
     }
     
     func setTime() {
+        // 默认的时间
         let dsTime = Int(Common.getDSBonusTime()*60)
-        restSeconds = dsTime
+        // 红包对应date字符串
+        let dsDateString = Common.getDSBonusDate()
+        //获取当前时间字符串
+        let date:NSDate = NSDate()
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.stringFromDate(date)
+        let dsDate = formatter.dateFromString(dsDateString)
+        let nowDate = formatter.dateFromString(dateString)
+        
+        let seconds = Int( (nowDate?.timeIntervalSinceDate(dsDate!))!)
+        
+        print("dsDate===\(dsDate)=======nowDate\(nowDate)===============时间秒差\(seconds)")
+        
+        
+        let resSeconds:Int?
+        if seconds < dsTime{
+             resSeconds = dsTime - seconds
+            
+        }else { resSeconds = 0}
+        
+        
+        restSeconds = resSeconds
         lTime.text = getTimeStr(self.restSeconds!)
         
         if(self.restSeconds>0){
@@ -130,24 +158,24 @@ class CDSViewController: UIViewController {
             
         }else if(RESULT_TYPE==CDS_CHOICE.Chose){
             lMyChoice.hidden = false
-            btnD.removeFromSuperview()
-            btnS.removeFromSuperview()
+            btnD.hidden = true
+            btnS.hidden = true
             
         }else if(RESULT_TYPE==CDS_CHOICE.Result){
-            btnD.removeFromSuperview()
-            btnS.removeFromSuperview()
+            btnD.hidden = true
+            btnS.hidden = true
             
         }
     }
     
-    func guessDS() {
+    func guessDS(result:Int) {
 
-        let param:NSDictionary = ["uid":uid,"token":token,"dsId":dsId,"rid":rid,"result":result!]
+        let param:NSDictionary = ["uid":uid,"token":token,"dsId":dsId,"rid":rid,"result":result]
         
         mgr.POST(URL_guessDS, parameters: param, progress: nil, success: { (task, responObj) in
 //            print("=======服务端API接入成功")
 //            
-//            print("==========respon=\(responObj)=========data\(responObj!["info"])")
+            print("==========发送我的guess的respon=\(responObj)=========data\(responObj!["info"])")
             }) { (task, error) in
                  print("========服务端API接入失败")
         }
@@ -161,20 +189,53 @@ class CDSViewController: UIViewController {
         mgr.POST(URL_getDSResult, parameters: param, progress: nil, success: { (task, responObj) in
 //            print("=======服务端API接入成功，倒数完毕=====")
 //            
-//            print("==========respon=\(responObj)=========data\(responObj!["data"])")
+            print("==========respon=\(responObj)=========data\(responObj!["data"])")
             
-            let data = responObj!["data"] as! NSDictionary
-            let result = data["result"] as! String
-            self.lResult2.hidden = false
+            let data = responObj!["data"] as? NSDictionary
+            if (data == 0)
+            {
+                return
+            }
+
+            
+            let result = data!["result"] as? String
+
             if (result == "1")
             {
+                self.RESULT_TYPE = CDS_CHOICE.Result
                 self.lResult2.text = "单"
-            
+                self.changeResultType()
+                
             }else if (result == "2")
             {
+                self.RESULT_TYPE = CDS_CHOICE.Result
                 self.lResult2.text = "双"
-            }
+                self.changeResultType()
+            }else { self.lResult2.hidden = true}
             
+            // 当前竞猜人数
+            let personNum = data!["personNum"] as! Int
+            self.guessMember.text = "当前竞猜人数为：\(personNum)"
+            
+            // 我的竞猜
+            let myGuess = data!["guess"] as? String
+            self.lMyChoice.hidden = false
+            if myGuess == "1"
+            {
+                self.RESULT_TYPE = CDS_CHOICE.Chose
+                self.lMyChoice.text = "我的竞猜：单"
+            } else if myGuess == "2"
+            {
+                self.RESULT_TYPE = CDS_CHOICE.Chose
+                self.lMyChoice.text = "我的竞猜：双"
+            } else {
+                
+                self.lMyChoice.text = "我的竞猜：0"}
+            
+            self.lResult2.hidden = false
+
+            
+            self.changeResultType()
             
             }, failure: { (task, error) in
                 print("========服务端API接入失败")
@@ -197,7 +258,7 @@ class CDSViewController: UIViewController {
         mgr.POST(URL_getpersonNum, parameters: param, progress: nil, success: { (task, responObj) in
 //            print("=======服务端API接入成功")
 //            
-//            print("==========respon=\(responObj)=========data\(responObj!["data"])")
+            print("==========respon=\(responObj)=========data\(responObj!["data"])=========info\(responObj!["info"])")
             
             let data = responObj!["data"] as! NSDictionary
             let member = data["personNum"] as! Int
@@ -216,13 +277,13 @@ class CDSViewController: UIViewController {
         mgr.POST(URL_getMyGuess, parameters: param, progress: nil, success: { (task, responObj) in
             //            print("=======服务端API接入成功")
             //
-            //            print("==========respon=\(responObj)=========data\(responObj!["data"])")
+                        print("==========respon=\(responObj)=========data\(responObj!["data"])==========info\(responObj!["info"])")
             let data = responObj!["data"] as! NSDictionary
             // 当前竞猜人数
-            let personNum = data["personNum"] as! String
+            let personNum = data["personNum"] as! Int
             self.guessMember.text = "当前竞猜人数为：\(personNum)"
             // 我的竞猜
-            let myGuess = data["guess"] as! String
+            let myGuess = data["guess"] as? String
             
             if myGuess == "1"
             {
@@ -230,7 +291,7 @@ class CDSViewController: UIViewController {
             } else if myGuess == "2"
             {
                 self.lMyChoice.text = "我的竞猜：双"
-            }
+            }else { self.lMyChoice.text = "我的竞猜：0"}
             
             
             }) { (task, error) in

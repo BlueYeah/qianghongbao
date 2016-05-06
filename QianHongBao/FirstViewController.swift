@@ -107,6 +107,14 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
 
+                // 实现token过期
+                if res_jsonobj["status"] as! Int == 0
+                {
+                    MyDialog.showErrorAlert(self, msg: res_jsonobj["info"] as! String)
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                    self.presentViewController(controller, animated: true, completion: nil)
+                    
+                }
                 
                 let data_json = res_jsonobj["data"]
                 
