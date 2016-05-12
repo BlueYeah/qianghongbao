@@ -16,6 +16,10 @@ class DataViewController: UIViewController {
     @IBAction func btnBack(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+
+    @IBOutlet weak var myWebView: UIView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,30 +29,24 @@ class DataViewController: UIViewController {
         let uid = Common.getUid()
         let token = Common.getToken()
         
-        let mgr = AFHTTPSessionManager()
-        
-        let param:NSDictionary = ["uid":uid ,"token":token]
-        
-        
-       mgr.POST(URL_getUserNotice, parameters: param, progress: nil, success: { (task, responseObj) in
-        print("=====服务端API接入成功")
-        print("===========response\(responseObj)=====info\(responseObj!["info"])")
-        
-        let str = responseObj!["data"] as! String
-        
-        let index = str.startIndex.advancedBy(3)
-        let index2 = str.endIndex.advancedBy(-4)
-        let range = Range<String.Index>(start: index, end: index2)
-        let notice = str.substringWithRange(range)
-        
-        //print("========notice\(notice)")
-        self.tvData.text = notice
+//        let url = "http://192.168.111.106/QHB/User/notice/uid/\(uid)/token/\(token)"
+//        print("weburl=====\(url)")
+//        let request:NSURLRequest = NSURLRequest(URL: NSURL(fileURLWithPath:url))
+//        webview.loadRequest(request)
+        let webView = UIWebView(frame:self.view.bounds)
+        let url = NSURL(string: "http://192.168.111.106/QHB/User/notice/uid/\(uid)/token/\(token)")
+        let request = NSURLRequest(URL: url!)
+
+
+        let data = NSData(contentsOfURL: url!)
         
         
         
-        }) { (task, error) in
-            print("===========服务端API接入失败")
-        }
+        webView.loadData(data!, MIMEType: "text/html", textEncodingName: "UTF-8", baseURL: url!)
+
+        self.myWebView.addSubview(webView)
+        
+
         
         
         

@@ -35,12 +35,21 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             print("服务端API接入成功")
             
          
+            print("second===========\(responseObj)========info\(responseObj!["info"])")
              // 实现token过期
-            if responseObj!["status"] as! Int == 0
+            if responseObj!["status"] as! Int == -2
             {
-                MyDialog.showErrorAlert(self, msg: responseObj!["info"] as! String)
-                let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-                self.presentViewController(controller, animated: true, completion: nil)
+
+              
+                MyDialog.showErrorAlert(self, msg: responseObj!["info"] as! String, completion: {
+                    var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                    while(vc?.presentedViewController != nil){
+                        vc = vc?.presentedViewController
+                    }
+                    
+                    let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                    vc?.presentViewController(controller, animated: true, completion: nil)
+                })
                 
             }
 
@@ -61,6 +70,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             self.tvHall.reloadData()
             
             }else {
+
             
                 return
             }
@@ -71,6 +81,9 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             
             
         }) { (task, error) in
+            let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud1.label.text = "网络异常"
+            hud1.hideAnimated(true, afterDelay: 1)
             print(error)
         }
         

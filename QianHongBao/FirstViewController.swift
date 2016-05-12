@@ -75,6 +75,14 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         let data = ["uid":self.uid,"token":self.token]
         MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), {
+                
+                if (error != nil)
+                {
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "网络异常"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    print("商品信息没有接受到数据")
+                    return}
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
@@ -104,15 +112,31 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         print("======uid\(self.uid)")
         MyHttp.doPost(sUrl, data: data) { (data, req, error) in
             dispatch_async(dispatch_get_main_queue(), {
+                // 若没数据 则返回
+                if (error != nil)
+                {
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "网络异常"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    return
+                }
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
 
                 // 实现token过期
                 if res_jsonobj["status"] as! Int == 0
                 {
-                    MyDialog.showErrorAlert(self, msg: res_jsonobj["info"] as! String)
-                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-                    self.presentViewController(controller, animated: true, completion: nil)
+
+  
+                    MyDialog.showErrorAlert(self, msg: res_jsonobj["info"] as! String, completion: {
+                        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                        while(vc?.presentedViewController != nil){
+                            vc = vc?.presentedViewController
+                        }
+                        
+                        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                        vc?.presentViewController(controller, animated: true, completion: nil)
+                    })
                     
                 }
                 

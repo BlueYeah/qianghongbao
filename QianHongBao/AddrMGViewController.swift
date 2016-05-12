@@ -33,7 +33,7 @@ class AddrMGViewController: UIViewController {
         
         
         if(name=="" || phone=="" || addr==""){
-            MyDialog.showErrorAlert(self, msg: "数据不能为空")
+            MyDialog.showErrorAlert(self, msg: "数据不能为空",completion: nil)
             return
         }
         let data:Dictionary<String,AnyObject> = ["name":name!,"phone":phone!,"addr":addr!]

@@ -230,7 +230,7 @@ class CDSViewController: UIViewController {
                 self.lMyChoice.text = "我的竞猜：双"
             } else {
                 
-                self.lMyChoice.text = "我的竞猜：0"}
+                self.lMyChoice.text = "我的竞猜： "}
             
             self.lResult2.hidden = false
 
@@ -291,7 +291,7 @@ class CDSViewController: UIViewController {
             } else if myGuess == "2"
             {
                 self.lMyChoice.text = "我的竞猜：双"
-            }else { self.lMyChoice.text = "我的竞猜：0"}
+            }else { self.lMyChoice.text = "我的竞猜： "}
             
             
             }) { (task, error) in

@@ -16,7 +16,7 @@ class ChatTableViewCell: UITableViewCell {
     var bgImageBtn:UIButton!
     var lName:UILabel!
     var messageItem:MessageItem!
-    
+    var timerText:UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,6 +34,9 @@ class ChatTableViewCell: UITableViewCell {
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        timerText = UILabel()
+        self.addSubview(timerText)
+        
         headImage = UIImageView()
         self.addSubview(headImage)
         
@@ -78,13 +81,30 @@ class ChatTableViewCell: UITableViewCell {
         headImage.sd_setImageWithURL(NSURL(string: mi.headImg), placeholderImage: UIImage(named: IMG_LOADING))
 //        headImage.image = UIImage(named: mi.headImg)
 //        headImage.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+        let timerW = CGFloat(120)
+        let timerX = (self.frame.width - timerW)/2
+        
+        // 设置消息时间
+        
+        let timerStr = getSeconds(mi)
+        
+        // 3.获取秒数
+        timerText.text = timerStr
+        let timerFont = UIFont.systemFontOfSize(10)
+        timerText.font = timerFont
+        timerText.textColor = UIColor.whiteColor()
+        timerText.backgroundColor = UIColor.lightGrayColor()
+        timerText.sizeToFit()
+        timerText.frame.size = CGSize(width: timerW,height: 20)
+        timerText.frame.origin = CGPoint(x: timerX ,y:0 )
         
         headImage.frame.size = CGSize(width: 40 , height: 40)
         var imageOX = CGFloat(10)
         if(isSelf){
             imageOX = self.frame.width-50
         }
-        headImage.frame.origin = CGPoint(x: imageOX, y: 10)
+       let timerMaxY = timerText.bounds.maxY
+        headImage.frame.origin = CGPoint(x: imageOX, y: timerMaxY)
         
         //name
         
@@ -98,7 +118,8 @@ class ChatTableViewCell: UITableViewCell {
         if(isSelf){
             lnx = self.frame.width-lName.frame.width-60
         }
-        lName.frame.origin = CGPointMake(lnx, 10)
+        print("-----------------text里的timerMAXY\(timerMaxY)")
+        lName.frame.origin = CGPointMake(lnx, timerMaxY)
         
         //message content
         //font
@@ -113,7 +134,9 @@ class ChatTableViewCell: UITableViewCell {
             labelx = imageOX - 20-contentSize.width
         }
         
-        contentLabel.frame = CGRect(x: labelx, y: 35, width: contentSize.width , height: contentSize.height)
+        let lNameMaxY = lName.frame.maxY
+        
+        contentLabel.frame = CGRect(x: labelx, y: lNameMaxY + 9, width: contentSize.width , height: contentSize.height)
         
         contentLabel.numberOfLines = 0
         contentLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -143,7 +166,9 @@ class ChatTableViewCell: UITableViewCell {
         if(isSelf){
             bgx = imageOX-bgWidth
         }
-        bgImage.frame = CGRectMake(bgx, 25, bgWidth, bgHeigh)
+        let bgy = lNameMaxY
+        
+        bgImage.frame = CGRectMake(bgx, bgy, bgWidth, bgHeigh)
         
     }
     func adaptDataHongBao(mi:MessageItem){
@@ -151,6 +176,22 @@ class ChatTableViewCell: UITableViewCell {
         if(mi.uid == 0){
             isSelf=true
         }
+        
+        // timer Label
+        let timerW = CGFloat(120)
+        let timerX = (self.frame.width - timerW)/2
+        
+        // 设置消息时间
+        let timerStr = getSeconds(mi)
+        
+        timerText.text = timerStr
+        let timerFont = UIFont.systemFontOfSize(10)
+        timerText.font = timerFont
+        timerText.textColor = UIColor.darkGrayColor()
+        timerText.sizeToFit()
+        timerText.frame.size = CGSize(width: timerW,height: 20)
+        timerText.frame.origin = CGPoint(x: timerX ,y:0 )
+        
         //head Image
         headImage.sd_setImageWithURL(NSURL(string: mi.headImg), placeholderImage: UIImage(named: IMG_LOADING))
         //headImage.image = UIImage(named: mi.headImg)
@@ -173,7 +214,9 @@ class ChatTableViewCell: UITableViewCell {
         if(isSelf){
             lnx = self.frame.width-lName.frame.width-60
         }
-        lName.frame.origin = CGPointMake(lnx, 10)
+        let lny = timerText.frame.maxY
+        
+        lName.frame.origin = CGPointMake(lnx, lny)
         
         //image
         
@@ -197,7 +240,9 @@ class ChatTableViewCell: UITableViewCell {
         if(isSelf){
             bgx = self.frame.width-bgWidth-bgx
         }
-        bgImageBtn.frame = CGRectMake(bgx, 25, bgWidth, bgHeigh)
+        let bgy = lName.frame.maxY
+        
+        bgImageBtn.frame = CGRectMake(bgx, bgy, bgWidth, bgHeigh)
     }
     
     func btnShowHB(sender:AnyObject){
@@ -305,6 +350,44 @@ class ChatTableViewCell: UITableViewCell {
         vc?.presentViewController(controller, animated: true, completion: nil)
 
         
+    }
+    
+    func getSeconds(mi:MessageItem) -> String {
+        // 1.获取当前消息对应date字符串
+        let msgDateString = mi.date
+        // 2.获取当前时间字符串
+        let date:NSDate = NSDate()
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.stringFromDate(date)
+        
+        // 2.1 转换成Date类型
+        let msgDate = formatter.dateFromString(msgDateString!)
+        let nowdate = formatter.dateFromString(dateString)
+        
+        let seconds = Int((nowdate?.timeIntervalSinceDate(msgDate!))!)
+        
+        var timerStr:String = ""
+        
+        if seconds > 60 {
+      
+            // 少于1天
+            if seconds < 60 * 60 * 24 {
+                
+                formatter.dateFormat = "HH:mm:ss"
+                timerStr = formatter.stringFromDate(msgDate!)
+                
+            }
+                // 大于1天直接显示日期
+            else {
+                timerStr = msgDateString!
+            }
+            
+            
+            // 5分钟内不显示
+        }else { timerStr = " "}
+        
+        return timerStr
     }
     
 }

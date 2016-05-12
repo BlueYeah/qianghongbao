@@ -22,6 +22,8 @@ class FourViewController: UIViewController {
     @IBOutlet weak var iHeadImg: UIImageView!
     @IBOutlet weak var lMoney: UILabel!
     
+    var canlogin:Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,6 +50,8 @@ class FourViewController: UIViewController {
         lName.text = Common.getNickName()
         lMoney.text = "\(Common.getMoney())"
         iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+        
+
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -56,32 +60,49 @@ class FourViewController: UIViewController {
         let token = Common.getToken()
         
         
+        //let data:Dictionary<String,AnyObject> = ["uid":uid,"token":token]
         let data:Dictionary<String,AnyObject> = ["uid":uid,"token":token]
-        print("========uid\(uid)  token\(token)")
+
+        print("========data\(data)")
         MyHttp.doPost(URL_UserInfo, data: data) { (data, rep, error) in
             dispatch_sync(dispatch_get_main_queue(), {
                 
+
+                if (error != nil)
+                {
+                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud1.label.text = "网络异常"
+                    hud1.hideAnimated(true, afterDelay: 1)
+                    return
+                }
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 
                 //print("----------------\(jobj)")
                 
-                let status = (jobj["status"] as! NSNumber).integerValue
+                var status = (jobj["status"] as! NSNumber).integerValue
 //                if(status==0){
 //                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
 //                    return
 //                }
                 // 实现token过期
-                if (status==0)
-                {
-                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
-                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-                    self.presentViewController(controller, animated: true, completion: nil)
+                if(status == 0){
                     
+                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String, completion: {
+                        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                        while(vc?.presentedViewController != nil){
+                            vc = vc?.presentedViewController
+                        }
+                        
+                        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                        vc?.presentViewController(controller, animated: true, completion: nil)
+                    })
+                    
+     
                 }
                 
                 //success
                 
-                
+                print("=============测试rep\(rep)")
                 let data:AnyObject = jobj["data"] as! NSDictionary
                 
                 print("====data\(data)")
@@ -99,7 +120,6 @@ class FourViewController: UIViewController {
                 
                 Common.setMoney(Double(user["integral"]! as! String)!)
                 
-                Common.setToken(user["token"] as! String)
                 
                 self.lName.text = Common.getNickName()
                 self.lMoney.text = "\(Common.getMoney())"
@@ -112,6 +132,20 @@ class FourViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func cantLogin() {
+        
+            var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+        
+        print("rootview==========\(vc)")
+            while(vc?.presentedViewController != nil){
+                vc = vc?.presentedViewController
+            }
+            
+            let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+            vc?.presentViewController(controller, animated: true, completion: nil)
+        
     }
     
     func actionOrder(){

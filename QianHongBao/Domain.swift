@@ -457,12 +457,16 @@ class MyDialog{
         let alert = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
         vc.presentViewController(alert, animated: true, completion: nil)
     }
-    class func showErrorAlert(vc:UIViewController,msg:String){
+    class func showErrorAlert(vc:UIViewController,msg:String,completion: (() -> Void)?){
         let alert = UIAlertController(title: "错误", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
-        vc.presentViewController(alert, animated: true, completion: nil)
         alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (la) in
             vc.dismissViewControllerAnimated(true, completion: nil)
+            
+            // 调用block
+            completion!()
+
         }))
+        vc.presentViewController(alert, animated: true, completion: nil)
     }
     class func showSuccessAlert(vc:UIViewController,msg:String){
         let alert = UIAlertController(title: "成功", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
@@ -740,13 +744,13 @@ class MySQL {
                 if type == 1 {
 
                     
-                    array.append(MessageItem(uid:Userid ,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil ))
+                    array.append(MessageItem(uid:Userid ,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil ,date: date))
                     
                 }else if type == 2
                 {
                     
 
-                    array.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:name ,headImg:headImg ,content:content,bonusId:Int (id),dsBonus: nil))
+                    array.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:name ,headImg:content ,content:content,bonusId:Int (id),dsBonus: nil,date: date))
                     
                 }else if type == 3
                     
@@ -757,19 +761,23 @@ class MySQL {
                     
                     let dsBonus = DSBonus.init(id:Int(id), bonus_total: bonus_total, date: date, dsTime: dstime)
                     
-                    array.append(MessageItem(uid:Userid,type:ChatType.CDS,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: dsBonus))
+                    array.append(MessageItem(uid:Userid,type:ChatType.CDS,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: dsBonus,date: date))
                 }else if type == 4
                     
                 {
                     print("=======猜随机")
                     
-                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil))
+                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil,date: date))
                 }else if type == 5
                     
                 {
                     print("=======猜单双")
-                    
-                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil))
+                    let message:String
+                    if content == "1"
+                    {
+                        message = "本期单双开奖结果：单"
+                    }else {message = "本期单双开奖结果：双"}
+                    array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:message,bonusId:nil,dsBonus: nil,date: date))
                 }
 
 

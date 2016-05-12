@@ -34,7 +34,7 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
     @IBAction func btnJieSuang(sender: AnyObject) {
 
         if(sPhone==""){
-             MyDialog.showErrorAlert(self, msg: "地址不能为空")
+             MyDialog.showErrorAlert(self, msg: "地址不能为空",completion: nil)
             return
   
         }
@@ -78,7 +78,7 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
                     
-                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String,completion: nil)
                     return
                 }
                 //success

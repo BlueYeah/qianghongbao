@@ -18,7 +18,7 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
     
     @IBAction func btnImage(sender: AnyObject) {
         if(!UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)){
-            MyDialog.showErrorAlert(self, msg: "不能打开相册")
+            MyDialog.showErrorAlert(self, msg: "不能打开相册",completion: nil)
             return
         }
         let vc = UIImagePickerController()
@@ -89,7 +89,7 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
     @IBAction func btnConfirm(sender: AnyObject) {
         let nackname = tfName.text!
         if(nackname == ""){
-            MyDialog.showErrorAlert(self, msg: "数据不能为空")
+            MyDialog.showErrorAlert(self, msg: "数据不能为空",completion: nil)
             return
         }
 
@@ -101,14 +101,14 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
                     var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                     let status = (jobj["status"] as! NSNumber).integerValue
                     if(status==0){
-                        MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+                        MyDialog.showErrorAlert(self, msg: jobj["info"] as! String,completion: nil)
                         return
                     }
                     
                     MyDialog.showSuccessAlert(self, msg: jobj["info"] as! String)
                     Common.setNickName(nackname)
                 }catch{
-                    MyDialog.showErrorAlert(self, msg: "未知错误")
+                    MyDialog.showErrorAlert(self, msg: "未知错误",completion: nil)
                     return
                 }
             })

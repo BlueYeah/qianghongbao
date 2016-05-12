@@ -33,9 +33,10 @@ class MessageItem{
     var name:String
     var bonusId: Int?
     var dsBonus: DSBonus?
+    var date:String?
     
     
-    init(uid:Int,type:ChatType,name:String,headImg:String,content:String,bonusId:Int?,dsBonus:DSBonus?){
+    init(uid:Int,type:ChatType,name:String,headImg:String,content:String,bonusId:Int?,dsBonus:DSBonus?,date:String?){
         self.uid = uid
         self.type = type
         self.headImg = headImg
@@ -44,6 +45,7 @@ class MessageItem{
         self.time = NSDate()
         self.bonusId = bonusId
         self.dsBonus = dsBonus
+        self.date = date
     }
 }
 

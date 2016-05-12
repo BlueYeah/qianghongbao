@@ -53,8 +53,9 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 
                 print("----------------------\(res_jsonobj)")
                 
-                let data = res_jsonobj["data"] as! NSDictionary
+               if let data = res_jsonobj["data"] as? NSDictionary
                 
+               {
                 //let data:AnyObject = self.json2obj(data_json as! String)
                 
                 //if data == nil return
@@ -67,8 +68,6 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 
                 
                 let page = Page(obj: page_jsonobj)
-                
-                
                 
                 for jOrder in jOrders{
                     let order = Order(obj: jOrder)
@@ -83,6 +82,13 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                 }else{
                     self.mMJRefreshFooter.endRefreshingWithNoMoreData()
                 }
+                
+               } else {
+                self.mMJRefreshFooter.endRefreshingWithNoMoreData()
+                }
+                
+                
+
             })
             
         }

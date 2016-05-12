@@ -31,9 +31,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         //init data
         self.chatData = [
 
-            MessageItem(uid: 22,type: ChatType.Text,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: nil,dsBonus: nil),
-            MessageItem(uid: 0,type: ChatType.SJHB,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 7780,dsBonus: nil),
-            MessageItem(uid: 1,type: ChatType.CDS,name:"System",headImg: "qrcode",content: "fuck fuck fuck fuck fuck",bonusId: 5600,dsBonus: nil)
 
             
         ]
@@ -129,6 +126,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             let uid = alert["uid"] as! Int
             
             let rid = alert["rid"] as! Int
+            let date = alert["date"] as! String
             
             
             let myuid = Common.getUid()
@@ -146,7 +144,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }
 
             if type == 1 {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil ))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil ,date: date))
               
             }else if type == 2
             {
@@ -159,7 +157,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 if uid == myuid {
                     Userid = 0
                 }
-                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: nil))
+                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: nil,date: date))
    
             }else if type == 3
             
@@ -181,15 +179,21 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     Userid = 0
                 }
                 
-                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: dsBonus))
+                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: dsBonus,date: date))
             }else if type == 4
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil,date: date))
                 
             }
             else if type == 5
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil))
+                let message:String
+                if msg as! String == "1"
+                {
+                    message = "本期单双开奖结果：单"
+                }else {message = "本期单双开奖结果：双"}
+                
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:message ,bonusId:nil,dsBonus: nil,date: date))
                 
             }
 
@@ -205,8 +209,14 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let uid = Common.getUid()
         let photo = Common.getHeadImg()
         let nickName = Common.getNickName()
+        // 2.获取当前时间字符串
+        let date:NSDate = NSDate()
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.stringFromDate(date)
         
-        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
+        
+        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":dateString ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
         
         //设置message
         let dict:NSDictionary = ["alert":appDict]
@@ -243,8 +253,13 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let uid = Common.getUid()
         let photo = Common.getHeadImg()
         let nickName = Common.getNickName()
+        // 2.获取当前时间字符串
+        let date:NSDate = NSDate()
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.stringFromDate(date)
         
-        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":"123" ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
+        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":dateString ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
         
         //设置message
         
@@ -299,7 +314,13 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let photo = Common.getHeadImg()
         let nickName = Common.getNickName()
         
-        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:nickName,headImg:photo,content:msg!,bonusId: nil,dsBonus: nil))
+        // 2.获取当前时间字符串
+        let date:NSDate = NSDate()
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.stringFromDate(date)
+        
+        chatData.append(MessageItem(uid:0,type:ChatType.Text,name:nickName,headImg:photo,content:msg!,bonusId: nil,dsBonus: nil,date: dateString))
 
         textFieldSend.text = ""
         
@@ -340,12 +361,12 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             if contentSize.height>60{
                 return contentSize.height+45
             }
-            return 75
+            return 95
         }else if(messageItem.type == ChatType.SJHB || messageItem.type == ChatType.CDS){
             
-            return 115
+            return 135
         }
-        return 75
+        return 95
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -369,10 +390,11 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor(red: 212/255, green: 212/255, blue: 212/255, alpha: 1)
-
+        cell.backgroundColor = UIColor.whiteColor()
         
     }
+    
+
     
     @IBAction func tapAction(sender: AnyObject) {
         

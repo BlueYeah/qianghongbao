@@ -21,11 +21,11 @@ class ModPWDViewController: UIViewController {
         let pwd2 = tPwd2.text!
         if(old=="" || pwd=="" || pwd2==""){
             
-            MyDialog.showErrorAlert(self, msg: "不能为空")
+            MyDialog.showErrorAlert(self, msg: "不能为空",completion: nil)
             return
         }
         if(pwd != pwd2){
-            MyDialog.showErrorAlert(self, msg: "两次输入密码不一致")
+            MyDialog.showErrorAlert(self, msg: "两次输入密码不一致",completion: nil)
             return
         }
 
@@ -36,13 +36,13 @@ class ModPWDViewController: UIViewController {
                     var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                     let status = (jobj["status"] as! NSNumber).integerValue
                     if(status==0){
-                        MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+                        MyDialog.showErrorAlert(self, msg: jobj["info"] as! String,completion: nil)
                         return
                     }
                     self.dismissViewControllerAnimated(true, completion: nil)
                     
                 }catch{
-                    MyDialog.showErrorAlert(self, msg: "JOSN解释出错")
+                    MyDialog.showErrorAlert(self, msg: "JOSN解释出错",completion: nil)
                     return
                 }
             })

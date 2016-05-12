@@ -26,12 +26,12 @@ class RegViewController: UIViewController {
         
         
         if(pwd=="" || pwd2=="" || name=="" || tel==""){
-            MyDialog.showErrorAlert(self, msg: "不能为空")
+            MyDialog.showErrorAlert(self, msg: "不能为空",completion: nil)
         }
         
         if(pwd != pwd2){
             
-            MyDialog.showErrorAlert(self, msg: "两次输入密码不一致")
+            MyDialog.showErrorAlert(self, msg: "两次输入密码不一致",completion: nil)
             
         }
         
@@ -64,7 +64,7 @@ class RegViewController: UIViewController {
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 let status = (jobj["status"] as! NSNumber).integerValue
                 if(status==0){
-                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
+                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String,completion:nil)
                     return
                 }
                 //success
