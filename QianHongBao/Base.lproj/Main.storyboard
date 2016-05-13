@@ -188,6 +188,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="商城" image="shop" id="acW-dT-cKf"/>
                     <connections>
+                        <outlet property="baritem" destination="acW-dT-cKf" id="z9z-cl-AQb"/>
                         <outlet property="slider" destination="mHF-68-MsK" id="XS0-eG-ZG0"/>
                         <outlet property="tvProducts" destination="yfV-zj-qHM" id="75U-iR-5TK"/>
                     </connections>

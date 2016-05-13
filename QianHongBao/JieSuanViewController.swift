@@ -157,7 +157,11 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         vAddr.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(JieSuanViewController.actionChangeAddress(_:))))
         
         let addrs: NSArray? = NSUserDefaults.standardUserDefaults().objectForKey("addr") as? NSArray
+        
+        print("=============jiesuan数组\(addrs! as NSArray)")
         if let _ = addrs{
+            
+            //var addr = addrs![0] as! Dictionary<String,String>
             var addr = addrs![0] as! Dictionary<String,String>
             sName = addr["name"]!
             sPhone = addr["phone"]!
@@ -167,7 +171,7 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         }
         
         // 监听通知
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JieSuanViewController.close), name: "CLOSE_B", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(JieSuanViewController.btnBack2), name: "CLOSE_B", object: nil)
         
     }
     

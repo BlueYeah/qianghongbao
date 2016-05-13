@@ -81,21 +81,33 @@ class ChatTableViewCell: UITableViewCell {
         headImage.sd_setImageWithURL(NSURL(string: mi.headImg), placeholderImage: UIImage(named: IMG_LOADING))
 //        headImage.image = UIImage(named: mi.headImg)
 //        headImage.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
-        let timerW = CGFloat(120)
-        let timerX = (self.frame.width - timerW)/2
-        
-        // 设置消息时间
-        
-        let timerStr = getSeconds(mi)
+
         
         // 3.获取秒数
-        timerText.text = timerStr
+        
+        let timerStr:NSString = getSeconds(mi)
+        let timerH:CGFloat
+        
+        if timerStr == "" {
+            timerH = 0
+        }else {
+            timerH = 20
+        }
+        // 3.设置时间
+        timerText.text = timerStr as String
         let timerFont = UIFont.systemFontOfSize(10)
         timerText.font = timerFont
         timerText.textColor = UIColor.whiteColor()
         timerText.backgroundColor = UIColor.lightGrayColor()
         timerText.sizeToFit()
-        timerText.frame.size = CGSize(width: timerW,height: 20)
+        
+        // 动态获取label宽
+        let titleSize = timerStr.boundingRectWithSize(CGSizeMake(CGFloat.max, 40), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName:timerFont], context: nil)
+        let timerW = titleSize.width
+        let timerX = (self.frame.width - timerW)/2
+        
+        
+        timerText.frame.size = CGSize(width: timerW,height: timerH)
         timerText.frame.origin = CGPoint(x: timerX ,y:0 )
         
         headImage.frame.size = CGSize(width: 40 , height: 40)
@@ -178,18 +190,32 @@ class ChatTableViewCell: UITableViewCell {
         }
         
         // timer Label
-        let timerW = CGFloat(120)
-        let timerX = (self.frame.width - timerW)/2
         
         // 设置消息时间
         let timerStr = getSeconds(mi)
         
-        timerText.text = timerStr
+        let timerH:CGFloat
+        
+        if timerStr == "" {
+            timerH = 0
+        }else {
+            timerH = 20
+        }
+
+        
+        timerText.text = timerStr as String
         let timerFont = UIFont.systemFontOfSize(10)
         timerText.font = timerFont
-        timerText.textColor = UIColor.darkGrayColor()
+        timerText.textColor = UIColor.whiteColor()
+        timerText.backgroundColor = UIColor.lightGrayColor()
         timerText.sizeToFit()
-        timerText.frame.size = CGSize(width: timerW,height: 20)
+        
+        // 动态获取label宽
+        let titleSize = timerStr.boundingRectWithSize(CGSizeMake(CGFloat.max, 40), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName:timerFont], context: nil)
+        let timerW = titleSize.width
+        let timerX = (self.frame.width - timerW)/2
+
+        timerText.frame.size = CGSize(width: timerW,height: timerH)
         timerText.frame.origin = CGPoint(x: timerX ,y:0 )
         
         //head Image
@@ -367,7 +393,7 @@ class ChatTableViewCell: UITableViewCell {
         
         let seconds = Int((nowdate?.timeIntervalSinceDate(msgDate!))!)
         
-        var timerStr:String = ""
+        var timerStr:String?
         
         if seconds > 60 {
       
@@ -385,9 +411,9 @@ class ChatTableViewCell: UITableViewCell {
             
             
             // 5分钟内不显示
-        }else { timerStr = " "}
+        }else { timerStr = ""}
         
-        return timerStr
+        return timerStr!
     }
     
 }

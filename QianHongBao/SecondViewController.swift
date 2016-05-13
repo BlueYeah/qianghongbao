@@ -37,7 +37,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
          
             print("second===========\(responseObj)========info\(responseObj!["info"])")
              // 实现token过期
-            if responseObj!["status"] as! Int == -2
+            if responseObj!["status"] as! Int != 1
             {
 
               

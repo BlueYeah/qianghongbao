@@ -23,6 +23,7 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     var uid:Int!
     
 
+    @IBOutlet weak var baritem: UITabBarItem!
     
     @IBOutlet weak var tvProducts: UITableView!
     var viewAppearCounter = 0
@@ -62,6 +63,9 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     override func viewWillAppear(animated: Bool) {
         
+        
+        print("tabbar=============\(self.tabBarController?.tabBar.hidden)")
+        //self.tabBarController?.tabBar.hidden = false
         if(viewAppearCounter == 0){
             // 这里注释了
             adaptSlider()
@@ -123,8 +127,9 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
 
+                print("res_jsonobj\(res_jsonobj["status"])=======\(res_jsonobj["info"])")
                 // 实现token过期
-                if res_jsonobj["status"] as! Int == 0
+                if res_jsonobj["status"] as! Int != 1
                 {
 
   

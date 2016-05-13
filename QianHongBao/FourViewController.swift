@@ -85,7 +85,8 @@ class FourViewController: UIViewController {
 //                    return
 //                }
                 // 实现token过期
-                if(status == 0){
+                
+                if(status != 1 ){
                     
                     MyDialog.showErrorAlert(self, msg: jobj["info"] as! String, completion: {
                         var vc = UIApplication.sharedApplication().keyWindow?.rootViewController

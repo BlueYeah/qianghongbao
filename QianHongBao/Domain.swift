@@ -462,11 +462,15 @@ class MyDialog{
         alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (la) in
             vc.dismissViewControllerAnimated(true, completion: nil)
             
-            // 调用block
-            completion!()
+
 
         }))
         vc.presentViewController(alert, animated: true, completion: nil)
+        if (completion != nil) {
+            completion!()
+        }
+        // 调用block
+ 
     }
     class func showSuccessAlert(vc:UIViewController,msg:String){
         let alert = UIAlertController(title: "成功", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
