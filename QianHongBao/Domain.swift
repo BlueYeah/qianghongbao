@@ -460,7 +460,8 @@ class MyDialog{
     class func showErrorAlert(vc:UIViewController,msg:String,completion: (() -> Void)?){
         let alert = UIAlertController(title: "错误", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (la) in
-            vc.dismissViewControllerAnimated(true, completion: nil)
+            print("------------------vc\(vc)")
+            //vc.dismissViewControllerAnimated(true, completion: nil)
             
 
 
@@ -471,6 +472,22 @@ class MyDialog{
         }
         // 调用block
  
+    }
+    class func showmyErrorAlert(vc:UIViewController,msg:String,completion: (() -> Void)?){
+        let alert = UIAlertController(title: "错误", message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (la) in
+            print("------------------vc\(vc)")
+            vc.dismissViewControllerAnimated(true, completion: nil)
+            
+            if (completion != nil) {
+                completion!()
+            }
+            
+        }))
+        vc.presentViewController(alert, animated: true, completion: nil)
+
+        // 调用block
+        
     }
     class func showSuccessAlert(vc:UIViewController,msg:String){
         let alert = UIAlertController(title: "成功", message: msg, preferredStyle: UIAlertControllerStyle.Alert)

@@ -93,6 +93,10 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         tvHall.tableFooterView = view
     }
     
+    override func viewWillAppear(animated: Bool) {
+        print("---------------------------")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -141,6 +145,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
 
         
     }
+    
     
     /*
     // MARK: - Navigation

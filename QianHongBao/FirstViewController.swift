@@ -36,6 +36,8 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     @IBOutlet weak var slider: JLSliderView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("++++++++++++++++firstviewdiload")
+
         self.getCurPageProductUrl = URL_Product
         // Do any additional setup after loading the view, typically from a nib.
         //init MJRefresh
@@ -43,11 +45,6 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         tvProducts.addSubview(mMJRefresh)
         mMJRefresh.beginRefreshing()
         //endRefreshing()
-
-        self.uid = Common.getUid()
-        self.token = Common.getToken()
-        //print("================\(self.token)-----\(self.uid)")
-        
         
         
     }
@@ -63,20 +60,34 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     override func viewWillAppear(animated: Bool) {
         
+        print("++++++++++++++++firstwill")
+     
+        self.uid = Common.getUid()
+        self.token = Common.getToken()
+  
+    
         
-        print("tabbar=============\(self.tabBarController?.tabBar.hidden)")
-        //self.tabBarController?.tabBar.hidden = false
         if(viewAppearCounter == 0){
             // 这里注释了
             adaptSlider()
+            endRefreshing()
         }
         NSUserDefaults.standardUserDefaults().removeObjectForKey(UD_GWCS)
         self.tvProducts.reloadData()
-        viewAppearCounter += 1
+      //  viewAppearCounter += 1
+        
+
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        print("+++++++++++++end")
+        self.mMJRefresh.endRefreshing()
     }
     func adaptSlider(){
         let sUrl = URL_Slider
         let data = ["uid":self.uid,"token":self.token]
+        
+        print("+++++++++++++++++slider")
         MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 
@@ -85,6 +96,9 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                     let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                     hud1.label.text = "网络异常"
                     hud1.hideAnimated(true, afterDelay: 1)
+                    
+                    
+                    self.mMJRefresh.endRefreshing()
                     print("商品信息没有接受到数据")
                     return}
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
@@ -113,21 +127,22 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         let sUrl = getCurPageProductUrl
         // 自己添加data
         let data = ["uid":self.uid,"token":self.token]
-        print("======uid\(self.uid)")
+        
+        print("+++++++++++++++++product")
         MyHttp.doPost(sUrl, data: data) { (data, req, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 // 若没数据 则返回
                 if (error != nil)
                 {
+                    self.mMJRefresh.endRefreshing()
                     let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                     hud1.label.text = "网络异常"
                     hud1.hideAnimated(true, afterDelay: 1)
+                    self.mMJRefresh.endRefreshing()
                     return
                 }
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
-
-                print("res_jsonobj\(res_jsonobj["status"])=======\(res_jsonobj["info"])")
                 // 实现token过期
                 if res_jsonobj["status"] as! Int != 1
                 {
@@ -284,6 +299,8 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
             }
         }
     }
+    
+
 
 }
 

@@ -17,6 +17,8 @@ class ChatTableViewCell: UITableViewCell {
     var lName:UILabel!
     var messageItem:MessageItem!
     var timerText:UILabel!
+    var lastMsgDate:String!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -65,14 +67,14 @@ class ChatTableViewCell: UITableViewCell {
         
     }
     
-    func adaptData(mi:MessageItem){
+    func adaptData(mi:MessageItem,lastmsg:String){
         if(mi.type == ChatType.Text){
-            adaptDataText(mi)
+            adaptDataText(mi,lastmsg: lastmsg)
         }else if(mi.type == ChatType.CDS || mi.type == ChatType.SJHB){
-            adaptDataHongBao(mi)
+            adaptDataHongBao(mi,lastmsg: lastmsg)
         }
     }
-    func adaptDataText(mi:MessageItem){
+    func adaptDataText(mi:MessageItem,lastmsg:String){
         var isSelf=false
         if(mi.uid == 0){
             isSelf=true
@@ -85,7 +87,7 @@ class ChatTableViewCell: UITableViewCell {
         
         // 3.获取秒数
         
-        let timerStr:NSString = getSeconds(mi)
+        let timerStr:NSString = getSeconds(mi,lastmsg:lastmsg)
         let timerH:CGFloat
         
         if timerStr == "" {
@@ -183,7 +185,7 @@ class ChatTableViewCell: UITableViewCell {
         bgImage.frame = CGRectMake(bgx, bgy, bgWidth, bgHeigh)
         
     }
-    func adaptDataHongBao(mi:MessageItem){
+    func adaptDataHongBao(mi:MessageItem,lastmsg:String){
         var isSelf=false
         if(mi.uid == 0){
             isSelf=true
@@ -192,7 +194,7 @@ class ChatTableViewCell: UITableViewCell {
         // timer Label
         
         // 设置消息时间
-        let timerStr = getSeconds(mi)
+        let timerStr = getSeconds(mi,lastmsg: lastmsg)
         
         let timerH:CGFloat
         
@@ -378,20 +380,22 @@ class ChatTableViewCell: UITableViewCell {
         
     }
     
-    func getSeconds(mi:MessageItem) -> String {
+    func getSeconds(mi:MessageItem ,lastmsg:String) -> String {
         // 1.获取当前消息对应date字符串
         let msgDateString = mi.date
+        let lastmsgDateString = lastmsg
+        
         // 2.获取当前时间字符串
-        let date:NSDate = NSDate()
+       
         let formatter:NSDateFormatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let dateString = formatter.stringFromDate(date)
+        
         
         // 2.1 转换成Date类型
         let msgDate = formatter.dateFromString(msgDateString!)
-        let nowdate = formatter.dateFromString(dateString)
+        let lastdate = formatter.dateFromString(lastmsgDateString)
         
-        let seconds = Int((nowdate?.timeIntervalSinceDate(msgDate!))!)
+        let seconds = Int((msgDate?.timeIntervalSinceDate(lastdate!))!)
         
         var timerStr:String?
         
@@ -400,7 +404,7 @@ class ChatTableViewCell: UITableViewCell {
             // 少于1天
             if seconds < 60 * 60 * 24 {
                 
-                formatter.dateFormat = "HH:mm:ss"
+                formatter.dateFormat = "HH:mm"
                 timerStr = formatter.stringFromDate(msgDate!)
                 
             }

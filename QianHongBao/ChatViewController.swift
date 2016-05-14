@@ -371,6 +371,20 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let item = chatData[indexPath.row] as MessageItem
+        let lastmsg:String
+        let lastitem:MessageItem
+        print("chatdata\(chatData.count)")
+        if (indexPath.row > 1) {
+                 lastitem = chatData[indexPath.row - 1] as MessageItem
+                 lastmsg = lastitem.date!
+
+
+            
+        }else{
+            lastitem = chatData[indexPath.row] as MessageItem
+            lastmsg = lastitem.date!}
+        
+        
         
         var chatcell = "textcell"
         if(item.type == ChatType.CDS || item.type == ChatType.SJHB){
@@ -384,7 +398,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             cell = ChatTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: chatcell)
 
         }
-        cell!.adaptData(item)
+        cell!.adaptData(item,lastmsg: lastmsg)
         cell?.messageItem = item
         return cell!
     }

@@ -21,19 +21,20 @@ class OrderDetailViewController: UIViewController,UITableViewDataSource,UITableV
     @IBAction func btnBack(sender: AnyObject) {
 
         // 直接设置rootview 因为不是navigation。
-        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("First") as! FirstViewController
-
-        UIApplication.sharedApplication().keyWindow?.rootViewController = vc
-        
-       // 发送通知提醒B界面销毁
+//        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("First") as! FirstViewController
+//
+//        UIApplication.sharedApplication().keyWindow?.rootViewController = vc
+        // 发送通知提醒B界面销毁
         dismissViewControllerAnimated(true) {
-
+            
             NSNotificationCenter.defaultCenter().postNotificationName("CLOSE_B", object: nil, userInfo: nil)
             
-            
-
-            
         }
+        
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
+        self.presentViewController(vc, animated: true, completion: nil)
+        
+
 
 
     }

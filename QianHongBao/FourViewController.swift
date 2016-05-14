@@ -77,25 +77,21 @@ class FourViewController: UIViewController {
                 }
                 var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                 
-                //print("----------------\(jobj)")
                 
                 var status = (jobj["status"] as! NSNumber).integerValue
-//                if(status==0){
-//                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String)
-//                    return
-//                }
+
                 // 实现token过期
-                
+
                 if(status != 1 ){
                     
-                    MyDialog.showErrorAlert(self, msg: jobj["info"] as! String, completion: {
+                    MyDialog.showmyErrorAlert(self, msg: jobj["info"] as! String, completion: {
                         var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
                         while(vc?.presentedViewController != nil){
                             vc = vc?.presentedViewController
                         }
                         
                         let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-                        vc?.presentViewController(controller, animated: true, completion: nil)
+                        vc!.presentViewController(controller, animated: true, completion: nil)
                     })
                     
      
@@ -103,10 +99,8 @@ class FourViewController: UIViewController {
                 
                 //success
                 
-                print("=============测试rep\(rep)")
+
                 let data:AnyObject = jobj["data"] as! NSDictionary
-                
-                print("====data\(data)")
                 
                 var user = data as! Dictionary<String,AnyObject>
                 
@@ -135,19 +129,6 @@ class FourViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func cantLogin() {
-        
-            var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
-        
-        print("rootview==========\(vc)")
-            while(vc?.presentedViewController != nil){
-                vc = vc?.presentedViewController
-            }
-            
-            let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-            vc?.presentViewController(controller, animated: true, completion: nil)
-        
-    }
     
     func actionOrder(){
         let vc = storyboard!.instantiateViewControllerWithIdentifier("orderVC") as UIViewController

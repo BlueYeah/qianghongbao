@@ -238,6 +238,11 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
     }
     */
 
+    deinit
+    {
+        print("++++++++++++++++jiesuanVc 销毁了")
+    
+    }
     @IBAction func tapAction(sender: AnyObject) {
         view.endEditing(true)
     }
