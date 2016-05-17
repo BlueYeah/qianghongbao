@@ -159,15 +159,17 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         let addrs: NSArray? = NSUserDefaults.standardUserDefaults().objectForKey("addr") as? NSArray
         
         print("=============jiesuan数组\(addrs! as NSArray)")
-        if let _ = addrs{
+        if (addrs?.count == 0){
             
+            sName = "请选择收货地址"
+
+        }else{
             //var addr = addrs![0] as! Dictionary<String,String>
             var addr = addrs![0] as! Dictionary<String,String>
             sName = addr["name"]!
             sPhone = addr["phone"]!
             sAddr = addr["addr"]!
-        }else{
-            sName = "请选择收货地址"
+            
         }
         
         // 监听通知

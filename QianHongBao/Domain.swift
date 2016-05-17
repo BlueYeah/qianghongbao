@@ -661,7 +661,7 @@ class MyXG {
 }
 
 class MySQL {
-    /// 将微博数据保存到数据库
+    /// 将数据保存到数据库
    class func saveMessage(dict:[String: AnyObject]) {
         
         // 1.定义SQL语句

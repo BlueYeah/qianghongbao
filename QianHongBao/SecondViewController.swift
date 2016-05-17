@@ -16,7 +16,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
     let TAG_LABEL = 4
     
     var room:[Room] = []
-    
+    var roomData:Array<MessageItem>!
     
     let FriendsListCell="roomlistcell"
     
@@ -122,14 +122,30 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
 //        
         let time = cell.viewWithTag(TAG_TIME) as! UILabel
 //
-        let money = cell.viewWithTag(TAG_LABEL) as! UILabel
+        let text = cell.viewWithTag(TAG_LABEL) as! UILabel
         
         let Room = room[indexPath.row]
         
         img.sd_setImageWithURL(NSURL(string: Room.image), placeholderImage: UIImage(named: IMG_LOADING))
         
+
+ 
         name.text = Room.name
         
+        MySQL.loadMessage(0, max_id: 0, rid: Room.rid) { (array) in
+            self.roomData = array
+        }
+        print("roomdata\(roomData)")
+        if (self.roomData.count > 0) {
+            time.text = roomData[roomData.count-1].date
+            
+            text.text = roomData[roomData.count-1].content
+        }else {
+            time.text = ""
+            
+            text.text = ""
+        }
+
         
 
         
