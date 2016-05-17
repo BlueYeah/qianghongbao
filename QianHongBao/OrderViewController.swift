@@ -119,7 +119,9 @@ class OrderViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         
         let cell = tableView.dequeueReusableCellWithIdentifier(chatcell, forIndexPath: indexPath) as UITableViewCell
         
-        _ = cell.viewWithTag(TAG_IMG) as! UIImageView
+        let headimg = cell.viewWithTag(TAG_IMG) as! UIImageView
+        
+        headimg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
         
         let lStatus = cell.viewWithTag(TAG_STATUS) as! UILabel
         

@@ -158,8 +158,8 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         
         let addrs: NSArray? = NSUserDefaults.standardUserDefaults().objectForKey("addr") as? NSArray
         
-        print("=============jiesuan数组\(addrs! as NSArray)")
-        if (addrs?.count == 0){
+        //print("=============jiesuan数组\(addrs! as NSArray)")
+        if (addrs?.count == 0 || addrs == nil){
             
             sName = "请选择收货地址"
 

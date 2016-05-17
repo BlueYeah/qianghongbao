@@ -25,6 +25,12 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         super.viewDidLoad()
         
         
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        print("---------------------------")
+        
         let mgr = AFHTTPSessionManager()
         let token = Common.getToken()
         let uid = Common.getUid()
@@ -34,13 +40,13 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             
-         
+            
             print("second===========\(responseObj)========info\(responseObj!["info"])=========status\(responseObj!["status"])")
-             // 实现token过期
+            // 实现token过期
             if responseObj!["status"] as! Int != 1
             {
-
-              
+                
+                
                 MyDialog.showErrorAlert(self, msg: responseObj!["info"] as! String, completion: {
                     var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
                     while(vc?.presentedViewController != nil){
@@ -54,32 +60,32 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
                 return
                 
             }
-
-            
-        
             
             
-         let temp = responseObj!["data"] as? String
-        
-       
+            
+            
+            
+            let temp = responseObj!["data"] as? String
+            
+            
             if let sss = temp
-        {
-            let datastring = responseObj!["data"] as!String
-            let data = Common.json2obj(datastring) as! NSArray
-            
-            self.room = Room.initWithRoom(data)
-            
-            self.tvHall.reloadData()
-            
+            {
+                let datastring = responseObj!["data"] as!String
+                let data = Common.json2obj(datastring) as! NSArray
+                
+                self.room = Room.initWithRoom(data)
+                
+                self.tvHall.reloadData()
+                
             }else {
-
-            
+                
+                
                 return
             }
             
             
             
-
+            
             
             
         }) { (task, error) in
@@ -91,12 +97,8 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         
         // Do any additional setup after loading the view.
         let view = UIView()
-//        view.frame.size = CGSizeMake(tvHall.frame.width, 10)
+        //        view.frame.size = CGSizeMake(tvHall.frame.width, 10)
         tvHall.tableFooterView = view
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        print("---------------------------")
     }
     
     override func didReceiveMemoryWarning() {
