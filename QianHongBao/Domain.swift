@@ -462,14 +462,16 @@ class MyDialog{
         alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (la) in
             print("------------------vc\(vc)")
             //vc.dismissViewControllerAnimated(true, completion: nil)
-            
+            if (completion != nil) {
+                completion!()
+            }
 
 
         }))
         vc.presentViewController(alert, animated: true, completion: nil)
-        if (completion != nil) {
-            completion!()
-        }
+//        if (completion != nil) {
+//            completion!()
+//        }
         // 调用block
  
     }
@@ -480,6 +482,7 @@ class MyDialog{
             vc.dismissViewControllerAnimated(true, completion: nil)
             
             if (completion != nil) {
+                print("======打印了block")
                 completion!()
             }
             

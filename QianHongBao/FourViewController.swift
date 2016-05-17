@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import AFNetworking
 class FourViewController: UIViewController {
 
     @IBOutlet weak var vModifyData: UIView!
@@ -58,70 +58,71 @@ class FourViewController: UIViewController {
         
         let uid = Common.getUid()
         let token = Common.getToken()
-        
-        
+
         //let data:Dictionary<String,AnyObject> = ["uid":uid,"token":token]
         let data:Dictionary<String,AnyObject> = ["uid":uid,"token":token]
+        
+        let mgr = AFHTTPSessionManager()
 
-        print("========data\(data)")
-        MyHttp.doPost(URL_UserInfo, data: data) { (data, rep, error) in
-            dispatch_sync(dispatch_get_main_queue(), {
+        mgr.POST(URL_UserInfo, parameters: data, progress: nil, success: { (task, resp) in
+            print("reps============\(resp)=======resp\(resp!["status"])=====info\(resp!["info"])")
+            
+            var status = (resp!["status"] as! NSNumber).integerValue
+            
+            // 实现token过期
+            
+            if(status != 1 ){
                 
-
-                if (error != nil)
-                {
-                    let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                    hud1.label.text = "网络异常"
-                    hud1.hideAnimated(true, afterDelay: 1)
-                    return
-                }
-                var jobj = try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
-                
-                
-                var status = (jobj["status"] as! NSNumber).integerValue
-
-                // 实现token过期
-
-                if(status != 1 ){
+                MyDialog.showmyErrorAlert(self, msg: resp!["info"] as! String, completion: {
                     
-                    MyDialog.showmyErrorAlert(self, msg: jobj["info"] as! String, completion: {
-                        var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
-                        while(vc?.presentedViewController != nil){
-                            vc = vc?.presentedViewController
-                        }
+                    var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+                    
+                    while(vc?.presentedViewController != nil){
                         
-                        let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-                        vc!.presentViewController(controller, animated: true, completion: nil)
-                    })
-                    
-     
-                }
-                
-                //success
-                
+                        vc = vc?.presentedViewController
+                        
+                    }
 
-                let data:AnyObject = jobj["data"] as! NSDictionary
+                    let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                    
+                    vc!.presentViewController(controller, animated: true, completion: nil)
+                    
+                })
                 
-                var user = data as! Dictionary<String,AnyObject>
+                return
+            }
+            
+            let data:AnyObject = resp!["data"] as! NSDictionary
+
+            var user = data as! Dictionary<String,AnyObject>
+
+            let uid = Int(user["uid"]! as! String)!
+
+            Common.setHeadImg(user["photo"]! as! String)
+
+            Common.setNickName(user["nackname"]! as! String)
+
+            Common.setMoney(Double(user["integral"]! as! String)!)
+
+            self.lName.text = Common.getNickName()
+            
+            self.lMoney.text = "\(Common.getMoney())"
+            
+            self.iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+            
+            NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
+            
+            }) { (task, error) in
+                let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 
+                hud1.label.text = "网络异常"
                 
+                hud1.hideAnimated(true, afterDelay: 1)
                 
-                let uid = Int(user["uid"]! as! String)!
-                
-                
-                Common.setHeadImg(user["photo"]! as! String)
-                
-                Common.setNickName(user["nackname"]! as! String)
-                
-                Common.setMoney(Double(user["integral"]! as! String)!)
-                
-                
-                self.lName.text = Common.getNickName()
-                self.lMoney.text = "\(Common.getMoney())"
-                self.iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
-                NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
-            })
+                return
         }
+
+
     }
 
     override func didReceiveMemoryWarning() {

@@ -374,6 +374,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let lastmsg:String
         let lastitem:MessageItem
         print("chatdata\(chatData.count)")
+        // 存储上条信息时间
         if (indexPath.row > 1) {
                  lastitem = chatData[indexPath.row - 1] as MessageItem
                  lastmsg = lastitem.date!

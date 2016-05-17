@@ -30,12 +30,12 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         let uid = Common.getUid()
         
         let param:NSDictionary = ["uid":uid, "token":token]
-        
+        print("========second token\(token)")
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             
          
-            print("second===========\(responseObj)========info\(responseObj!["info"])")
+            print("second===========\(responseObj)========info\(responseObj!["info"])=========status\(responseObj!["status"])")
              // 实现token过期
             if responseObj!["status"] as! Int != 1
             {
@@ -47,9 +47,11 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
                         vc = vc?.presentedViewController
                     }
                     
+                    
                     let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
                     vc?.presentViewController(controller, animated: true, completion: nil)
                 })
+                return
                 
             }
 
@@ -118,9 +120,9 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         
         let name = cell.viewWithTag(TAG_NAME) as! UILabel
 //        
-//        let time = cell.viewWithTag(TAG_TIME) as! UILabel
+        let time = cell.viewWithTag(TAG_TIME) as! UILabel
 //
-//        let money = cell.viewWithTag(TAG_LABEL) as! UILabel
+        let money = cell.viewWithTag(TAG_LABEL) as! UILabel
         
         let Room = room[indexPath.row]
         
@@ -128,6 +130,8 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         
         name.text = Room.name
         
+        
+
         
         return cell
     }
