@@ -259,6 +259,9 @@ class ChatTableViewCell: UITableViewCell {
         bgImageBtn.addTarget(self, action: btnActionName, forControlEvents: UIControlEvents.TouchUpInside)
        
         var imageName = "sjhb"
+        if(isSelf){
+            imageName = "sjhb1"
+        }
         if(mi.type == ChatType.CDS){
             imageName = "cds"
         }

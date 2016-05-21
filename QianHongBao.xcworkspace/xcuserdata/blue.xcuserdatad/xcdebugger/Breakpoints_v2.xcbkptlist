@@ -345,45 +345,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QianHongBao/ChatTableViewCell.swift"
-            timestampString = "485491329.73822"
+            timestampString = "485494445.118164"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "398"
-            endingLineNumber = "398"
+            startingLineNumber = "401"
+            endingLineNumber = "401"
             landmarkName = "getSeconds(_:lastmsg:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.ChatTableViewCell.getSeconds (QianHongBao.MessageItem, lastmsg : Swift.String) -&gt; Swift.String"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485491133.701295"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "397"
-                  endingLineNumber = "397"
-                  offsetFromSymbolStart = "813">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.ChatTableViewCell.getSeconds (QianHongBao.MessageItem, lastmsg : Swift.String) -&gt; Swift.String"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485491133.701393"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "397"
-                  endingLineNumber = "397"
-                  offsetFromSymbolStart = "2493">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
