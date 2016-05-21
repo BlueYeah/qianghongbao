@@ -87,7 +87,8 @@ class ChatTableViewCell: UITableViewCell {
         
         // 3.获取秒数
         
-        let timerStr:NSString = getSeconds(mi,lastmsg:lastmsg)
+        //let timerStr:NSString = getSeconds(mi,lastmsg:lastmsg)
+        let timerStr:NSString = Common.friendlyTime(mi.date!)
         let timerH:CGFloat
         
         if timerStr == "" {
@@ -132,7 +133,7 @@ class ChatTableViewCell: UITableViewCell {
         if(isSelf){
             lnx = self.frame.width-lName.frame.width-60
         }
-        print("-----------------text里的timerMAXY\(timerMaxY)")
+
         lName.frame.origin = CGPointMake(lnx, timerMaxY)
         
         //message content
@@ -279,7 +280,7 @@ class ChatTableViewCell: UITableViewCell {
         Common.setBonusImage(messageItem.headImg)
         Common.setBonusNickName(messageItem.name)
         
-        print("==============点击了SJHB 存放红包信息")
+
         
         let mgr = AFHTTPSessionManager()
         let token = Common.getToken()
@@ -291,18 +292,17 @@ class ChatTableViewCell: UITableViewCell {
         // 点击后先判断红包是否有效
         mgr.POST(URL_getRandomBonus, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
-            print("=============data\(responseObj!["data"])==============SJ红包的response\(responseObj)========SJ红包的info\(responseObj!["info"] as! String)")
+           
             
             if (responseObj!["data"]as? String == "")
             {
-                print("=======红包失效============")
-
+                
                 var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
                 while(vc?.presentedViewController != nil){
                     vc = vc?.presentedViewController
                 }
                 
-                print("当前的VC=========的view\(vc)")
+               
                 let hud1 = MBProgressHUD.showHUDAddedTo(vc!.view, animated: true)
                 hud1.label.text = "网络异常"
                 hud1.hideAnimated(true, afterDelay: 1)

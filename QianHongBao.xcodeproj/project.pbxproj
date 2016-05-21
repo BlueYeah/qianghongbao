@@ -52,8 +52,6 @@
 		2EE2DDFD1C429F4C00C75519 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE2DDFC1C429F4C00C75519 /* FirstViewController.swift */; };
 		2EE2DDFF1C429F4C00C75519 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE2DDFE1C429F4C00C75519 /* SecondViewController.swift */; };
 		2EE2DE021C429F4C00C75519 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2EE2DE001C429F4C00C75519 /* Main.storyboard */; };
-		2EE2DE041C429F4C00C75519 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2EE2DE031C429F4C00C75519 /* Images.xcassets */; };
-		2EE2DE071C429F4C00C75519 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE2DE051C429F4C00C75519 /* LaunchScreen.xib */; };
 		2EE2DE131C429F4D00C75519 /* QianHongBaoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE2DE121C429F4D00C75519 /* QianHongBaoTests.swift */; };
 		2EE2DE1D1C42A83F00C75519 /* ThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE2DE1C1C42A83F00C75519 /* ThreeViewController.swift */; };
 		2EE2DE1F1C42A85300C75519 /* FourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE2DE1E1C42A85300C75519 /* FourViewController.swift */; };
@@ -68,6 +66,7 @@
 		2EECDECB1C8685BC003D4B6A /* AddrMGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EECDECA1C8685BC003D4B6A /* AddrMGViewController.swift */; };
 		2EEE2B6C1C8AD655004D0238 /* JieSuanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEE2B6B1C8AD655004D0238 /* JieSuanViewController.swift */; };
 		2EF513701C81744F002EA6BC /* SJHBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF5136F1C81744F002EA6BC /* SJHBViewController.swift */; };
+		3211CF9F1CED9EF4004E0BF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3211CF9E1CED9EF4004E0BF7 /* Images.xcassets */; };
 		32166B5E1CC215C400EBD1EE /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32166B5A1CC215C400EBD1EE /* libXG-SDK.a */; };
 		32166B5F1CC215C400EBD1EE /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32166B5B1CC215C400EBD1EE /* ReleaseNotes.txt */; };
 		32166B611CC2160300EBD1EE /* XinGeAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32166B601CC2160300EBD1EE /* XinGeAppDelegate.swift */; };
@@ -180,8 +179,6 @@
 		2EE2DDFC1C429F4C00C75519 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		2EE2DDFE1C429F4C00C75519 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		2EE2DE011C429F4C00C75519 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		2EE2DE031C429F4C00C75519 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2EE2DE061C429F4C00C75519 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2EE2DE0C1C429F4C00C75519 /* QianHongBaoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QianHongBaoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE2DE111C429F4C00C75519 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2EE2DE121C429F4D00C75519 /* QianHongBaoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QianHongBaoTests.swift; sourceTree = "<group>"; };
@@ -198,6 +195,7 @@
 		2EECDECA1C8685BC003D4B6A /* AddrMGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddrMGViewController.swift; sourceTree = "<group>"; };
 		2EEE2B6B1C8AD655004D0238 /* JieSuanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JieSuanViewController.swift; sourceTree = "<group>"; };
 		2EF5136F1C81744F002EA6BC /* SJHBViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SJHBViewController.swift; sourceTree = "<group>"; };
+		3211CF9E1CED9EF4004E0BF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		32166B5A1CC215C400EBD1EE /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
 		32166B5B1CC215C400EBD1EE /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
 		32166B5C1CC215C400EBD1EE /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
@@ -464,8 +462,7 @@
 				2E0D134D1C897E9C00B44D62 /* CDSViewController.swift */,
 				2EEE2B6B1C8AD655004D0238 /* JieSuanViewController.swift */,
 				2EE2DE001C429F4C00C75519 /* Main.storyboard */,
-				2EE2DE031C429F4C00C75519 /* Images.xcassets */,
-				2EE2DE051C429F4C00C75519 /* LaunchScreen.xib */,
+				3211CF9E1CED9EF4004E0BF7 /* Images.xcassets */,
 				324FB99B1CD9962000B355DF /* Tool */,
 				2EE25B281C440302002D99C3 /* Libs */,
 				2EE2DDF81C429F4C00C75519 /* Supporting Files */,
@@ -667,10 +664,9 @@
 				324FB99F1CD9969C00B355DF /* tables.sql in Resources */,
 				32166B5F1CC215C400EBD1EE /* ReleaseNotes.txt in Resources */,
 				2EE25BB01C442190002D99C3 /* LICENSE in Resources */,
+				3211CF9F1CED9EF4004E0BF7 /* Images.xcassets in Resources */,
 				2EE2DE021C429F4C00C75519 /* Main.storyboard in Resources */,
-				2EE2DE071C429F4C00C75519 /* LaunchScreen.xib in Resources */,
 				2EE25B641C440346002D99C3 /* MJRefresh.bundle in Resources */,
-				2EE2DE041C429F4C00C75519 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,14 +824,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		2EE2DE051C429F4C00C75519 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2EE2DE061C429F4C00C75519 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -926,6 +914,7 @@
 			baseConfigurationReference = 617C50727885780E8421E1E2 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = QianHongBao/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -944,6 +933,7 @@
 			baseConfigurationReference = E5B4858FD9CF26F92C2FCEEA /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = QianHongBao/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

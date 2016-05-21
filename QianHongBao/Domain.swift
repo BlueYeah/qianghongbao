@@ -451,7 +451,117 @@ class Common{
         let obj: AnyObject? = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!, options: NSJSONReadingOptions())
         return obj!
     }
+    
+    class func getSeconds(mi:String ) -> String {
+        // 1.获取当前消息对应date字符串
+        let msgDateString = mi
+        //let lastmsgDateString = lastmsg
+        
+        // 2.获取当前时间字符串
+        let date = NSDate()
+        
+        let formatter:NSDateFormatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        
+        // 2.1 转换成Date类型
+        let msgDate = formatter.dateFromString(msgDateString)
+        
+        let nowdate = formatter.stringFromDate(date)
+        let mydate = formatter.dateFromString(nowdate)
+        
+        let seconds = Int((mydate?.timeIntervalSinceDate(msgDate!))!)
+        
+        //let seconds = mydate?.timeIntervalSinceDate(msgDate!)
+ 
+        
+        var timerStr:String?
+        
+        if seconds > 60 {
+            
+            // 少于1天
+            if seconds < 60 * 60 * 24 {
+                
+                formatter.dateFormat = "HH:mm"
+                timerStr = formatter.stringFromDate(msgDate!)
+                
+            }
+                // 大于1天直接显示日期
+            else {
+                timerStr = msgDateString
+            }
+            
+            
+            // 5分钟内不显示
+        }else { timerStr = ""}
+        
+        return timerStr!
+    }
+    
+   class func friendlyTime(dateTime: String) -> String {
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
+        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss")
+        if let date = dateFormatter.dateFromString(dateTime) {
+            let delta = NSDate().timeIntervalSinceDate(date)
+            
+            if (delta <= 0) {
+                return "刚刚"
+            }
+            else if (delta < 60) {
+                return "\(Int(delta))秒前"
+            }
+            else if (delta < 3600) {
+                return "\(Int(delta / 60))分钟前"
+            }
+            else {
+                let calendar = NSCalendar.currentCalendar()
+                let unitFlags:NSCalendarUnit = [NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day,NSCalendarUnit.Hour,NSCalendarUnit.Minute]
+                
+                let comp = calendar.components(unitFlags, fromDate: NSDate())
+                let currentYear = String(comp.year)
+                let currentDay = String(comp.day)
+                
+                let comp2 = calendar.components(unitFlags, fromDate: date)
+                let year = String(comp2.year)
+                let month = String(comp2.month)
+                let day = String(comp2.day)
+                var hour = String(comp2.hour)
+                var minute = String(comp2.minute)
+                
+                if comp2.hour < 10 {
+                    hour = "0" + hour
+                }
+                if comp2.minute < 10 {
+                    minute = "0" + minute
+                }
+                
+                if currentYear == year {
+                    if currentDay == day {
+                        return "今天 \(hour):\(minute)"
+                    } else {
+                        return "\(month)月\(day)日 \(hour):\(minute)"
+                    }
+                } else {
+                    return "\(year)年\(month)月\(day)日 \(hour):\(minute)"
+                }
+            }
+        }
+        return ""
+    }
+    
+    class func substring(indexString:String ,content:String) -> String {
+        let source = content
+        let str = indexString
+        let subRange = (source as NSString).rangeOfString(str)   //子范围
+        let index = subRange.location
+        let result = (source as NSString).substringFromIndex(index + 1)  //子字符串
+        return result
+    }
+
 }
+
 class MyDialog{
     class func showAlert(vc:UIViewController,title:String,msg:String){
         let alert = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
@@ -672,7 +782,7 @@ class MySQL {
             let id = dict["id"] as! Int
             let rid = dict["rid"] as! Int
             let uid = dict["uid"] as! Int
-            let content = dict["content"] as! String
+            let content = dict["alert"] as! String
             let nackname = dict["nackname"] as! String
     let date:String
     
@@ -740,18 +850,23 @@ class MySQL {
         SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) -> Void in
             let rs = db.executeQuery(sql)!
 
+
             // 字典是一条完整的微博数据的字典
             var array:Array<MessageItem> = []
             
             while rs.next() {
 
                 
-                
                 let uid = Int( rs.intForColumn("uid"))
                 let type = rs.intForColumn("type")
                 let name = rs.stringForColumn("nackname")
                 let headImg = rs.stringForColumn("photo")
-                let content = rs.stringForColumn("content")
+                let message = rs.stringForColumn("content")
+                
+                let content = Common.substring(":", content: message)
+                
+                
+                
                 let id = rs.intForColumn("id")
                 let bonus_total = Float( rs.intForColumn("bonus_total"))
                 let date = rs.stringForColumn("date")
@@ -812,7 +927,10 @@ class MySQL {
         })
     }
 
+
 }
+
+
 struct MyUserDefaultKey{
     static let KEY_HEADIMG = "ud_headimg"
     static let KEY_NICKNAME = "ud_nickname"

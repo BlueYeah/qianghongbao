@@ -41,7 +41,8 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             print("服务端API接入成功")
             
             
-            print("second===========\(responseObj)========info\(responseObj!["info"])=========status\(responseObj!["status"])")
+            //print("second===========\(responseObj)========info\(responseObj!["info"])=========status\(responseObj!["status"])")
+            
             // 实现token过期
             if responseObj!["status"] as! Int != 1
             {
@@ -137,10 +138,14 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         MySQL.loadMessage(0, max_id: 0, rid: Room.rid) { (array) in
             self.roomData = array
         }
-        print("roomdata\(roomData)")
+      
         if (self.roomData.count > 0) {
-            time.text = roomData[roomData.count-1].date
             
+            let date:String = roomData[roomData.count-1].date!
+        
+            //time.text = Common.getSeconds(date)
+            
+            time.text = Common.friendlyTime(date)
             text.text = roomData[roomData.count-1].content
         }else {
             time.text = ""
@@ -160,6 +165,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         print("======进入当前房间 rid=\(rid)")
         Common.setNowRid(rid)
         
+        XGPush.setTag(String (rid))
         let controller = storyboard!.instantiateViewControllerWithIdentifier("chatViewController") as UIViewController
         presentViewController(controller, animated: true, completion: nil)
         

@@ -39,9 +39,12 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         changeVcName(nowRid)
 
 
+        print("now rid ----\(nowRid)")
         MySQL.loadMessage(0, max_id: 0, rid: nowRid) { (array) in
             self.chatData = array
         }
+        
+
         
     
 //        self.mMJRefreshHeader = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction: "pullRefresh")
@@ -89,33 +92,33 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     func ReceiveMessage(notification: NSNotification) {
 
+        // 获取推送消息
         let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
         
-        if let apsDict = apsDictionary!["alert"]
-        {
-            
+        let apsDict = apsDictionary
 
             let alert:NSDictionary
+        
+            let json = apsDict
             
-            
-            
-            let json = apsDict as? String
-            
-            if  json != nil {
-                alert = Common.json2obj(apsDict as! String) as! NSDictionary
+            if  json == nil {
+                
+                alert = Common.json2obj( String (apsDict)) as! NSDictionary
             }
             else {
             
             
-              alert = apsDict as! NSDictionary
+              alert = apsDict!
             }
             
             print("==========接受到消息啊！！！\(alert)")
    
             
             //apsDict["alert"]
-            let msg = alert["content"]
-            
+            let content = Common.substring(":", content: apsDict!["alert"] as! String)
+        
+            let msg = content
+        
 
             let nickName = alert["nackname"] as! String
             
@@ -144,7 +147,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }
 
             if type == 1 {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil ,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:nil,dsBonus: nil ,date: date))
               
             }else if type == 2
             {
@@ -157,7 +160,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 if uid == myuid {
                     Userid = 0
                 }
-                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: nil,date: date))
+                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:bonus_id,dsBonus: nil,date: date))
    
             }else if type == 3
             
@@ -179,10 +182,10 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     Userid = 0
                 }
                 
-                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:bonus_id,dsBonus: dsBonus,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:bonus_id,dsBonus: dsBonus,date: date))
             }else if type == 4
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg! as! String,bonusId:nil,dsBonus: nil,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:nil,dsBonus: nil,date: date))
                 
             }
             else if type == 5
@@ -198,7 +201,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }
 
             mTableView.reloadData()
-        }
+        
 
     }
     
@@ -216,12 +219,11 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let dateString = formatter.stringFromDate(date)
         
         
-        let appDict:NSDictionary = ["id":0,"uid":uid, "content":message, "rid":rid ,"date":dateString ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
+        let appDict:NSDictionary = ["id":0,"uid":uid, "alert":message, "rid":rid ,"date":dateString ,"photo":photo ,"nackname":nickName ,"type":1,"status":1,"bonus_total":0,"dsTime":0]
         
         //设置message
-        let dict:NSDictionary = ["alert":appDict]
         
-        let message = MyXG.message(dict)
+        let message = MyXG.message(appDict)
         
         
         let param = MyXG.sendMessage(access_id as String, type: type, message: message, enviroment: "1", messageType: "0")
@@ -229,6 +231,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let mgr = AFHTTPSessionManager()
         
         let url = "\(XGurl)\(type)"
+        
+        print("ios信息字典\(param)")
         
         mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
@@ -294,11 +298,16 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     //go back
     @IBAction func btnBack(sender: AnyObject) {
+        // 删除标签
+        let tag = String( nowRid)
+        
+        XGPush.delTag(tag)
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     //send message
     @IBAction func btnSend(sender: AnyObject) {
-        let msg = textFieldSend.text
+        var msg = textFieldSend.text
         if(msg==""){
             
             // 测试随机红包
@@ -333,7 +342,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         // 信鸽
         let rid = Common.getNowRid()
-        
+        msg = "\(nickName):" + msg!
         SendMessage(msg!, rid: rid)
         SendAdMessage(msg!, rid: rid)
 
@@ -373,7 +382,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         let item = chatData[indexPath.row] as MessageItem
         let lastmsg:String
         let lastitem:MessageItem
-        print("chatdata\(chatData.count)")
         // 存储上条信息时间
         if (indexPath.row > 1) {
                  lastitem = chatData[indexPath.row - 1] as MessageItem
