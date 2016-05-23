@@ -80,6 +80,7 @@ class LoginViewController: UIViewController {
 
                     
                     let uid = Int(data1!["uid"]! as! String)!
+                    let headImg = data1!["photo"]! as! String
                     
                     Common.setHeadImg(data1!["photo"]! as! String)
                     
@@ -94,10 +95,10 @@ class LoginViewController: UIViewController {
                 print("=====login uid\(uid)  token\(data1!["photo"])")
                 
                //let image = sd_setImageWithURL(NSURL(string:data1!["photo"]), placeholderImage: UIImage(named: IMG_LOADING))
-
                 
+                // 将头像图片存到沙盒
                 let mgr1 = SDWebImageManager.sharedManager()
-                mgr1.downloadImageWithURL(NSURL(string:data1!["photo"] as! String), options: SDWebImageOptions.RetryFailed, progress: { (min, max) in
+                mgr1.downloadImageWithURL(NSURL(string:headImg), options: SDWebImageOptions.RetryFailed, progress: { (min, max) in
                     print("加载中")
                     }, completed: { (UIImage, NSError, SDImageCacheType, true, nil) in
                         let iconimage = UIImage

@@ -170,12 +170,12 @@
                   moduleName = "QianHongBao"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485684163.763402"
+                  timestampString = "485688141.870144"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "402"
                   endingLineNumber = "402"
-                  offsetFromSymbolStart = "656">
+                  offsetFromSymbolStart = "891">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -185,12 +185,12 @@
                   moduleName = "QianHongBao"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485684163.763498"
+                  timestampString = "485688141.870346"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "402"
                   endingLineNumber = "402"
-                  offsetFromSymbolStart = "2120">
+                  offsetFromSymbolStart = "3022">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -241,38 +241,6 @@
             endingLineNumber = "43"
             landmarkName = "btnConfirm(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.AddrMGViewController.btnConfirm (Swift.AnyObject) -&gt; ()"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/AddrMGViewController.swift"
-                  timestampString = "485684621.340416"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "4183">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.AddrMGViewController.btnConfirm (Swift.AnyObject) -&gt; ()"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/AddrMGViewController.swift"
-                  timestampString = "485684621.34053"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "4251">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -304,6 +272,38 @@
             startingLineNumber = "105"
             endingLineNumber = "105"
             landmarkName = "btnLogin(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QianHongBao/RegViewController.swift"
+            timestampString = "485689997.108985"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
+            landmarkName = "willShow(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QianHongBao/RegViewController.swift"
+            timestampString = "485689997.108985"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "willShow(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

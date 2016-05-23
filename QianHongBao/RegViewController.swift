@@ -12,6 +12,8 @@ class RegViewController: UIViewController {
     @IBOutlet weak var etName: UITextField!
     
     @IBOutlet weak var tPhone: UITextField!
+    @IBOutlet weak var showView: UIView!
+    @IBOutlet var bgView: UIView!
     
     @IBOutlet weak var tPwd: UITextField!
     
@@ -98,12 +100,25 @@ class RegViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // 键盘通知
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegViewController.willShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegViewController.willHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        addFielldToArr()
+    }
+    
+    
     
 
     /*
@@ -115,6 +130,8 @@ class RegViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
 
     
 
@@ -125,4 +142,74 @@ class RegViewController: UIViewController {
         view.endEditing(true)
     }
     
+    //MARK: 键盘处理
+    var fieldArr: [UITextField] = []
+    
+    
+    
+    //把VC上的textField加到一个数组里面
+    func addFielldToArr(){
+        
+        etName.tag = 0
+        fieldArr.append(etName)
+        tPhone.tag  = 1
+        fieldArr.append(tPhone)
+        tPwd.tag = 2
+        fieldArr.append(tPwd)
+        tPwd2.tag = 3
+        fieldArr.append(tPwd2)
+        
+        
+    }
+    
+    //获取当前键盘响应者的索引
+    private func indexOfFirstResponse() ->(Int){
+        
+        for tf in fieldArr {
+            if tf.isFirstResponder() {
+               // print("tag======\(tf.tag)")
+                return tf.tag
+            }
+        }
+        //返回-1，没有当前响应者
+        return -1
+    }
+    
+    
+    
+    //键盘将要显示的通知处理
+    func willShow(notify: NSNotification) ->(){
+        
+        
+        //1.获取当前选中的UITextField在控制器View中的最大值
+        //获取当前焦点的field
+        let currentTF = self.fieldArr[self.indexOfFirstResponse()]
+        
+        //当前textField的最大Y值等于本身的最大Y值加上父控件view的y值
+        let maxY = CGRectGetMaxY(currentTF.frame) + (currentTF.superview?.frame.origin.y)!
+        
+        print("+++++++++\(currentTF.superview)")
+        //2.获取键盘的y值（弹出来后的y值)
+        let kbEndFrm = notify.userInfo![UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
+        let kbY = kbEndFrm?.origin.y
+        
+        //3.进行比较
+        let delta = kbY! - maxY 
+        if (delta < 0) {//需要往上移
+            //添加动画
+            UIView.animateWithDuration(0.25, animations: {
+                self.showView.transform = CGAffineTransformMakeTranslation(0, delta)
+            })
+        }
+        
+
+    }
+    //键盘将要消失的通知处理
+    func willHide(notify: NSNotification) ->(){
+        
+        //恢复原状
+        UIView.animateWithDuration(0) {
+            self.showView.transform = CGAffineTransformIdentity
+        }
+    }
 }
