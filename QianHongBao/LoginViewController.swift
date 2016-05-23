@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFNetworking
 
 class LoginViewController: UIViewController {
 
@@ -14,6 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var tPassword: UITextField!
     
     var canLogin = true
+    
     
     @IBAction func btnRegister(sender: AnyObject) {
         let vc = storyboard!.instantiateViewControllerWithIdentifier("regVC") as UIViewController
@@ -75,19 +77,9 @@ class LoginViewController: UIViewController {
                     let data1 = jobj!["data"] as? Dictionary<String,AnyObject>
                 print("=====data1\(data1)")
               
-                // 假如data是string 再一次json解析成字典
-               
-                    //let tmp_str = jobj!["data"] as! String
 
-//                    let data1 = try! NSJSONSerialization.JSONObjectWithData(tmp_str.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments) as? Dictionary<String,AnyObject>
-
-
-                    
-                    
-                    //print("---------------------token\(data!["token"])")
                     
                     let uid = Int(data1!["uid"]! as! String)!
-                    //let token = Int(data1!["token"]! as! String)
                     
                     Common.setHeadImg(data1!["photo"]! as! String)
                     
@@ -99,30 +91,19 @@ class LoginViewController: UIViewController {
                     
                     Common.setToken(data1!["token"] as! String)
                 
-                print("=====login uid\(uid)  token\(data1!["token"])")
+                print("=====login uid\(uid)  token\(data1!["photo"])")
                 
-                   // var user = data!["user"] as? Dictionary<String,String>
+               //let image = sd_setImageWithURL(NSURL(string:data1!["photo"]), placeholderImage: UIImage(named: IMG_LOADING))
+
                 
-                
-//                    print("---------------------token\(data!["token"])")
-//                
-//                    let uid = Int(data!["uid"]! as! String)!
-//                    
-//                    
-//                    Common.setHeadImg(data!["photo"]! as! String)
-//                    
-//                    Common.setNickName(data!["nackname"]! as! String)
-//                    
-//                    Common.setMoney(Double(data!["integral"]! as! String)!)
-//                
-//                
-//                    
-//                    NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
-              
-                
-                
-                
-                
+                let mgr1 = SDWebImageManager.sharedManager()
+                mgr1.downloadImageWithURL(NSURL(string:data1!["photo"] as! String), options: SDWebImageOptions.RetryFailed, progress: { (min, max) in
+                    print("加载中")
+                    }, completed: { (UIImage, NSError, SDImageCacheType, true, nil) in
+                        let iconimage = UIImage
+                        print("用户头像-----\(iconimage)")
+                        Common.saveIconImageToSandBox(iconimage, imageImageNmae: "iconImage.png")
+                })
                 
                 let vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as! UITabBarController
                 self.presentViewController(vc, animated: true, completion: nil)

@@ -23,7 +23,7 @@
 
 import UIKit
 import CryptoSwift
-let SERVER_HTTP = "http://192.168.111.106/QHB/"
+let SERVER_HTTP = "http://192.168.0.106/QHB/"
 
 let URL_Product = SERVER_HTTP + "Product/getJson"
 let URL_Slider = SERVER_HTTP + "Slider/getJson"
@@ -559,6 +559,63 @@ class Common{
         let result = (source as NSString).substringFromIndex(index + 1)  //子字符串
         return result
     }
+    
+    //保存头像图片到本地沙盒
+    class func saveIconImageToSandBox(iconImage:UIImage,imageImageNmae:String){
+        
+        //首先拿到沙盒路径
+        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).last! as NSString
+        
+        let iconImagePath = path.stringByAppendingPathComponent(imageImageNmae)
+        print(iconImagePath)
+        let imageData = UIImageJPEGRepresentation(iconImage, 1.0)
+        
+        imageData?.writeToFile(iconImagePath, atomically: true)
+    }
+    
+    //从沙盒中取出头像
+    class func getImageFromSandBox() -> UIImage{
+        
+        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).last
+        let saveIconImagePath = path! + "/iconImage.png"
+        print("imagepath\(saveIconImagePath)")
+        let saveIconImage = UIImage.init(contentsOfFile: saveIconImagePath) ?? UIImage(named: "qrcode")
+        
+        return saveIconImage!
+    }
+    // 判断是否为手机号
+    class func isTelNumber(num:NSString)->Bool
+    {
+        let mobile = "^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$"
+        let  CM = "^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$"
+        let  CU = "^1(3[0-2]|5[256]|8[56])\\d{8}$"
+        let  CT = "^1((33|53|8[09])[0-9]|349)\\d{7}$"
+        let regextestmobile = NSPredicate(format: "SELF MATCHES %@",mobile)
+        let regextestcm = NSPredicate(format: "SELF MATCHES %@",CM )
+        let regextestcu = NSPredicate(format: "SELF MATCHES %@" ,CU)
+        let regextestct = NSPredicate(format: "SELF MATCHES %@" ,CT)
+        let length = num.length
+        
+        
+        if length <= 11 {
+            if ((regextestmobile.evaluateWithObject(num) == true)
+                || (regextestcm.evaluateWithObject(num)  == true)
+                || (regextestct.evaluateWithObject(num) == true)
+                || (regextestcu.evaluateWithObject(num) == true))
+            {
+                return true
+            }
+            else
+            {
+                return false
+            }
+        } else
+        {
+            return false
+        }
+        
+    }
+
 
 }
 

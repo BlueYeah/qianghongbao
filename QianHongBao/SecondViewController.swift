@@ -39,33 +39,23 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         print("========second token\(token)")
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
-            
-            
-            //print("second===========\(responseObj)========info\(responseObj!["info"])=========status\(responseObj!["status"])")
-            
+
             // 实现token过期
             if responseObj!["status"] as! Int != 1
             {
-                
-                
+
                 MyDialog.showErrorAlert(self, msg: responseObj!["info"] as! String, completion: {
                     var vc = UIApplication.sharedApplication().keyWindow?.rootViewController
                     while(vc?.presentedViewController != nil){
                         vc = vc?.presentedViewController
                     }
-                    
-                    
+ 
                     let controller = vc!.storyboard!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
                     vc?.presentViewController(controller, animated: true, completion: nil)
                 })
                 return
-                
             }
-            
-            
-            
-            
-            
+
             let temp = responseObj!["data"] as? String
             
             
@@ -79,16 +69,10 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
                 self.tvHall.reloadData()
                 
             }else {
-                
-                
+
                 return
             }
-            
-            
-            
-            
-            
-            
+
         }) { (task, error) in
             let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud1.label.text = "网络异常"

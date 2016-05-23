@@ -18,15 +18,18 @@ PODS:
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
+  - SnapKit (0.19.1)
 
 DEPENDENCIES:
   - AFNetworking
   - CryptoSwift
   - FMDB
+  - SnapKit (~> 0.19.1)
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   CryptoSwift: 19d29910d88440fcb132761d9ab57e175f1b0d0e
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  SnapKit: eff58d6e3451bf2f482db2eccf86aecf371dc62d
 
 COCOAPODS: 0.39.0

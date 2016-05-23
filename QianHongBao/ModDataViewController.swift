@@ -34,9 +34,12 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
         let gotImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
         let midImage:UIImage = self.imageWithImageSimple(gotImage, scaledToSize: CGSizeMake(100, 100))
-//        
+
         self.btnHeadImg.setImage(midImage, forState: UIControlState.Normal)
         
+        // 本地存储图片
+        Common.saveIconImageToSandBox(gotImage, imageImageNmae: "iconImage.png")
+        // 上传图片
         uploadImg(midImage)
 
         
@@ -119,10 +122,16 @@ class ModDataViewController: UIViewController,UIImagePickerControllerDelegate,UI
         super.viewDidLoad()
 
         tfName.text = Common.getNickName()
-        btnHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), forState: UIControlState.Normal, placeholderImage: UIImage(named: IMG_LOADING))
+
+        let iconimage = Common.getImageFromSandBox()
+        print("icon\(iconimage)")
+        btnHeadImg.setBackgroundImage(iconimage, forState: UIControlState.Normal)
+        
         // Do any additional setup after loading the view.
     }
-
+    override func viewWillAppear(animated: Bool) {
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -35,9 +35,9 @@ class RegViewController: UIViewController {
             
         }
         
-        let isTel = isTelNumber(tel)
+        let isTel = Common.isTelNumber(tel)
 
-        if  isTel {
+        if  !isTel {
             MyDialog.showErrorAlert(self, msg: "手机号格式错误",completion: nil)
         }
         
@@ -115,37 +115,7 @@ class RegViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    func isTelNumber(num:NSString)->Bool
-    {
-        let mobile = "^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$"
-        let  CM = "^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$"
-        let  CU = "^1(3[0-2]|5[256]|8[56])\\d{8}$"
-        let  CT = "^1((33|53|8[09])[0-9]|349)\\d{7}$"
-        let regextestmobile = NSPredicate(format: "SELF MATCHES %@",mobile)
-        let regextestcm = NSPredicate(format: "SELF MATCHES %@",CM )
-        let regextestcu = NSPredicate(format: "SELF MATCHES %@" ,CU)
-        let regextestct = NSPredicate(format: "SELF MATCHES %@" ,CT)
-        let length = num.length
-        
-        
-        if length <= 11 {
-            if ((regextestmobile.evaluateWithObject(num) == true)
-                || (regextestcm.evaluateWithObject(num)  == true)
-                || (regextestct.evaluateWithObject(num) == true)
-                || (regextestcu.evaluateWithObject(num) == true))
-            {
-                return true
-            }
-            else
-            {
-                return false
-            }
-        } else
-        {
-            return false
-        }
-   
-    }
+
     
 
     

@@ -18,15 +18,24 @@ class AppDelegate: XinGeAppDelegate {
         // Override point for customization after application launch.
         let uid = Common.getUid()
         
-        if(uid == 0){
+        let st = self.window?.rootViewController?.storyboard
+        if isNewupdate() {
+            //返回真，有新版本，进入新特性界面  NewFeatureVCID
             
-            let st = self.window?.rootViewController?.storyboard
-            let vc = st!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
-            self.window?.rootViewController = vc
-            //var vc = self.storyboard?.instantiateViewControllerWithIdentifier("mTabBarVC") as UITabBarController
-            //self.presentViewController(vc, animated: true, completion: nil)
+            let newFeatueCollectionVC = st!.instantiateViewControllerWithIdentifier("NewFeatureVCID")
+            window?.rootViewController = newFeatueCollectionVC
+            
+        }else{
+            //没有新版本，进入登录界面
+            if(uid == 0){
+                
+                let st = self.window?.rootViewController?.storyboard
+                let vc = st!.instantiateViewControllerWithIdentifier("loginVC") as UIViewController
+                self.window?.rootViewController = vc
+                
+            }
         }
-        
+
         // 打开数据库
         SQLiteManager.sharedSQLiteManager.openDB("status.db")
         
@@ -57,6 +66,25 @@ class AppDelegate: XinGeAppDelegate {
     print("app被杀死")
       //  XGPush.unRegisterDevice()
         
+    }
+    private func isNewupdate() -> Bool{
+        // 1.获取当前软件的版本号 --> info.plist
+        let currentVersion = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        
+        // 2.获取以前的软件版本号 --> 从本地文件中读取(以前自己存储的)
+        let sandboxVersion =  NSUserDefaults.standardUserDefaults().objectForKey("CFBundleShortVersionString") as? String ?? ""
+        print("current = \(currentVersion) sandbox = \(sandboxVersion)")
+        
+        // 3.比较当前版本号和以前版本号
+        //   2.0                    1.0
+        if currentVersion.compare(sandboxVersion) == NSComparisonResult.OrderedDescending
+        {
+            // 3.1.1存储当前最新的版本号
+            NSUserDefaults.standardUserDefaults().setObject(currentVersion, forKey: "CFBundleShortVersionString")
+            return true
+        }
+        
+        return false
     }
 
 

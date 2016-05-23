@@ -15,6 +15,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     @IBOutlet weak var chatTableView: UITableView!
     @IBOutlet weak var Vcname: UILabel!
+    @IBOutlet weak var bgView: UIView!
+    
     //chat data
     var chatData:Array<MessageItem>!
     
@@ -26,35 +28,19 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-        
         //init data
-        self.chatData = [
+        self.chatData = []
 
-
-            
-        ]
-
-        
         changeVcName(nowRid)
 
-
-        print("now rid ----\(nowRid)")
         MySQL.loadMessage(0, max_id: 0, rid: nowRid) { (array) in
             self.chatData = array
         }
-        
 
-        
-    
-//        self.mMJRefreshHeader = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction: "pullRefresh")
         
         self.chatTableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: "textcell")
         
         self.chatTableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: "hbcell")
-        
-//        mTableView.addSubview(mMJRefreshHeader)
-        // Do any additional setup after loading the view.
         
         //scroll to bottom
         if chatData.count > 5 {
@@ -69,7 +55,16 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         // 监听通知
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.ReceiveMessage(_:)), name: "NewMessage", object: nil)
         
+        // 键盘通知
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.willShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.willHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        addFielldToArr()
     }
     
     func changeVcName(rid:Int) {
@@ -147,7 +142,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             }
 
             if type == 1 {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:nil,dsBonus: nil ,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg ,bonusId:nil,dsBonus: nil ,date: date))
               
             }else if type == 2
             {
@@ -160,7 +155,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 if uid == myuid {
                     Userid = 0
                 }
-                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:bonus_id,dsBonus: nil,date: date))
+                    chatData.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:nickName as String,headImg:photo ,content:msg ,bonusId:bonus_id,dsBonus: nil,date: date))
    
             }else if type == 3
             
@@ -182,16 +177,16 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                     Userid = 0
                 }
                 
-                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:bonus_id,dsBonus: dsBonus,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.CDS,name:nickName as String,headImg:photo ,content:msg ,bonusId:bonus_id,dsBonus: dsBonus,date: date))
             }else if type == 4
             {
-                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg as! String,bonusId:nil,dsBonus: nil,date: date))
+                chatData.append(MessageItem(uid:1,type:ChatType.Text,name:nickName as String,headImg:photo ,content:msg ,bonusId:nil,dsBonus: nil,date: date))
                 
             }
             else if type == 5
             {
                 let message:String
-                if msg as! String == "1"
+                if msg == "1"
                 {
                     message = "本期单双开奖结果：单"
                 }else {message = "本期单双开奖结果：双"}
@@ -342,9 +337,11 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         // 信鸽
         let rid = Common.getNowRid()
+        SendAdMessage(msg!, rid: rid)
+        // 发送ios 信息前要加名字
         msg = "\(nickName):" + msg!
         SendMessage(msg!, rid: rid)
-        SendAdMessage(msg!, rid: rid)
+        
 
 
         
@@ -379,6 +376,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         let item = chatData[indexPath.row] as MessageItem
         let lastmsg:String
         let lastitem:MessageItem
@@ -409,6 +407,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         }
         cell!.adaptData(item,lastmsg: lastmsg)
         cell?.messageItem = item
+        
+        
         return cell!
     }
 
@@ -423,6 +423,85 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         view.endEditing(true)
     }
+    
+    
+    
+    //MARK: 键盘处理
+    var fieldArr: [UITextField] = []
+    
+    
+    
+    //把VC上的textField加到一个数组里面
+    func addFielldToArr(){
+        
+        textFieldSend.tag  = 0
+        fieldArr.append(textFieldSend)
+
+    }
+    
+    //获取当前键盘响应者的索引
+    private func indexOfFirstResponse() ->(Int){
+        
+        for tf in fieldArr {
+            if tf.isFirstResponder() {
+                return tf.tag
+            }
+        }
+        //返回-1，没有当前响应者
+        return -1
+    }
+    
+    
+    
+    //键盘将要显示的通知处理
+    func willShow(notify: NSNotification) ->(){
+        
+        
+        //1.获取当前选中的UITextField在控制器View中的最大值
+        //获取当前焦点的field
+        let currentTF = self.fieldArr[self.indexOfFirstResponse()]
+        
+        //当前textField的最大Y值等于本身的最大Y值加上父控件view的y值
+        let maxY = CGRectGetMaxY(currentTF.frame) + (currentTF.superview?.frame.origin.y)!
+        
+        //2.获取键盘的y值（弹出来后的y值)
+        let kbEndFrm = notify.userInfo![UIKeyboardFrameEndUserInfoKey]?.CGRectValue()
+        let kbY = kbEndFrm?.origin.y
+        
+        //3.进行比较
+        let delta = kbY! - maxY - 65
+        if (delta < 0) {//需要往上移
+            //添加动画
+            UIView.animateWithDuration(0.25, animations: {
+                self.bgView.transform = CGAffineTransformMakeTranslation(0, delta)
+            })
+        }
+        
+        //scroll to bottom
+        if chatData.count > 5 {
+            
+            let indexPath = NSIndexPath(forRow: chatData.count-1, inSection: 0)
+            mTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        
+        }
+        
+        
+        
+    }
+    
+    
+    //键盘将要消失的通知处理
+    func willHide(notify: NSNotification) ->(){
+        
+        //恢复原状
+        UIView.animateWithDuration(0) {
+            self.bgView.transform = CGAffineTransformIdentity
+        }
+    }
+
+    
+    
+
     
     /*
     // MARK: - Navigation

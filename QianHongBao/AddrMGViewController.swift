@@ -36,6 +36,14 @@ class AddrMGViewController: UIViewController {
             MyDialog.showErrorAlert(self, msg: "数据不能为空",completion: nil)
             return
         }
+        
+        let isTel = Common.isTelNumber(phone!)
+        
+        if  !isTel {
+            MyDialog.showErrorAlert(self, msg: "手机号格式错误",completion: nil)
+            return
+        }
+        
         let data:Dictionary<String,AnyObject> = ["name":name!,"phone":phone!,"addr":addr!]
         
         let tmp = mUserDefault.arrayForKey(ADDR_KEY)

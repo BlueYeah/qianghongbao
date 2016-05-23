@@ -80,6 +80,7 @@ class ChatTableViewCell: UITableViewCell {
             isSelf=true
         }
         //head Image
+        
         headImage.sd_setImageWithURL(NSURL(string: mi.headImg), placeholderImage: UIImage(named: IMG_LOADING))
 //        headImage.image = UIImage(named: mi.headImg)
 //        headImage.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))

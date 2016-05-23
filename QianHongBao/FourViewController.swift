@@ -19,7 +19,7 @@ class FourViewController: UIViewController {
     
     
     @IBOutlet weak var lName: UILabel!    
-    @IBOutlet weak var iHeadImg: UIImageView!
+    @IBOutlet weak var iHeadImg: UIButton!
     @IBOutlet weak var lMoney: UILabel!
     
     var canlogin:Bool = true
@@ -27,6 +27,7 @@ class FourViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         // Do any additional setup after loading the view.
         vOrder.userInteractionEnabled = true
         let mGes = UITapGestureRecognizer(target: self, action: #selector(FourViewController.actionOrder))
@@ -49,12 +50,19 @@ class FourViewController: UIViewController {
         
         lName.text = Common.getNickName()
         lMoney.text = "\(Common.getMoney())"
-        iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
         
+        //iHeadImg.imageView?.image = Common.getImageFromSandBox("/iconImage.png")
+        //iHeadImg.imageView!.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+
 
     }
     
     override func viewWillAppear(animated: Bool) {
+        
+        
+        let iconimage = Common.getImageFromSandBox()
+        print("icon\(iconimage)")
+        iHeadImg.setBackgroundImage(iconimage, forState: UIControlState.Normal)
         
         let uid = Common.getUid()
         let token = Common.getToken()
@@ -108,7 +116,7 @@ class FourViewController: UIViewController {
             
             self.lMoney.text = "\(Common.getMoney())"
             
-            self.iHeadImg.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
+            self.iHeadImg.imageView!.sd_setImageWithURL(NSURL(string: Common.getHeadImg()), placeholderImage: UIImage(named: IMG_LOADING))
             
             NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
             
@@ -130,6 +138,11 @@ class FourViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func toIconVC(sender: AnyObject) {
+        let vc = storyboard!.instantiateViewControllerWithIdentifier("IconVC") as UIViewController
+        presentViewController(vc, animated: true, completion: nil)
+        
+    }
     
     func actionOrder(){
         let vc = storyboard!.instantiateViewControllerWithIdentifier("orderVC") as UIViewController
@@ -165,6 +178,8 @@ class FourViewController: UIViewController {
         let obj: AnyObject? = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)!, options: NSJSONReadingOptions())
         return obj!
     }
+    
+    
 
     /*
     // MARK: - Navigation

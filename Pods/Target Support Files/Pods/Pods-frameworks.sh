@@ -87,9 +87,11 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/AFNetworking.framework"
   install_framework "Pods/CryptoSwift.framework"
   install_framework "Pods/FMDB.framework"
+  install_framework "Pods/SnapKit.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/AFNetworking.framework"
   install_framework "Pods/CryptoSwift.framework"
   install_framework "Pods/FMDB.framework"
+  install_framework "Pods/SnapKit.framework"
 fi
