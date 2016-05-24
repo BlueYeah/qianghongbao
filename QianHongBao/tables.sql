@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS "message" (
     "bonus_total" FLOAT NOT NULL,
     "dsTime" INTEGER NOT NULL,
     "photo" TEXT NOT NULL,
+    "msgStatus" INTEGER NOT NULL,
     PRIMARY KEY("mid")
 );

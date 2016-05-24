@@ -27,14 +27,13 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
     }
     
     override func viewWillAppear(animated: Bool) {
-        print("---------------------------")
         
         let mgr = AFHTTPSessionManager()
         let token = Common.getToken()
         let uid = Common.getUid()
         
         let param:NSDictionary = ["uid":uid, "token":token]
-        print("========second token\(token)")
+
         mgr.POST(URL_getRoom, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
 
@@ -80,8 +79,12 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         
         // Do any additional setup after loading the view.
         let view = UIView()
-        //        view.frame.size = CGSizeMake(tvHall.frame.width, 10)
+
         tvHall.tableFooterView = view
+        
+        // 接收未读聊天消息通知
+        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SecondViewController.reloadList), name: "notReadMessage", object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -89,6 +92,10 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         // Dispose of any resources that can be recreated.
 
     }
+    func reloadList() {
+        self.tvHall.reloadData()
+    }
+    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -128,7 +135,17 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
             //time.text = Common.getSeconds(date)
             
             time.text = Common.friendlyTime(date)
-            text.text = roomData[roomData.count-1].content
+            let content = roomData[roomData.count-1].content
+            let nackname = roomData[roomData.count-1].name
+            
+            let num =  MySQL.checkNumMsg(Room.rid, msgStatus: 0)
+            if num == 0 {
+                text.text = nackname + ":" + content
+            } else{
+                text.text = "[\(num)]" + nackname + ":" + content
+            }
+            
+            
         }else {
             time.text = ""
             

@@ -509,8 +509,10 @@ class Common{
             if (delta <= 0) {
                 return "刚刚"
             }
-            else if (delta < 60) {
-                return "\(Int(delta))秒前"
+            else if (delta <= 120) {
+                //return "\(Int(delta))秒前"
+                return ""
+
             }
             else if (delta < 3600) {
                 return "\(Int(delta / 60))分钟前"
@@ -1025,7 +1027,7 @@ class MySQL {
     class func updateMsgStatus(nowRid:Int) {
         
         let arr:[AnyObject] = []
-        let sql = "update message set msgStatus = 1 where uid = ?"
+        let sql = "update message set msgStatus = 1 where rid = \(nowRid)"
         
         SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) in
             if !db.executeUpdate(sql, withArgumentsInArray: arr)
@@ -1043,8 +1045,32 @@ class MySQL {
 
         
     }
+    
+    class func checkNumMsg (rid:Int,msgStatus:Int) -> Int {
+        
 
+        
+        // 1.定义SQL语句
+          let sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(Int( rid)) and msgStatus = \(msgStatus)"
+        
+        // 测试 sql
+        print(sql)
+        
+        // 字典是一条完整的微博数据的字典
+        var array:Array<String> = []
+        
+        // 3. 执行 SQL
+        SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) -> Void in
+            let rs = db.executeQuery(sql)!
 
+            while rs.next() {
+                array.append("1")
+            }
+
+        })
+        
+        return array.count
+    }
 }
 
 

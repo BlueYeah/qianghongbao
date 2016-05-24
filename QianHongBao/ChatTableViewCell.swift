@@ -87,9 +87,13 @@ class ChatTableViewCell: UITableViewCell {
 
         
         // 3.获取秒数
-        
+        let timerStr:NSString
         //let timerStr:NSString = getSeconds(mi,lastmsg:lastmsg)
-        let timerStr:NSString = Common.friendlyTime(mi.date!)
+        // 判断两条消息之间差是否超过2分钟
+        if getSeconds(mi, lastmsg: lastmsg) {
+            timerStr = Common.friendlyTime(mi.date!)
+        }else { timerStr = "" }
+        
         let timerH:CGFloat
         
         if timerStr == "" {
@@ -194,9 +198,11 @@ class ChatTableViewCell: UITableViewCell {
         }
         
         // timer Label
-        
+        let timerStr:NSString
         // 设置消息时间
-        let timerStr = getSeconds(mi,lastmsg: lastmsg)
+        if getSeconds(mi, lastmsg: lastmsg) {
+            timerStr = Common.friendlyTime(mi.date!)
+        }else { timerStr = "" }
         
         let timerH:CGFloat
         
@@ -384,7 +390,8 @@ class ChatTableViewCell: UITableViewCell {
         
     }
     
-    func getSeconds(mi:MessageItem ,lastmsg:String) -> String {
+    // 判断两条消息直接的时间差
+    func getSeconds(mi:MessageItem ,lastmsg:String) -> Bool {
         // 1.获取当前消息对应date字符串
         let msgDateString = mi.date
         let lastmsgDateString = lastmsg
@@ -403,25 +410,28 @@ class ChatTableViewCell: UITableViewCell {
         
         var timerStr:String?
         
-        if seconds > 60 {
-      
-            // 少于1天
-            if seconds < 60 * 60 * 24 {
-                
-                formatter.dateFormat = "HH:mm"
-                timerStr = formatter.stringFromDate(msgDate!)
-                
-            }
-                // 大于1天直接显示日期
-            else {
-                timerStr = msgDateString!
-            }
-            
-            
-            // 5分钟内不显示
-        }else { timerStr = ""}
+        if seconds > 120 {
+            return true
+        } else {return false
         
-        return timerStr!
+        }
+        
+//        // 秒数大于2分钟
+//        if seconds > 120 {
+//            // 少于1天
+//            if seconds < 60 * 60 * 24 {
+//                
+//                formatter.dateFormat = "HH:mm"
+//                timerStr = formatter.stringFromDate(msgDate!)
+//            }
+//                // 大于1天直接显示日期
+//            else {
+//                timerStr = msgDateString!
+//            }
+//
+//        }
+//        else { timerStr = ""}
+//        return timerStr!
     }
     
 }

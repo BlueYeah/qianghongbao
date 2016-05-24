@@ -28,6 +28,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       
         //init data
         self.chatData = []
 
@@ -54,6 +55,9 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         // 接收聊天消息通知
         // 监听通知
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.ReceiveMessage(_:)), name: "NewMessage", object: nil)
+        // 接收更改用户info通知
+        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.reloadInfo), name: "newUserInfo", object: nil)
         
         // 键盘通知
 
@@ -65,6 +69,14 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     
     override func viewWillAppear(animated: Bool) {
         addFielldToArr()
+        
+         MySQL.updateMsgStatus(nowRid)
+    }
+    func reloadInfo() {
+        MySQL.loadMessage(0, max_id: 0, rid: nowRid,uid: nil) { (array) in
+            self.chatData = array
+        }
+        self.mTableView.reloadData()
     }
     
     func changeVcName(rid:Int) {
@@ -380,6 +392,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        print("===================>",chatData[indexPath.row].name)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         let item = chatData[indexPath.row] as MessageItem
         let lastmsg:String

@@ -17,7 +17,7 @@ class AppDelegate: XinGeAppDelegate {
     override func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         let uid = Common.getUid()
-        
+        Common.setNowRid(0)
         
         
         let st = self.window?.rootViewController?.storyboard

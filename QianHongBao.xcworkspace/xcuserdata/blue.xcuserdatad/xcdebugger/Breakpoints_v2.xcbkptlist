@@ -137,54 +137,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "QianHongBao/ChatTableViewCell.swift"
-            timestampString = "485494445.118164"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "401"
-            endingLineNumber = "401"
-            landmarkName = "getSeconds(_:lastmsg:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.ChatTableViewCell.getSeconds (QianHongBao.MessageItem, lastmsg : Swift.String) -&gt; Swift.String"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485751709.450796"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "402"
-                  endingLineNumber = "402"
-                  offsetFromSymbolStart = "656">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "QianHongBao.ChatTableViewCell.getSeconds (QianHongBao.MessageItem, lastmsg : Swift.String) -&gt; Swift.String"
-                  moduleName = "QianHongBao"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/blue/Desktop/qianghongbao2%202XG%20/QianHongBao/ChatTableViewCell.swift"
-                  timestampString = "485751709.450907"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "402"
-                  endingLineNumber = "402"
-                  offsetFromSymbolStart = "2120">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "QianHongBao/AddrMGViewController.swift"
             timestampString = "485684014.645084"
             startingColumnNumber = "9223372036854775807"
@@ -266,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QianHongBao/XinGeAppDelegate.swift"
-            timestampString = "485751715.716061"
+            timestampString = "485767191.157917"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
             landmarkName = "application(_:didReceiveRemoteNotification:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -281,13 +233,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "QianHongBao/XinGeAppDelegate.swift"
-            timestampString = "485751800.211475"
+            filePath = "QianHongBao/ChatViewController.swift"
+            timestampString = "485767406.505934"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -297,29 +249,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "QianHongBao/XinGeAppDelegate.swift"
-            timestampString = "485751849.499246"
+            filePath = "QianHongBao/ChatViewController.swift"
+            timestampString = "485768540.590403"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "QianHongBao/XinGeAppDelegate.swift"
-            timestampString = "485751850.635286"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "reloadInfo()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

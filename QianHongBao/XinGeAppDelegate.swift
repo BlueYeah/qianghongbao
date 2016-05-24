@@ -203,18 +203,19 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
     
     // iOS 3 以上
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        
-//        UIAlertView(title: "3-", message: "didReceive", delegate: self, cancelButtonTitle: "OK").show()
+
         let apsDictionary = userInfo["aps"] as? NSDictionary
         let nowrid = Common.getNowRid()
         //print("收到的消息==========aps===\(userInfo)")
         if let apsDict = apsDictionary
         {
-//            let alertView = UIAlertView(title: "您有新的消息", message: apsDict["alert"]!["content"] as? String, delegate: self, cancelButtonTitle: "确定")
-//            alertView.show()
-            
+
             // 发送消息通知
             NSNotificationCenter.defaultCenter().postNotificationName("NewMessage", object: nil, userInfo: userInfo )
+            // 发送更新未读消息通知
+            NSNotificationCenter.defaultCenter().postNotificationName("notReadMessage", object: nil, userInfo: nil )
+           
+            
      
             let temp = apsDict as? NSDictionary
             if let ss = temp {
@@ -251,6 +252,8 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
 
                 if result {
                     MySQL.updateMessage(apsDict as! [String : AnyObject])
+                    // 发送更新用户info通知
+                    NSNotificationCenter.defaultCenter().postNotificationName("newUserInfo", object: nil, userInfo: nil )
                 }
   
             }else {
