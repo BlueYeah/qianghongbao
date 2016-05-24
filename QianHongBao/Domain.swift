@@ -829,10 +829,10 @@ class MyXG {
 
 class MySQL {
     /// 将数据保存到数据库
-   class func saveMessage(dict:[String: AnyObject]) {
+    class func saveMessage(dict:[String: AnyObject],msgStatus:Int) {
         
         // 1.定义SQL语句
-        let sql = "INSERT OR REPLACE INTO message (id, rid,uid,content,nackname,date,status,type,bonus_total,dsTime,photo) VALUES ( ?, ?,?,?,?,?,?,?,?,?,?);"
+        let sql = "INSERT OR REPLACE INTO message (id, rid,uid,content,nackname,date,status,type,bonus_total,dsTime,photo,msgStatus) VALUES ( ?, ?,?,?,?,?,?,?,?,?,?,?);"
         
 
             // 3.1 cid
@@ -880,7 +880,7 @@ class MySQL {
             
             // 4. 执行 sql
             SQLiteManager.sharedSQLiteManager.queue!.inTransaction({ (db, rollback) -> Void in
-                if !db.executeUpdate(sql, id, rid, uid, content,nackname,date,status,type,bonus_total,dsTime,photo) {
+                if !db.executeUpdate(sql, id, rid, uid, content,nackname,date,status,type,bonus_total,dsTime,photo,msgStatus) {
                     rollback.memory = true
                 }
             })
@@ -888,11 +888,19 @@ class MySQL {
     }
     
     /// 加载缓存数据
-    class  func loadMessage(since_id: Int, max_id: Int,rid:Int ,finished:(array:Array<MessageItem>)->())
+    class  func loadMessage(since_id: Int, max_id: Int,rid:Int? ,uid: Int?,finished:(array:Array<MessageItem>)->())
     {
         // 1.定义SQL语句
-        var sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(rid)"
+        var sql = ""
+        if rid == nil {
+            sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE uid = \(Int( uid!)) "
+        }else {
+            sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(Int( rid!)) "
         
+        }
+        
+
+
 //        if since_id > 0 {           // 下拉刷新
 //            sql += "AND mid > \(since_id) \n"
 //        } else if max_id > 0 {      // 上拉刷新
@@ -982,6 +990,58 @@ class MySQL {
             // 完成回调
             finished(array: array)
         })
+    }
+    
+    class func updateMessage(dict:[String: AnyObject]) {
+        
+        
+        let nackname = dict["nackname"] as! String
+        let photo = dict["photo"] as! String
+        let uid = dict["uid"] as! Int
+        
+        let arr:[AnyObject] = [nackname,photo,uid];
+        
+        let sql = "update message set nackname = ?, photo = ? where uid = ?"
+        
+        
+        SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) in
+            if !db.executeUpdate(sql, withArgumentsInArray: arr)
+            {
+            
+                print("updateSQL:\(sql)")
+                print("修改1条数据失败！: \(db.lastErrorMessage())")
+
+            }else {
+            
+                print("updateSQL:\(sql)")
+                print("修改1条数据成功！")
+            }
+        })
+
+
+
+    }
+    
+    class func updateMsgStatus(nowRid:Int) {
+        
+        let arr:[AnyObject] = []
+        let sql = "update message set msgStatus = 1 where uid = ?"
+        
+        SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) in
+            if !db.executeUpdate(sql, withArgumentsInArray: arr)
+            {
+                
+                print("updateSQL:\(sql)")
+                print("修改1条数据失败！: \(db.lastErrorMessage())")
+                
+            }else {
+                
+                print("updateSQL:\(sql)")
+                print("修改1条数据成功！")
+            }
+        })
+
+        
     }
 
 

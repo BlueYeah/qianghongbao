@@ -18,6 +18,8 @@ class AppDelegate: XinGeAppDelegate {
         // Override point for customization after application launch.
         let uid = Common.getUid()
         
+        
+        
         let st = self.window?.rootViewController?.storyboard
         if isNewupdate() {
             //返回真，有新版本，进入新特性界面  NewFeatureVCID
@@ -38,6 +40,8 @@ class AppDelegate: XinGeAppDelegate {
 
         // 打开数据库
         SQLiteManager.sharedSQLiteManager.openDB("status.db")
+        
+        
         
         // return true
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

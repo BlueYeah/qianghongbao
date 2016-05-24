@@ -23,8 +23,6 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
     @IBOutlet weak var tvHall: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
 
     }
     
@@ -119,7 +117,7 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
  
         name.text = Room.name
         
-        MySQL.loadMessage(0, max_id: 0, rid: Room.rid) { (array) in
+        MySQL.loadMessage(0, max_id: 0, rid: Room.rid,uid: nil) { (array) in
             self.roomData = array
         }
       

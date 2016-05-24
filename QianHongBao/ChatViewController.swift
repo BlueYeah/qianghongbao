@@ -33,7 +33,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
 
         changeVcName(nowRid)
 
-        MySQL.loadMessage(0, max_id: 0, rid: nowRid) { (array) in
+        MySQL.loadMessage(0, max_id: 0, rid: nowRid,uid: nil) { (array) in
             self.chatData = array
         }
 
@@ -293,6 +293,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     //go back
     @IBAction func btnBack(sender: AnyObject) {
+        // 删除当前房间号
+        Common.setNowRid(0)
         // 删除标签
         let tag = String( nowRid)
         
@@ -302,6 +304,8 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     }
     //send message
     @IBAction func btnSend(sender: AnyObject) {
+        
+        
         var msg = textFieldSend.text
         if(msg==""){
             

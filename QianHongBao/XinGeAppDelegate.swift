@@ -206,6 +206,7 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
         
 //        UIAlertView(title: "3-", message: "didReceive", delegate: self, cancelButtonTitle: "OK").show()
         let apsDictionary = userInfo["aps"] as? NSDictionary
+        let nowrid = Common.getNowRid()
         //print("收到的消息==========aps===\(userInfo)")
         if let apsDict = apsDictionary
         {
@@ -218,15 +219,51 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
             let temp = apsDict as? NSDictionary
             if let ss = temp {
                 print("-------------\(apsDict)")
-                MySQL.saveMessage(apsDict as! [String : AnyObject])
+                let nackname = apsDict["nackname"] as! String
+                let uid = apsDict["uid"] as! Int
+                let photo = apsDict["photo"] as! String
+                var result = false
+                
+                // 加载上一条信息
+                var lastmsg:MessageItem?
+                MySQL.loadMessage(0, max_id: 0, rid: nil,uid: uid, finished: { (array) in
+                    let maxNum = array.count
+                    if maxNum > 1
+                    {
+                        lastmsg = array[maxNum - 2]
+                        let lastname = lastmsg?.name
+                        let lastphoto = lastmsg?.headImg
+                        result = lastname! as String != nackname || lastphoto! as String != photo
+
+                    }else
+                    {
+                        return
+                    }
+                    })
+                
+                // 根据房间号设置信息状态
+                if nowrid != 0 {
+                    // 已查看消息 msgStatus = 1
+                    MySQL.saveMessage(apsDict as! [String : AnyObject],msgStatus: 1)
+                }else{
+                    MySQL.saveMessage(apsDict as! [String : AnyObject],msgStatus: 0)
+                }
+
+                if result {
+                    MySQL.updateMessage(apsDict as! [String : AnyObject])
+                }
+  
             }else {
                 let data = apsDict["alert"] as! String
                 let dict = Common.json2obj(data) as! NSDictionary
-                MySQL.saveMessage(dict as! [String : AnyObject])
+                // 根据房间号设置信息状态
+                if nowrid != 0 {
+                    MySQL.saveMessage(dict as! [String : AnyObject],msgStatus: 1)
+                }else{
+                    MySQL.saveMessage(dict as! [String : AnyObject],msgStatus: 0)
+                }
             }
-            
-            
-            
+
         }
         
         // 清空通知栏通知
