@@ -85,12 +85,47 @@ class SecondViewController: UIViewController,UITableViewDelegate,UITableViewData
         // 接收未读聊天消息通知
         // 监听通知
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SecondViewController.reloadList), name: "notReadMessage", object: nil)
+//        // 接收聊天消息通知
+//        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SecondViewController.topMsg(_:)), name: "NewMessage", object: nil)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
 
+    }
+    
+    func topMsg(notification: NSNotification) {
+        // 获取推送消息
+        let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
+        let newrid = apsDictionary!["rid"] as! Int
+        let list1 = room[0].rid
+        
+        
+        if list1 == newrid {
+            return
+        }else{
+            //  原房间的数组下标
+            var aimindex:Int?
+            //  获得newrid的在room数组的下标
+        
+            for index in 0...4 {
+                let aimrid = room[index].rid
+                if aimrid == newrid {
+                 aimindex = index
+                }
+            }
+            
+            let item = room[aimindex!]
+            room.removeAtIndex(aimindex!)
+            room.insert(item, atIndex: 0)
+            
+            self.tvHall.reloadData()
+        }
+        
+        
+        
     }
     func reloadList() {
         self.tvHall.reloadData()

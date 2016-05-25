@@ -120,17 +120,21 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             
             print("==========接受到消息啊！！！\(alert)")
    
-            
+ 
             //apsDict["alert"]
-            let content = Common.substring(":", content: apsDict!["alert"] as! String)
-        
-            let msg = content
-        
 
+        
             let nickName = alert["nackname"] as! String
             
             let type =   alert["type"] as! Int
-            
+            // 直接跳出
+            if type == 6 {
+            return
+            }
+        
+            let content = Common.substring(":", content: apsDict!["alert"] as! String)
+            let msg = content
+        
             let photo = alert["photo"] as! String
             
             let uid = alert["uid"] as! Int
@@ -239,8 +243,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         let url = "\(XGurl)\(type)"
         
-        print("ios信息字典\(param)")
-        
         mgr.POST(url, parameters: param, progress: nil, success: { (task, responseObj) in
             print("服务端API接入成功")
             
@@ -320,14 +322,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         
         var msg = textFieldSend.text
         if(msg==""){
-            
-            // 测试随机红包
-            let url1 = "http://192.168.111.106/QHB/Room/testsendhb/rid/1/uid/6"
-            mgr.POST(url1, parameters: nil, success: { (task, respon) in
-                print("红包要发送啦======")
-            }) { (task, error) in
-                print("红包发送失败")
-            }
             return
         }
         
@@ -391,8 +385,6 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
         return 95
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        print("===================>",chatData[indexPath.row].name)
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         let item = chatData[indexPath.row] as MessageItem
         let lastmsg:String

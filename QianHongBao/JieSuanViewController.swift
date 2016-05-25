@@ -17,6 +17,12 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
     @IBOutlet weak var vAddr: UIView!
     @IBOutlet weak var tvPro: UITableView!
     
+    @IBOutlet weak var tName: UILabel!
+
+    @IBOutlet weak var tPhone: UILabel!
+    
+    @IBOutlet weak var tAddr: UILabel!
+
     let TAG_NAME = 1
     let TAG_NUM = 2
     let TAG_PRICE = 3
@@ -160,7 +166,9 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
         
         //print("=============jiesuan数组\(addrs! as NSArray)")
         if (addrs?.count == 0 || addrs == nil){
-            
+            tAddr.hidden = true
+            tName.hidden = true
+            tPhone.hidden = true
             sName = "请选择收货地址"
 
         }else{
@@ -169,6 +177,9 @@ class JieSuanViewController: UIViewController,UITableViewDataSource,UITableViewD
             sName = addr["name"]!
             sPhone = addr["phone"]!
             sAddr = addr["addr"]!
+            tAddr.hidden = false
+            tName.hidden = false
+            tPhone.hidden = false
             
         }
         

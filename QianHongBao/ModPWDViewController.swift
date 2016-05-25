@@ -35,7 +35,9 @@ class ModPWDViewController: UIViewController {
                 do{
                     var jobj = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as! Dictionary<String,AnyObject>
                     let status = (jobj["status"] as! NSNumber).integerValue
+                    print("+++++++\(jobj)")
                     if(status==0){
+                        
                         MyDialog.showErrorAlert(self, msg: jobj["info"] as! String,completion: nil)
                         return
                     }

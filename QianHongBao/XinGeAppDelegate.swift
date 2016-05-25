@@ -102,7 +102,7 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
                     
                     if (UIDevice.currentDevice().systemVersion.compare("8", options:.NumericSearch) != NSComparisonResult.OrderedAscending)
                     {
-                        print("我的registerPush")
+
                         self.registerPushForIOS8()
                     }
                     else
@@ -206,13 +206,14 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
 
         let apsDictionary = userInfo["aps"] as? NSDictionary
         let nowrid = Common.getNowRid()
-        //print("收到的消息==========aps===\(userInfo)")
+        // 发送消息通知
+        NSNotificationCenter.defaultCenter().postNotificationName("NewMessage", object: nil, userInfo: userInfo )
+
+        print("收到的消息==========aps===\(userInfo)")
         if let apsDict = apsDictionary
         {
 
-            // 发送消息通知
-            NSNotificationCenter.defaultCenter().postNotificationName("NewMessage", object: nil, userInfo: userInfo )
-            // 发送更新未读消息通知
+                       // 发送更新未读消息通知
             NSNotificationCenter.defaultCenter().postNotificationName("notReadMessage", object: nil, userInfo: nil )
            
             
@@ -234,6 +235,7 @@ class XinGeAppDelegate: UIResponder, UIApplicationDelegate {
                         lastmsg = array[maxNum - 2]
                         let lastname = lastmsg?.name
                         let lastphoto = lastmsg?.headImg
+                        print("lastphoto=\(lastphoto)-----lastname\(lastname)")
                         result = lastname! as String != nackname || lastphoto! as String != photo
 
                     }else

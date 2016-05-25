@@ -900,8 +900,6 @@ class MySQL {
             sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(Int( rid!)) "
         
         }
-        
-
 
 //        if since_id > 0 {           // 下拉刷新
 //            sql += "AND mid > \(since_id) \n"
@@ -909,10 +907,7 @@ class MySQL {
 //            sql += "AND mid <= \(max_id) \n"
 //        }
 //        sql += "ORDER BY mid DESC LIMIT 3;"
-        
-        // 测试 sql
-        print(sql)
-        
+
         // 3. 执行 SQL
         SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) -> Void in
             let rs = db.executeQuery(sql)!
@@ -929,10 +924,9 @@ class MySQL {
                 let name = rs.stringForColumn("nackname")
                 let headImg = rs.stringForColumn("photo")
                 let message = rs.stringForColumn("content")
-                
+                // 如果是type 6 直接不加载这条消息
+                if type == 6 { continue}
                 let content = Common.substring(":", content: message)
-                
-                
                 
                 let id = rs.intForColumn("id")
                 let bonus_total = Float( rs.intForColumn("bonus_total"))
@@ -956,34 +950,35 @@ class MySQL {
                 {
                     
 
-                    array.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:name ,headImg:content ,content:content,bonusId:Int (id),dsBonus: nil,date: date))
+                    array.append(MessageItem(uid:Userid,type:ChatType.SJHB,name:name ,headImg:headImg ,content:content,bonusId:Int (id),dsBonus: nil,date: date))
                     
                 }else if type == 3
                     
                 {
-                    print("=======猜单双")
 
-                    
-                    
                     let dsBonus = DSBonus.init(id:Int(id), bonus_total: bonus_total, date: date, dsTime: dstime)
                     
                     array.append(MessageItem(uid:Userid,type:ChatType.CDS,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: dsBonus,date: date))
                 }else if type == 4
                     
                 {
-                    print("=======猜随机")
+
                     
                     array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:content,bonusId:nil,dsBonus: nil,date: date))
                 }else if type == 5
                     
                 {
-                    print("=======猜单双")
+
                     let message:String
                     if content == "1"
                     {
                         message = "本期单双开奖结果：单"
                     }else {message = "本期单双开奖结果：双"}
                     array.append(MessageItem(uid:Userid,type:ChatType.Text,name:name,headImg:headImg ,content:message,bonusId:nil,dsBonus: nil,date: date))
+                }else if type == 6  //  即时更新竞猜人数
+                {
+                
+                    
                 }
 
 
@@ -1009,14 +1004,12 @@ class MySQL {
         SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) in
             if !db.executeUpdate(sql, withArgumentsInArray: arr)
             {
-            
-                print("updateSQL:\(sql)")
-                print("修改1条数据失败！: \(db.lastErrorMessage())")
+
+                print("updateMessage修改1条数据失败！: \(db.lastErrorMessage())")
 
             }else {
-            
-                print("updateSQL:\(sql)")
-                print("修改1条数据成功！")
+
+                print("updateMessage修改1条数据成功！")
             }
         })
 
@@ -1032,14 +1025,12 @@ class MySQL {
         SQLiteManager.sharedSQLiteManager.queue?.inDatabase({ (db) in
             if !db.executeUpdate(sql, withArgumentsInArray: arr)
             {
-                
-                print("updateSQL:\(sql)")
-                print("修改1条数据失败！: \(db.lastErrorMessage())")
+
+                print("updateMsgStatus修改1条数据失败！: \(db.lastErrorMessage())")
                 
             }else {
-                
-                print("updateSQL:\(sql)")
-                print("修改1条数据成功！")
+
+                print("updateMsgStatus修改1条数据成功！")
             }
         })
 
@@ -1052,9 +1043,6 @@ class MySQL {
         
         // 1.定义SQL语句
           let sql = "SELECT mid, id, rid, uid,content,nackname,date,status,type,bonus_total,dsTime,photo FROM message WHERE rid = \(Int( rid)) and msgStatus = \(msgStatus)"
-        
-        // 测试 sql
-        print(sql)
         
         // 字典是一条完整的微博数据的字典
         var array:Array<String> = []

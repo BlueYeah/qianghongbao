@@ -34,7 +34,9 @@ class DataViewController: UIViewController {
 //        let request:NSURLRequest = NSURLRequest(URL: NSURL(fileURLWithPath:url))
 //        webview.loadRequest(request)
         let webView = UIWebView(frame:self.view.bounds)
-        let url = NSURL(string: "http://192.168.111.106/QHB/User/notice/uid/\(uid)/token/\(token)")
+        let dataurl = SERVER_HTTP + "User/notice/uid/\(uid)/token/\(token)"
+        
+        let url = NSURL(string: dataurl)
         let request = NSURLRequest(URL: url!)
 
 

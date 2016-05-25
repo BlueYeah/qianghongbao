@@ -120,6 +120,10 @@ class FourViewController: UIViewController {
             
             NSUserDefaults.standardUserDefaults().setInteger(uid,forKey: UD_UID)
             
+            let dict = ["nackname":user["nackname"]! as! String,"photo":user["photo"]! as! String,"uid":uid]
+            
+            MySQL.updateMessage(dict as! [String : AnyObject])
+            
             }) { (task, error) in
                 let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 

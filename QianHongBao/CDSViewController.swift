@@ -37,6 +37,7 @@ class CDSViewController: UIViewController {
     let token = Common.getToken()
     let dsId = Common.getDSBonusId()
     let mgr = AFHTTPSessionManager()
+    let bonusTotal = Common.getDSBonusTotal()
     
     @IBAction func btnDan(sender: AnyObject) {
 //        let vc = storyboard!.instantiateViewControllerWithIdentifier("CDSVC") as UIViewController
@@ -84,10 +85,42 @@ class CDSViewController: UIViewController {
         setContent()
         
 
-        
+        // 接收聊天消息通知
+        // 监听通知
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CDSViewController.receiveMsg(_:)), name: "NewMessage", object: nil)
 
         
         
+    }
+
+        
+    func receiveMsg(notification: NSNotification) {
+        
+        print("猜单双人数的消息来了+++++++++")
+        // 获取推送消息
+        let apsDictionary = notification.userInfo!["aps"] as? NSDictionary
+        
+        let myuid = Common.getUid()
+        let nowRid = Common.getNowRid()
+        
+        let type = apsDictionary!["type"] as! Int
+        let uid = apsDictionary!["uid"] as! Int
+        
+        //判断是否是这房间的消息
+        if nowRid != rid {
+            return
+        }
+        
+        // 判断是否是我自己的消息
+        if type != 6{
+            return
+            
+        }
+        
+        let personNum = apsDictionary!["bonus_total"] as! Int
+        
+        self.guessMember.text = "当前竞猜人数为：\(personNum)"
+
     }
     
     func setTime() {
@@ -237,6 +270,21 @@ class CDSViewController: UIViewController {
             
             self.changeResultType()
             
+            let hud1 = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            print("myguess++++++++\(myGuess)")
+            
+            if myGuess != nil
+            {
+            if result == myGuess
+            {
+                hud1.label.text = "恭喜你，你赢了! 积分+\(self.bonusTotal)"
+            }else{
+                hud1.label.text = "很遗憾，你输了! 积分-\(self.bonusTotal)"
+            }
+            }
+            
+            hud1.hideAnimated(true, afterDelay: 1)
+            
             }, failure: { (task, error) in
                 print("========服务端API接入失败")
         })
@@ -244,7 +292,7 @@ class CDSViewController: UIViewController {
     }
 
     func setContent() {
-        let bonusTotal = Common.getDSBonusTotal()
+        
         let bonusdate = Common.getDSBonusDate()
         
         lMoney.text = "竞猜金额：￥\(bonusTotal)"

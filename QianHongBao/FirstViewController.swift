@@ -36,7 +36,6 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
     @IBOutlet weak var slider: JLSliderView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("++++++++++++++++firstviewdiload")
 
         self.getCurPageProductUrl = URL_Product
         // Do any additional setup after loading the view, typically from a nib.
@@ -46,6 +45,15 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         mMJRefresh.beginRefreshing()
         //endRefreshing()
         
+        self.uid = Common.getUid()
+        self.token = Common.getToken()
+        if(viewAppearCounter == 0){
+            // 这里注释了
+            adaptSlider()
+            endRefreshing()
+        }
+        
+
         
     }
     func endRefreshing(){
@@ -59,35 +67,34 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         
     }
     override func viewWillAppear(animated: Bool) {
-        
-        print("++++++++++++++++firstwill")
-     
-        self.uid = Common.getUid()
-        self.token = Common.getToken()
-  
-    
-        
-        if(viewAppearCounter == 0){
-            // 这里注释了
-            adaptSlider()
-            endRefreshing()
-        }
+//        // 开启slider定时器
+//        self.uid = Common.getUid()
+//        self.token = Common.getToken()
+//        if(viewAppearCounter == 0){
+//            // 这里注释了
+//            adaptSlider()
+//            endRefreshing()
+//        }
         NSUserDefaults.standardUserDefaults().removeObjectForKey(UD_GWCS)
         self.tvProducts.reloadData()
       //  viewAppearCounter += 1
         
 
     }
+    override func viewDidDisappear(animated: Bool) {
+        // 关闭slider定时器
+        self.slider.removeTimer()
+    }
     
     override func viewWillDisappear(animated: Bool) {
-        print("+++++++++++++end")
+
         self.mMJRefresh.endRefreshing()
     }
     func adaptSlider(){
         let sUrl = URL_Slider
         let data = ["uid":self.uid,"token":self.token]
-        
-        print("+++++++++++++++++slider")
+        self.slider.initSlider([IMG_LOADING])
+
         MyHttp.doPost(sUrl, data: data) { (data, rep, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 
@@ -104,17 +111,9 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
                 let res = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 
                 let res_jsonobj: AnyObject = self.json2obj(res! as String)
-                
-                
-                // data后还是json字符串 要再一次解析对data 进行解析
-//                let data = res_jsonobj["data"]
-//                print("============data\(data)")
-//                let slider:AnyObject = self.json2obj(data as! String)
-                
 
                 self.sliders = Slider.initWithJsonObjectArray(res_jsonobj.objectForKey("data")!)
-                
-                
+
                 var images:[String] = []
                 for slider in self.sliders{
                     images.append(slider.image)
@@ -127,8 +126,7 @@ class FirstViewController: UIViewController,UITableViewDataSource,UITableViewDel
         let sUrl = getCurPageProductUrl
         // 自己添加data
         let data = ["uid":self.uid,"token":self.token]
-        
-        print("+++++++++++++++++product")
+
         MyHttp.doPost(sUrl, data: data) { (data, req, error) in
             dispatch_async(dispatch_get_main_queue(), {
                 // 若没数据 则返回
